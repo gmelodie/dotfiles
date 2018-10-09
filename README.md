@@ -12,4 +12,6 @@ Dotfiles for when I format my PC
 
 ## Installation
 
-Simply run `./install.sh`
+
+With all the requirements installed, simply run
+`./install.sh`
