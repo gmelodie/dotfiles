@@ -8,3 +8,8 @@ Dotfiles for when I format my PC
 2. `python 3.*`
 3. `neovim`
 4. `python3-neovim`
+
+
+## Installation
+
+Simply run `./install.sh`
