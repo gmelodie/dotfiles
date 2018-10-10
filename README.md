@@ -21,3 +21,6 @@ and pastes everything into place.
 ## Installation
 With all the requirements installed, simply run
 `./install.sh`
+
+Be sure to log out and log back into your account so that the changes in zsh can take place
+
