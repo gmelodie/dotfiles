@@ -12,11 +12,11 @@ and pastes everything into place.
 * Zsh
 
 ## Requirements
-1. curl
-2. python 3
-3. neovim
-4. python3-neovim
-5. zsh
+1. Curl
+2. Python 3
+3. Neovim
+4. Python3-neovim
+5. Zsh
 
 ## Installation
 With all the requirements installed, simply run
