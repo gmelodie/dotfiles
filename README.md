@@ -3,7 +3,7 @@ Configuration files automation
 
 If you ever had to format your PC more than twice in a week you know that configuring everything is painful.
 But even if you aren't insane enough to format your PC once every hour, you probably spend a couple of hours
-configuring your PC after formating it.
+configuring it after formating.
 What I tried to do is assemble a list of my dotfiles (configuration files) and write a script that copies
 and pastes everything into place. 
 
