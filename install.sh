@@ -1,11 +1,6 @@
 
 # neovim
-if [ ! -d "~/.config" ]
-then
-    mkdir ~/.config
-fi
-
-mkdir ~/.config/nvim
+mkdir -p ~/.config/nvim
 cp init.vim ~/.config/nvim
 
 
