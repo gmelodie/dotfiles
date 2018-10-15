@@ -1,20 +1,14 @@
 
 # neovim
-if [ ! -d "~/.config" ]
-then
-    mkdir ~/.config
-fi
-
-mkdir ~/.config/nvim
+mkdir -p ~/.config/nvim
 cp init.vim ~/.config/nvim
 
 
 # zsh
-sed -e "s/USER/$USER/" zshrc > zshrc-temp # change USER for the current user
 chsh -s $(which zsh)
 
 
 # oh-my-zsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 
-mv zshrc-temp ~/.zshrc
+mv zshrc ~/.zshrc
