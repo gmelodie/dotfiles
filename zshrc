@@ -62,7 +62,8 @@ ZSH_THEME="robbyrussell"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
-  git
+  git,
+  vim
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -100,5 +101,11 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-export VISUAL=vim
+# change default text editor to nvim
+export VISUAL=nvim
 export EDITOR="$VISUAL"
+
+# alias vim -> nvim (calling vim will open nvim
+alias oldvim=vim
+alias vim=nvim
+
