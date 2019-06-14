@@ -1,14 +1,15 @@
 
-# neovim
+# copy neovim configuration file
 mkdir -p ~/.config/nvim
-cp init.vim ~/.config/nvim
+ln -s init.vim ~/.config/nvim/init.vim
 
 
-# zsh
+# change default shell to zsh
 chsh -s $(which zsh)
 
 
-# oh-my-zsh
+# install oh-my-zsh (zsh theme)
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 
-mv zshrc ~/.zshrc
+# copy zsh configuration file
+ln -s zshrc ~/.zshrc
