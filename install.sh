@@ -2,7 +2,7 @@
 # copy neovim configuration file
 mkdir -p ~/.config/nvim
 rm ~/.config/nvim/init.vim
-ln -s init.vim ~/.config/nvim/init.vim
+ln init.vim ~/.config/nvim/init.vim
 
 
 # change default shell to zsh
@@ -14,4 +14,4 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/mas
 
 # copy zsh configuration file
 rm ~/.zshrc
-ln -s zshrc ~/.zshrc
+ln zshrc ~/.zshrc

@@ -14,7 +14,7 @@ and pastes everything into place.
 ## Requirements
 1. Curl
 2. Python 3
-3. Neovim
+3. Neovim (installed from appimage do, `mv squash-root ~/.nvim`)
 4. Python3-neovim
 5. Zsh
 

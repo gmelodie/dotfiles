@@ -62,8 +62,8 @@ ZSH_THEME="robbyrussell"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
-  git,
-  vim
+  git
+  vi-mode
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -107,5 +107,4 @@ export EDITOR="$VISUAL"
 
 # alias vim -> nvim (calling vim will open nvim
 alias oldvim=vim
-alias vim=nvim
-
+alias vim=~/.nvim/usr/bin/nvim
