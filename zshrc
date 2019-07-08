@@ -110,3 +110,6 @@ alias oldvim=vim
 alias vim=~/.nvim/nvim.appimage
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# Set GOPATH
+export GOPATH=$HOME/go
