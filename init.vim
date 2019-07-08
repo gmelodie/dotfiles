@@ -32,7 +32,6 @@ call plug#begin(expand('~/.config/nvim/plugged'))
 "" Plug install packages
 "*****************************************************************************
 Plug 'scrooloose/nerdtree'
-Plug 'jistr/vim-nerdtree-tabs'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
 Plug 'vim-airline/vim-airline'
@@ -41,12 +40,15 @@ Plug 'airblade/vim-gitgutter'
 Plug 'vim-scripts/grep.vim'
 Plug 'vim-scripts/CSApprox'
 Plug 'bronson/vim-trailing-whitespace'
-Plug 'Raimondi/delimitMate'
 Plug 'majutsushi/tagbar'
-Plug 'scrooloose/syntastic'
+Plug 'w0rp/ale'
 Plug 'Yggdroot/indentLine'
-Plug 'avelino/vim-bootstrap-updater'
 Plug 'sheerun/vim-polyglot'
+Plug 'tpope/vim-surround'
+Plug 'valloric/youcompleteme'
+
+
+"" FZF
 if isdirectory('/usr/local/opt/fzf')
   Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'
 else
@@ -58,6 +60,7 @@ if exists('make')
         let g:make = 'make'
 endif
 Plug 'Shougo/vimproc.vim', {'do': g:make}
+
 
 "" Vim-Session
 Plug 'xolox/vim-misc'
@@ -74,8 +77,11 @@ endif
 
 Plug 'honza/vim-snippets'
 
-"" Color
+" Colorschemes
 Plug 'tomasr/molokai'
+Plug 'iCyMind/NeoSolarized'
+Plug 'morhetz/gruvbox'
+
 
 "*****************************************************************************
 "" Custom bundles
@@ -89,10 +95,6 @@ Plug 'ludwig/split-manpage.vim'
 " elixir
 Plug 'elixir-lang/vim-elixir'
 Plug 'carlosgaldino/elixir-snippets'
-
-
-" erlang
-Plug 'jimenezrick/vimerl'
 
 
 " go
@@ -121,7 +123,6 @@ Plug 'c9s/perlomni.vim'
 
 " python
 "" Python Bundle
-Plug 'davidhalter/jedi-vim'
 Plug 'raimon49/requirements.txt.vim', {'for': 'requirements'}
 
 
@@ -200,14 +201,6 @@ let g:session_command_aliases = 1
 "*****************************************************************************
 "" Visual Settings
 "*****************************************************************************
-syntax on
-set ruler
-set number
-
-let no_buffers_menu=1
-if !exists('g:not_finish_vimplug')
-  colorscheme molokai
-endif
 
 set mousemodel=popup
 set t_Co=256
@@ -228,8 +221,22 @@ else
   let g:indentLine_char = '┆'
   let g:indentLine_faster = 1
 
-  
 endif
+
+syntax on
+set ruler
+set number
+set background=dark
+set termguicolors
+
+"" Set colorscheme
+let no_buffers_menu=1
+if !exists('g:not_finish_vimplug')
+  " colorscheme molokai
+  colorscheme gruvbox
+  " colorscheme NeoSolarized
+endif
+
 
 
 
@@ -260,12 +267,13 @@ if exists("*fugitive#statusline")
 endif
 
 " vim-airline
-let g:airline_theme = 'powerlineish'
+let g:airline_theme = 'powerlineish'  " in case you want a dark background
 let g:airline#extensions#syntastic#enabled = 1
 let g:airline#extensions#branch#enabled = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tagbar#enabled = 1
 let g:airline_skip_empty_sections = 1
+
 
 "*****************************************************************************
 "" Abbreviations
@@ -590,20 +598,6 @@ augroup vimrc-python
       \ formatoptions+=croq softtabstop=4
       \ cinwords=if,elif,else,for,while,try,except,finally,def,class,with
 augroup END
-
-" jedi-vim
-let g:jedi#popup_on_dot = 0
-let g:jedi#goto_assignments_command = "<leader>g"
-let g:jedi#goto_definitions_command = "<leader>d"
-let g:jedi#documentation_command = "K"
-let g:jedi#usages_command = "<leader>n"
-let g:jedi#rename_command = "<leader>r"
-let g:jedi#show_call_signatures = "0"
-let g:jedi#completions_command = "<C-Space>"
-let g:jedi#smart_auto_mappings = 0
-
-" syntastic
-let g:syntastic_python_checkers=['python', 'flake8']
 
 " vim-airline
 let g:airline#extensions#virtualenv#enabled = 1

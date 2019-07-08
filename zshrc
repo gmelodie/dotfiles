@@ -102,9 +102,9 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # change default text editor to nvim
-export VISUAL=nvim
+alias nvim=~/.nvim/nvim.appimage
+export VISUAL=~/.nvim/nvim.appimage
 export EDITOR="$VISUAL"
 
-# alias vim -> nvim (calling vim will open nvim
 alias oldvim=vim
-alias vim=~/.nvim/usr/bin/nvim
+alias vim=~/.nvim/nvim.appimage
