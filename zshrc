@@ -112,5 +112,8 @@ alias vim=~/.nvim/nvim.appimage
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # Set GOPATH and PATH for golang
+# GOPATH sets the workspace where go code is in
+# In this case we keep _all_ the go code in $HOME/go
 export GOPATH=$HOME/go
-PATH=$PATH:/usr/local/go/bin
+export PATH=$PATH:/usr/local/go/bin
+export PATH=$PATH:$(go env GOPATH)/bin
