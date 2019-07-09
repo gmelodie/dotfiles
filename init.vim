@@ -505,23 +505,26 @@ let erlang_folding = 1
 let erlang_show_errors = 1
 
 
-" go
-" vim-go
+" go (vim-go)
+
+" disable autosave (use ALE's)
+let g:go_fmt_autosave = 0
+
 " run :GoBuild or :GoTestCompile based on the go file
-" function! s:build_go_files()
-"   let l:file = expand('%')
-"   if l:file =~# '^\f\+_test\.go$'
-"     call go#test#Test(0, 1)
-"   elseif l:file =~# '^\f\+\.go$'
-"     call go#cmd#Build(0)
-"   endif
-" endfunction
+function! s:build_go_files()
+  let l:file = expand('%')
+  if l:file =~# '^\f\+_test\.go$'
+    call go#test#Test(0, 1)
+  elseif l:file =~# '^\f\+\.go$'
+    call go#cmd#Build(0)
+  endif
+endfunction
 
 let g:go_list_type = "quickfix"
 let g:go_fmt_command = "goimports"
 let g:go_fmt_fail_silently = 1
-let g:syntastic_go_checkers = ['golint', 'govet']
-let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
+" let g:syntastic_go_checkers = ['golint', 'govet']
+" let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
 
 let g:go_highlight_types = 1
 let g:go_highlight_fields = 1
