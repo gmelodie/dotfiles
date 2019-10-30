@@ -700,3 +700,12 @@ else
   let g:airline_symbols.readonly = ''
   let g:airline_symbols.linenr = ''
 endif
+
+
+" be able to go up and down single row at md and txt files
+autocmd FileType markdown nnoremap j gj
+autocmd FileType markdown nnoremap k gk
+
+autocmd FileType text nnoremap j gj
+autocmd FileType text nnoremap k gk
+
