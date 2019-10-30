@@ -117,3 +117,6 @@ alias vim=~/.nvim/nvim.appimage
 export GOPATH=$HOME/go
 export PATH=$PATH:/usr/local/go/bin
 export PATH=$PATH:$(go env GOPATH)/bin
+
+# Some magic to make gpg2 work
+export GPG_TTY=$(tty)
