@@ -428,14 +428,12 @@ let g:UltiSnipsJumpForwardTrigger="<tab>"
 let g:UltiSnipsJumpBackwardTrigger="<c-b>"
 let g:UltiSnipsEditSplit="vertical"
 
-" syntastic
-let g:syntastic_always_populate_loc_list=1
-let g:syntastic_error_symbol='✗'
-let g:syntastic_warning_symbol='⚠'
-let g:syntastic_style_error_symbol = '✗'
-let g:syntastic_style_warning_symbol = '⚠'
-let g:syntastic_auto_loc_list=1
-let g:syntastic_aggregate_errors = 1
+" Ale
+" For gopls issues (source
+" https://github.com/golang/tools/blob/master/gopls/doc/vim.md)
+let g:ale_linters = {
+	\ 'go': ['gopls'],
+	\}
 
 " Tagbar
 nmap <silent> <F4> :TagbarToggle<CR>
@@ -506,15 +504,10 @@ let erlang_show_errors = 1
 
 
 " go (vim-go)
-" run :GoBuild or :GoTestCompile based on the go file
-" function! s:build_go_files()
-"   let l:file = expand('%')
-"   if l:file =~# '^\f\+_test\.go$'
-"     call go#test#Test(0, 1)
-"   elseif l:file =~# '^\f\+\.go$'
-"     call go#cmd#Build(0)
-"   endif
-" endfunction
+" For gopls issues (source
+" https://github.com/golang/tools/blob/master/gopls/doc/vim.md)
+let g:go_def_mode='gopls'
+let g:go_info_mode='gopls'
 
 let g:go_list_type = "quickfix"
 let g:go_fmt_command = "goimports"
