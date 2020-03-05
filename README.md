@@ -12,10 +12,10 @@ and pastes everything into place.
 * Zsh
 
 ## Requirements
-1. Curl
-2. Python3
+1. `curl`
+2. `python3`
 3. Neovim (download the [appimage](https://github.com/neovim/neovim/releases/latest) and put it in, `~/.nvim`)
-4. Python3-neovim (`python-pynvim` for arch)
+4. `python3-neovim` (`python-pynvim` for arch)
 5. FUSE and Cmake for neovim's appimage
 6. Zsh
 7. Golang
