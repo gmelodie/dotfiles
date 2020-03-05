@@ -5,7 +5,6 @@
   export ZSH="/home/$USER/.oh-my-zsh"
 
 # Fix encoding bug
-export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 
 # Set name of the theme to load. Optionally, if you set this to "random"
@@ -75,9 +74,6 @@ source $ZSH/oh-my-zsh.sh
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
-
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
 # if [[ -n $SSH_CONNECTION ]]; then
