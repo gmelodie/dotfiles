@@ -16,8 +16,8 @@ and pastes everything into place.
 2. `python3`
 3. Neovim (download the [appimage](https://github.com/neovim/neovim/releases/latest) and put it in, `~/.nvim`)
 4. `python3-neovim` (`python-pynvim` for arch)
-5. FUSE and Cmake for neovim's appimage
-6. Zsh
+5. [FUSE](https://github.com/AppImage/AppImageKit/wiki/FUSE) and `cmake` for neovim's appimage
+6. `zsh`
 7. Golang
 
 
