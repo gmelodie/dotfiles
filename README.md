@@ -32,5 +32,7 @@ Be sure to log out and log back into your account so that the changes in zsh can
 
 2. The `YouCompleteMe` plugin for Neovim currently throws an error after installing (`"The ycmd server SHUT DOWN (restart with :YcmRestartServer)"`). To fix this simply (1) make sure you have python3 installed and (2) execute the `install.py` script located in `.config/nvim/plugged/youcompleteme/` (this path may change depending on where your nvim configs are located): `python3 install.py` or `./install.py`
 
+3. Depending on your systems's [`locale`](https://wiki.archlinux.org/index.php/Locale), mostly if it's not en-US, you may have some bugs with autocomplete and line breaks on `zsh`. In order to fix that (which will also change the language of your shell session to English), add `export LANG=en_US.UTF-8` to your `zshrc`. (*obs: this was already done in the current repo's zshrc file*)
+
 ## Other configurations
 - Terminal font: Hack Regular 12
