@@ -36,3 +36,4 @@ Be sure to log out and log back into your account so that the changes in zsh can
 
 ## Other configurations
 - Terminal font: Hack Regular 12
+- Terminal colors: Use the [gruvbox](https://github.com/morhetz/gruvbox) theme colors
