@@ -37,3 +37,4 @@ Be sure to log out and log back into your account so that the changes in zsh can
 ## Other configurations
 - Terminal font: Hack Regular 12
 - Terminal colors: Use the [gruvbox](https://github.com/morhetz/gruvbox) theme colors
+- Using `gnome-terminal` opening a new tab is going to redirect you to the `~/` directory. In order to open the tabe in the same directory (i.e. `pwd`) you have to go to gnome-terminal > preferences > your profile > command and check `Run command as a login shell`.
