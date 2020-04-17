@@ -479,6 +479,10 @@ noremap <C-k> <C-w>k
 noremap <C-l> <C-w>l
 noremap <C-h> <C-w>h
 
+"" Close window
+"" Might conflict with another in mac
+noremap <C-c> <C-w>c
+
 "" Vmap for maintain Visual Mode after shifting > and <
 vmap < <gv
 vmap > >gv
