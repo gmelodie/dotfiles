@@ -231,6 +231,10 @@ set number
 set background=dark
 set termguicolors
 
+" Relative line numbers
+set relativenumber
+
+
 "" Set colorscheme
 let no_buffers_menu=1
 if !exists('g:not_finish_vimplug')
