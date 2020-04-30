@@ -231,8 +231,15 @@ set number
 set background=dark
 set termguicolors
 
-" Relative line numbers
+" Relative line numbers (toggle when using multiple windows)
+" See vim-numbertoggle plugin (does the same thing)
 set relativenumber
+
+augroup numbertoggle
+  autocmd!
+  autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
+  autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
+augroup END
 
 
 "" Set colorscheme
