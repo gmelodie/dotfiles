@@ -5,7 +5,7 @@ If you ever had to format your PC more than twice in a week you know that config
 But even if you aren't insane enough to format your PC once every hour, you probably spend a couple of hours
 configuring it after formating.
 What I tried to do is assemble a list of my dotfiles (configuration files) and write a script that copies
-and pastes everything into place. 
+and pastes everything into place.
 
 ## Currently supported applications
 * Neovim
@@ -29,11 +29,13 @@ With all the requirements installed, simply run
 Be sure to log out and log back into your account so that the changes in zsh can take place
 
 ## Common issues
-1. Make sure you log out and back in after changing the default shell to zsh (with the command `chsh` that is executed by default in the `install.sh` script)
+- Make sure you log out and back in after changing the default shell to zsh (with the command `chsh` that is executed by default in the `install.sh` script)
 
-2. The `YouCompleteMe` plugin for Neovim currently throws an error after installing (`"The ycmd server SHUT DOWN (restart with :YcmRestartServer)"`). To fix this simply (1) make sure you have python3 installed and (2) execute the `install.py` script located in `.config/nvim/plugged/youcompleteme/` (this path may change depending on where your nvim configs are located): `python3 install.py` or `./install.py`
+- The `YouCompleteMe` plugin for Neovim currently throws an error after installing (`"The ycmd server SHUT DOWN (restart with :YcmRestartServer)"`). To fix this simply (1) make sure you have python3 installed and (2) execute the `install.py` script located in `.config/nvim/plugged/youcompleteme/` (this path may change depending on where your nvim configs are located): `python3 install.py` or `./install.py`
 
-3. Depending on your systems's [`locale`](https://wiki.archlinux.org/index.php/Locale), mostly if it's not en-US, you may have some bugs with autocomplete and line breaks on `zsh`. In order to fix that (which will also change the language of your shell session to English), add `export LANG=en_US.UTF-8` to your `zshrc`. (*obs: this was already done in the current repo's zshrc file*)
+- The `YouCompleteMe` plugin for Neovim throws an error on working with Go files (with Vim-Go installed): `File not found /home/gmelodie/.config/nvim/plugged/youcompleteme/ycmd/...`. To fix this use [this workaround](https://github.com/ycm-core/YouCompleteMe/issues/3074#issuecomment-425032138).
+
+- Depending on your systems's [`locale`](https://wiki.archlinux.org/index.php/Locale), mostly if it's not en-US, you may have some bugs with autocomplete and line breaks on `zsh`. In order to fix that (which will also change the language of your shell session to English), add `export LANG=en_US.UTF-8` to your `zshrc`. (*obs: this was already done in the current repo's zshrc file*)
 
 ## Other configurations
 - Terminal font: Hack Regular 12
