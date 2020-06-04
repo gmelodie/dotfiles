@@ -80,8 +80,8 @@ endif
 Plug 'honza/vim-snippets'
 
 " Colorschemes
-Plug 'tomasr/molokai'
-Plug 'iCyMind/NeoSolarized'
+" Plug 'tomasr/molokai'
+" Plug 'iCyMind/NeoSolarized'
 Plug 'morhetz/gruvbox'
 
 
@@ -333,6 +333,7 @@ else
   nnoremap <silent> <leader>sh :VimShellCreate<CR>
 endif
 
+
 "*****************************************************************************
 "" Functions
 "*****************************************************************************
@@ -504,6 +505,9 @@ vnoremap K :m '<-2<CR>gv=gv
 
 "" Open current line on GitHub
 nnoremap <Leader>o :.Gbrowse<CR>
+
+"" Terminal emulatior
+tnoremap <Esc> <C-\><C-n>
 
 "*****************************************************************************
 "" Custom configs
