@@ -68,6 +68,8 @@ plugins=(
   git
   vi-mode
   fzf
+  virtualenvwrapper # enter a venv automatically when cd into project
+                    # IMPORTANT: venv and dir must have the same name
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -121,3 +123,7 @@ export PATH=$PATH:$(go env GOPATH)/bin
 
 # Some magic to make gpg2 work
 export GPG_TTY=$(tty)
+
+# Virtualenvwrapper (python) stuff
+export WORKON_HOME=$HOME/.virtualenvs
+source $HOME/.local/bin/virtualenvwrapper.sh
