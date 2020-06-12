@@ -126,4 +126,7 @@ export GPG_TTY=$(tty)
 
 # Virtualenvwrapper (python) stuff
 export WORKON_HOME=$HOME/.virtualenvs
+path+=('$HOME/.local/bin')
+export PATH
 source $HOME/.local/bin/virtualenvwrapper.sh
+
