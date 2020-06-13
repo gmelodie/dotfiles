@@ -42,6 +42,7 @@ Plug 'vim-scripts/grep.vim'
 Plug 'vim-scripts/CSApprox'
 Plug 'bronson/vim-trailing-whitespace'
 Plug 'majutsushi/tagbar'
+Plug 'ludovicchabant/vim-gutentags'
 Plug 'w0rp/ale'
 Plug 'Yggdroot/indentLine'
 Plug 'sheerun/vim-polyglot'
@@ -454,6 +455,13 @@ let g:tagbar_autofocus = 1
 let g:tagbar_autopreview = 1
 let g:tagbar_previewwin_pos = "belowright"
 let g:tagbar_autoclose = 1
+
+" Gutentags
+" VimEnter makes the mapping run
+" after plugins are loaded (override plugins)
+autocmd VimEnter * nnoremap <C-J> <C-]>
+autocmd VimEnter * nnoremap <C-K> <C-T>
+
 
 " Disable visualbell
 set noerrorbells visualbell t_vb=
