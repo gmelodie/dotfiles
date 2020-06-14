@@ -454,13 +454,19 @@ nmap <silent> <F4> :TagbarToggle<CR>
 let g:tagbar_autofocus = 1
 let g:tagbar_autopreview = 1
 let g:tagbar_previewwin_pos = "belowright"
-let g:tagbar_autoclose = 1
+let g:tagbar_autoclose = 0
+
 
 " Gutentags
 " VimEnter makes the mapping run
 " after plugins are loaded (override plugins)
-autocmd VimEnter * nnoremap <C-J> <C-]>
-autocmd VimEnter * nnoremap <C-K> <C-T>
+autocmd VimEnter * nnoremap <C-S-J> <C-]>
+autocmd VimEnter * nnoremap <C-S-K> <C-T>
+" tell gutentags where the root of the project is
+let g:gutentags_add_default_project_roots = 0
+let g:gutentags_project_root = ['package.json', '.git']
+" don't create 'tags' file in every dir (use .cache/vin/ctags instead)
+let g:gutentags_cache_dir = expand('~/.cache/vim/ctags/')
 
 
 " Disable visualbell
