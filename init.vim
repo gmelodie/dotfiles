@@ -460,8 +460,8 @@ let g:tagbar_autoclose = 0
 " Gutentags
 " VimEnter makes the mapping run
 " after plugins are loaded (override plugins)
-autocmd VimEnter * nnoremap <C-S-J> <C-]>
-autocmd VimEnter * nnoremap <C-S-K> <C-T>
+autocmd VimEnter * nnoremap J <C-]>
+autocmd VimEnter * nnoremap K <C-T>
 " tell gutentags where the root of the project is
 let g:gutentags_add_default_project_roots = 0
 let g:gutentags_project_root = ['package.json', '.git']
