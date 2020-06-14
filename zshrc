@@ -128,5 +128,4 @@ export GPG_TTY=$(tty)
 export WORKON_HOME=$HOME/.virtualenvs
 path+=('$HOME/.local/bin')
 export PATH
-source $HOME/.local/bin/virtualenvwrapper.sh
 
