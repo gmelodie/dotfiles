@@ -452,7 +452,7 @@ let g:ale_linters = {
 " Tagbar
 nmap <silent> <F4> :TagbarToggle<CR>
 let g:tagbar_autofocus = 1
-let g:tagbar_autopreview = 1
+let g:tagbar_autopreview = 0
 let g:tagbar_previewwin_pos = "belowright"
 let g:tagbar_autoclose = 0
 
