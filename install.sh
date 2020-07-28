@@ -35,4 +35,9 @@ fi
 
 ln -sf $BASEDIR/zshrc $HOME/.zshrc
 
+
+echo 'Installing Git configurations (.gitconfig)'
+ln -sf $BASEDIR/gitconfig $HOME/.gitconfig
+
+
 echo 'All done!'

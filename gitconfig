@@ -1,0 +1,22 @@
+[user]
+	name = Gabriel Cruz
+	email = gabrieldemelocruz@gmail.com
+
+[core]
+	editor = nvim
+
+[commit]
+    gpgsign = true
+
+[github]
+	user = gmelodie
+
+[pull]
+    ff = only
+
+[alias]
+    a = add --all
+    s = status
+    c = commit
+    ch = checkout
+    unadd = restore --staged
