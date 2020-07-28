@@ -105,12 +105,10 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # change default text editor to nvim
-alias nvim=~/.nvim/nvim.appimage
-export VISUAL=~/.nvim/nvim.appimage
+export VISUAL=nvim
 export EDITOR="$VISUAL"
-
 alias oldvim=vim
-alias vim=~/.nvim/nvim.appimage
+alias vim=nvim
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 

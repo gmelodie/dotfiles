@@ -276,9 +276,11 @@ set statusline=%F%m%r%h%w%=(%{&ff}/%Y)\ (line\ %l\/%L,\ col\ %c)\
 nnoremap n nzzzv
 nnoremap N Nzzzv
 
+" vim-fugitive
 if exists("*fugitive#statusline")
   set statusline+=%{fugitive#statusline()}
 endif
+set diffopt+=vertical
 
 " vim-airline
 " let g:airline_theme = 'powerlineish'  " in case you want a dark background

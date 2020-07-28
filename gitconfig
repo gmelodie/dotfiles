@@ -1,6 +1,7 @@
 [user]
 	name = Gabriel Cruz
 	email = gabrieldemelocruz@gmail.com
+	signingkey = C1818F9BA91EBD38
 
 [core]
 	editor = nvim
