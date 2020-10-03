@@ -29,6 +29,13 @@ endif
 " Required:
 call plug#begin(expand('~/.config/nvim/plugged'))
 
+" Syntax highlight
+" Default highlight is better than polyglot
+" Needs to be before the Plug loading line
+let g:polyglot_disabled = ['python']
+let python_highlight_all = 1
+
+
 "*****************************************************************************
 "" Plug install packages
 "*****************************************************************************
@@ -48,7 +55,7 @@ Plug 'Yggdroot/indentLine'
 Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-surround'
 Plug 'valloric/youcompleteme'
-
+Plug 'rust-lang/rust.vim'
 
 
 "" FZF
@@ -631,11 +638,6 @@ augroup END
 
 " vim-airline
 let g:airline#extensions#virtualenv#enabled = 1
-
-" Syntax highlight
-" Default highlight is better than polyglot
-let g:polyglot_disabled = ['python']
-let python_highlight_all = 1
 
 
 " ruby
