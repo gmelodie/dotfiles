@@ -20,5 +20,6 @@
     a = add --all
     s = status
     c = commit
+    l = log --oneline
     ch = checkout
     unadd = restore --staged

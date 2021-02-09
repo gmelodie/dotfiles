@@ -2,7 +2,7 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-  export ZSH="/home/$USER/.oh-my-zsh"
+export ZSH="/home/$USER/.oh-my-zsh"
 
 # Fix encoding bug
 export LANG=en_US.UTF-8
@@ -124,6 +124,4 @@ export GPG_TTY=$(tty)
 
 # Virtualenvwrapper (python) stuff
 export WORKON_HOME=$HOME/.virtualenvs
-path+=('$HOME/.local/bin')
-export PATH
-
+export PATH=$PATH:$HOME/.local/bin
