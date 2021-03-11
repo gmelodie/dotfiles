@@ -40,4 +40,12 @@ echo 'Installing Git configurations (.gitconfig)'
 ln -sf $BASEDIR/gitconfig $HOME/.gitconfig
 
 
+echo 'Installing xcreep'
+if ! command -v go &> /dev/null
+then
+    echo "Golang not found, skipping xcreep installation"
+else
+    go get github.com/gmelodie/xcreep
+fi
+
 echo 'All done!'
