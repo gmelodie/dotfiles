@@ -106,10 +106,10 @@ export NVM_DIR="$HOME/.nvm"
 
 # change default text editor to nvim
 export NVIM_APPIMAGE="$HOME/.nvim/nvim.appimage"
-export VISUAL=$NVIM_APPIMAGE
-export EDITOR="$VISUAL"
+export VISUAL="$NVIM_APPIMAGE"
+export EDITOR="$NVIM_APPIMAGE"
 alias oldvim=vim
-alias vim=$NVIM_APPIMAGE
+alias vim="$NVIM_APPIMAGE"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
