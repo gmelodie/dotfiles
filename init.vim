@@ -336,13 +336,12 @@ let Grep_Skip_Dirs = '.git node_modules'
 let g:vimshell_user_prompt = 'fnamemodify(getcwd(), ":~")'
 let g:vimshell_prompt =  '$ '
 
-" terminal emulation
+" terminal emulation (open terminal on new split to the right)
 if g:vim_bootstrap_editor == 'nvim'
-  nnoremap <silent> <leader>sh :terminal<CR>
+  nnoremap <silent> <leader>t :vsplit \| terminal<CR> \| a
 else
-  nnoremap <silent> <leader>sh :VimShellCreate<CR>
+  nnoremap <silent> <leader>t :vsplit \| VimShellCreate<CR> \| a
 endif
-
 
 "*****************************************************************************
 "" Functions
@@ -390,6 +389,9 @@ set autoread
 "*****************************************************************************
 
 "" Split
+" new splits are put below and to the right
+set splitbelow
+set splitright
 noremap <Leader>h :<C-u>split<CR>
 noremap <Leader>v :<C-u>vsplit<CR>
 
@@ -421,7 +423,7 @@ nnoremap <leader>. :lcd %:p:h<CR>
 noremap <Leader>e :e <C-R>=expand("%:p:h") . "/" <CR>
 
 "" Opens a tab edit command with the path of the currently edited file filled
-noremap <Leader>te :tabe <C-R>=expand("%:p:h") . "/" <CR>
+" noremap <Leader>te :tabe <C-R>=expand("%:p:h") . "/" <CR>
 
 "" fzf.vim
 set wildmode=list:longest,list:full
@@ -623,7 +625,7 @@ augroup go
   au FileType go nmap <Leader>db <Plug>(go-doc-browser)
 
   au FileType go nmap <leader>r  <Plug>(go-run)
-  au FileType go nmap <leader>t  <Plug>(go-test)
+  " au FileType go nmap <leader>t  <Plug>(go-test)
   au FileType go nmap <Leader>gt <Plug>(go-coverage-toggle)
   au FileType go nmap <Leader>i <Plug>(go-info)
   au FileType go nmap <silent> <Leader>l <Plug>(go-metalinter)
@@ -690,7 +692,7 @@ let g:tagbar_type_ruby = {
 \ }
 
 " RSpec.vim mappings
-map <Leader>t :call RunCurrentSpecFile()<CR>
+" map <Leader>t :call RunCurrentSpecFile()<CR>
 map <Leader>s :call RunNearestSpec()<CR>
 map <Leader>l :call RunLastSpec()<CR>
 map <Leader>a :call RunAllSpecs()<CR>
