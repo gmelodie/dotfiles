@@ -1,0 +1,9 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Type=Application
+Name=Obsidian
+Comment=Obsidian note taking app
+# Icon=/home/gmelodie/Applications/Minecraft/icon.png
+Exec=/home/gmelodie/applications/obsidian.AppImage
+Terminal=false
+# Categories=Obsidian;games

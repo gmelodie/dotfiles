@@ -41,3 +41,9 @@ Be sure to log out and log back into your account so that the changes in zsh can
 - Using `gnome-terminal` opening a new tab is going to redirect you to the `~/` directory. In order to open the tabe in the same directory (i.e. `pwd`) you have to go to gnome-terminal > preferences > your profile > command and check `Run command as a login shell`.
 - Install the `fzf` package (the `fzf` vim plugin will already be installed, but the package must be done manually).
 - Install the [xcreep](https://github.com/gmelodie/xcreep) utility.
+- Install [Obsidian](https://obsidian.md/) and `mv` it as `/home/gmelodie/applications/obsidian.appimage`.
+- Clone the [vaults]() repo and add the following lines to `vaults/.git/config` in order to make git backup push without asking for a password:
+```
+[commit]
+    gpgSign = false
+```

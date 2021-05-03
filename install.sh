@@ -50,3 +50,7 @@ fi
 
 echo 'All done!'
 echo 'Make sure to log out and back in so that changes can take place'
+
+
+# Symlink application desktop icons
+ln -sf $BASEDIR/applications/* $HOME/.local/share/applications
