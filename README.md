@@ -31,7 +31,7 @@ Be sure to log out and log back into your account so that the changes in zsh can
 ## Common issues
 - Make sure you log out and back in after changing the default shell to zsh (with the command `chsh` that is executed by default in the `install.sh` script)
 
-- If you don't have `ctags` installed you might get this error: `Executable 'ctags' can't be found. Gutentags will be disabled. You can re-enable it by setting g:gutentags_enabled back to 1.`
+- If you don't have `exuberant-ctags` installed you might get this error: `Executable 'ctags' can't be found. Gutentags will be disabled. You can re-enable it by setting g:gutentags_enabled back to 1.`
 
 - Depending on your systems's [`locale`](https://wiki.archlinux.org/index.php/Locale), mostly if it's not en-US, you may have some bugs with autocomplete and line breaks on `zsh`. In order to fix that (which will also change the language of your shell session to English), add `export LANG=en_US.UTF-8` to your `zshrc`. (*obs: this was already done in the current repo's zshrc file*)
 
