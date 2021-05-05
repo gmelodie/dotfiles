@@ -35,6 +35,8 @@ Be sure to log out and log back into your account so that the changes in zsh can
 
 - Depending on your systems's [`locale`](https://wiki.archlinux.org/index.php/Locale), mostly if it's not en-US, you may have some bugs with autocomplete and line breaks on `zsh`. In order to fix that (which will also change the language of your shell session to English), add `export LANG=en_US.UTF-8` to your `zshrc`. (*obs: this was already done in the current repo's zshrc file*)
 
+- `[coc.nvim] "node" is not executable` usually means you don't have `nodejs` installed.
+
 ## Other configurations
 - Terminal font: Hack Regular 12
 - Terminal colors: Use the [gruvbox](https://github.com/morhetz/gruvbox) theme colors
