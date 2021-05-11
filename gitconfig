@@ -1,7 +1,7 @@
 [user]
 	name = Gabriel Cruz
 	email = gabrieldemelocruz@gmail.com
-	signingkey = E68177C2DAB14F55
+	signingkey = 0CC6487AB9E3BF95
 
 [commit]
     gpgsign = true
