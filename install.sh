@@ -48,6 +48,14 @@ else
     go get github.com/gmelodie/xcreep
 fi
 
+echo 'Loading gnome-terminal preferences'
+if ! command -v gnome-terminal &> /dev/null
+then
+    echo "gnome-terminal not found, skipping preferences installation"
+else
+    cat $BASEDIR/gterminal.preferences | dconf load /org/gnome/terminal/legacy/profiles:/
+fi
+
 echo 'All done!'
 echo 'Make sure to log out and back in so that changes can take place'
 

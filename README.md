@@ -28,6 +28,9 @@ With all the requirements installed, simply run
 
 Be sure to log out and log back into your account so that the changes in zsh can take place
 
+## Notes for developers (or myself)
+- To save `gnome-terminal` preferences use `dconf dump /org/gnome/terminal:/ > gterminal.preferences` ([reference](https://askubuntu.com/a/1241849/855527))
+
 ## Common issues
 - Make sure you log out and back in after changing the default shell to zsh (with the command `chsh` that is executed by default in the `install.sh` script)
 
