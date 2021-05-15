@@ -5,6 +5,7 @@ BASEDIR="$( cd "$(dirname "$0")" ; pwd -P )"
 # Copy repo to $HOME/.dotfiles
 echo 'Installing dotfiles...'
 
+# --------------------- NVIM ------------------------
 # copy neovim configuration file
 echo 'Installing Neovim configurations (init.vim)'
 mkdir -p $HOME/.config/nvim
@@ -18,6 +19,30 @@ fi
 ln -sf $BASEDIR/init.vim $HOME/.config/nvim/init.vim
 
 
+# --------------------- GIT ------------------------
+echo 'Installing Git configurations (.gitconfig)'
+ln -sf $BASEDIR/gitconfig $HOME/.gitconfig
+
+
+# --------------------- XCREEP ------------------------
+echo 'Installing xcreep'
+if ! command -v go &> /dev/null
+then
+    echo "Golang not found, skipping xcreep installation"
+else
+    go get github.com/gmelodie/xcreep
+fi
+
+# --------------------- GNOME PREFERENCES ------------------------
+echo 'Loading gnome-terminal preferences'
+if ! command -v gnome-terminal &> /dev/null
+then
+    echo "gnome-terminal not found, skipping preferences installation"
+else
+    cat $BASEDIR/gterminal.preferences | dconf load /org/gnome/terminal/legacy/profiles:/
+fi
+
+# --------------------- ZSH ------------------------
 echo 'Installing Zsh configurations (zshrc)'
 
 # change default shell to zsh
@@ -36,29 +61,12 @@ fi
 ln -sf $BASEDIR/zshrc $HOME/.zshrc
 
 
-echo 'Installing Git configurations (.gitconfig)'
-ln -sf $BASEDIR/gitconfig $HOME/.gitconfig
+# --------------------- DESKTOP ICONS ------------------------
+# Symlink application desktop icons
+ln -sf $BASEDIR/applications/* $HOME/.local/share/applications
 
-
-echo 'Installing xcreep'
-if ! command -v go &> /dev/null
-then
-    echo "Golang not found, skipping xcreep installation"
-else
-    go get github.com/gmelodie/xcreep
-fi
-
-echo 'Loading gnome-terminal preferences'
-if ! command -v gnome-terminal &> /dev/null
-then
-    echo "gnome-terminal not found, skipping preferences installation"
-else
-    cat $BASEDIR/gterminal.preferences | dconf load /org/gnome/terminal/legacy/profiles:/
-fi
 
 echo 'All done!'
 echo 'Make sure to log out and back in so that changes can take place'
 
 
-# Symlink application desktop icons
-ln -sf $BASEDIR/applications/* $HOME/.local/share/applications
