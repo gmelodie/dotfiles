@@ -21,6 +21,9 @@ and pastes everything into place.
 7. Golang
 8. [`ctags`](https://ctags.io/)
 
+```
+curl python3 python3-neovim build-essentials zsh golang exuberant-ctags gnome-terminal
+```
 
 ## Installation
 With all the requirements installed, simply run

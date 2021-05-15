@@ -2,11 +2,15 @@
 
 BASEDIR="$( cd "$(dirname "$0")" ; pwd -P )"
 
-# Copy repo to $HOME/.dotfiles
+
+# Install dependencies (requires apt)
+sudo apt -y update && sudo apt -y upgrade
+sudo apt install curl python3 python3-neovim build-essentials zsh golang exuberant-ctags gnome-terminal
+
+
 echo 'Installing dotfiles...'
 
 # --------------------- NVIM ------------------------
-# copy neovim configuration file
 echo 'Installing Neovim configurations (init.vim)'
 mkdir -p $HOME/.config/nvim
 
