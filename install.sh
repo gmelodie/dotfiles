@@ -5,7 +5,7 @@ BASEDIR="$( cd "$(dirname "$0")" ; pwd -P )"
 
 # Install dependencies (requires apt)
 sudo apt -y update && sudo apt -y upgrade
-sudo apt install curl python3 python3-neovim python3-virtualenvwrapper build-essential zsh golang exuberant-ctags gnome-terminal fzf
+sudo apt install curl python3 python3-neovim python3-virtualenvwrapper build-essential zsh golang exuberant-ctags gnome-terminal fzf nodejs
 
 
 echo 'Installing dotfiles...'
@@ -13,7 +13,7 @@ echo 'Installing dotfiles...'
 # --------------------- NVIM ------------------------
 echo 'Installing Neovim configurations (appimage, init.vim)'
 mkdir -p $HOME/.nvim
-wget "https://github.com/neovim/neovim/releases/latest/download/nvim.appimage" -o $HOME/.nvim/nvim.appimage
+wget -O $HOME/.nvim/nvim.appimage "https://github.com/neovim/neovim/releases/latest/download/nvim.appimage"
 chmod +x $HOME/.nvim/nvim.appimage
 
 mkdir -p $HOME/.config/nvim
