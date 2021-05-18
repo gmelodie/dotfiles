@@ -10,20 +10,10 @@ and pastes everything into place.
 ## Currently supported applications
 * Neovim
 * Zsh
+* Gnome Terminal
 
 ## Requirements
-1. `curl`
-2. `python3`
-3. Neovim (download the [appimage](https://github.com/neovim/neovim/releases/latest) and put it in, `~/.nvim`)
-4. `python3-neovim` (`python-pynvim` for arch)
-5. [FUSE](https://github.com/AppImage/AppImageKit/wiki/FUSE) and `cmake` for neovim's appimage
-6. [`zsh`](https://github.com/ohmyzsh/ohmyzsh/wiki/Installing-ZSH)
-7. Golang
-8. [`ctags`](https://ctags.io/)
-
-```
-curl python3 python3-neovim build-essentials zsh golang exuberant-ctags gnome-terminal
-```
+Installed by default, check `install.sh` for a list of installed modules.
 
 ## Installation
 With all the requirements installed, simply run
@@ -48,8 +38,6 @@ Be sure to log out and log back into your account so that the changes in zsh can
 - Terminal font: Hack Regular 12
 - Terminal colors: Use the [gruvbox](https://github.com/morhetz/gruvbox) theme colors
 - Using `gnome-terminal` opening a new tab is going to redirect you to the `~/` directory. In order to open the tabe in the same directory (i.e. `pwd`) you have to go to gnome-terminal > preferences > your profile > command and check `Run command as a login shell`.
-- Install the `fzf` package (the `fzf` vim plugin will already be installed, but the package must be done manually).
-- Install the [xcreep](https://github.com/gmelodie/xcreep) utility.
 - Install [Obsidian](https://obsidian.md/) and `mv` it as `/home/gmelodie/applications/obsidian.appimage`.
 - Clone the [vaults]() repo and add the following lines to `vaults/.git/config` in order to make git backup push without asking for a password:
 ```
