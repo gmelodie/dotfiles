@@ -49,3 +49,4 @@ Be sure to log out and log back into your account so that the changes in zsh can
 ## Kali configs
 - PT keyboard layout is `Portuguese (Brasil) Nativo for US keyboards`
 - Create new sudo user (`sudo useradd -m new_user`, `sudo usermod -aG sudo new_user`) and delete `kali` user (`sudo userdel kali` and `sudo rm -rf /home/kali`)
+- Install `ufw` and enable it denying all ports by default (`sudo ufw default deny incoming` and `sudo ufw enable`) -> limit SSH if applicable
