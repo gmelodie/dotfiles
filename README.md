@@ -33,14 +33,19 @@ Be sure to log out and log back into your account so that the changes in zsh can
 
 - `[coc.nvim] "node" is not executable` usually means you don't have `nodejs` installed.
 
-## Other configurations
+## Manual configurations
 - KDE Desktop switching: `System settings` > `Workspace` > `Shortcuts` > `Kwin` and reassign "Switch to Next Desktop" to `Meta` + `Tab`
 - Terminal font: Hack Regular 12
 - Terminal colors: Use the [gruvbox](https://github.com/morhetz/gruvbox) theme colors
 - Using `gnome-terminal` opening a new tab is going to redirect you to the `~/` directory. In order to open the tabe in the same directory (i.e. `pwd`) you have to go to gnome-terminal > preferences > your profile > command and check `Run command as a login shell`.
+- PT keyboard layout is `Portuguese (Brasil) Nativo for US keyboards`
 - Install [Obsidian](https://obsidian.md/) and `mv` it as `/home/gmelodie/applications/obsidian.appimage`.
 - Clone the [vaults]() repo and add the following lines to `vaults/.git/config` in order to make git backup push without asking for a password:
 ```
 [commit]
     gpgSign = false
 ```
+
+## Kali configs
+- PT keyboard layout is `Portuguese (Brasil) Nativo for US keyboards`
+- Create new sudo user (`sudo useradd -m new_user`, `sudo usermod -aG sudo new_user`) and delete `kali` user (`sudo userdel kali` and `sudo rm -rf /home/kali`)
