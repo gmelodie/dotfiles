@@ -11,9 +11,12 @@ sudo apt install curl python3 python3-neovim python3-virtualenvwrapper build-ess
 echo 'Installing dotfiles...'
 
 # --------------------- NVIM ------------------------
-echo 'Installing Neovim configurations (init.vim)'
-mkdir -p $HOME/.config/nvim
+echo 'Installing Neovim configurations (appimage, init.vim)'
+mkdir -p $HOME/.nvim
+wget "https://github.com/neovim/neovim/releases/latest/download/nvim.appimage" -o $HOME/.nvim/nvim.appimage
+chmod +x $HOME/.nvim/nvim.appimage
 
+mkdir -p $HOME/.config/nvim
 if [ -e $HOME/.config/nvim/init.vim ]
 then
     echo '[Warning] Found existent init.vim, moving to init.vim.old'
