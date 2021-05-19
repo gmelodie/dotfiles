@@ -5,7 +5,7 @@ BASEDIR="$( cd "$(dirname "$0")" ; pwd -P )"
 
 # Install dependencies (requires apt)
 sudo apt -y update && sudo apt -y upgrade
-sudo apt install curl python3 python3-neovim python3-virtualenvwrapper build-essential zsh golang exuberant-ctags gnome-terminal fzf nodejs
+sudo apt install curl build-essential git python3 python3-neovim python3-virtualenvwrapper golang zsh exuberant-ctags gnome-terminal fzf nodejs dconf
 
 
 echo 'Installing dotfiles...'
@@ -26,6 +26,11 @@ fi
 ln -sf $BASEDIR/init.vim $HOME/.config/nvim/init.vim
 
 
+
+# --------------------- SSH and GPG ------------------------
+echo 'Generating SSH and GPG keys'
+$BASEDIR/gen-ssh-gpg-keys.sh
+
 # --------------------- GIT ------------------------
 echo 'Installing Git configurations (.gitconfig)'
 ln -sf $BASEDIR/gitconfig $HOME/.gitconfig
@@ -35,7 +40,7 @@ ln -sf $BASEDIR/gitconfig $HOME/.gitconfig
 echo 'Installing xcreep'
 if ! command -v go &> /dev/null
 then
-    echo "Golang not found, skipping xcreep installation"
+    echo "[Error] Golang not found, skipping xcreep installation"
 else
     go get github.com/gmelodie/xcreep
 fi
@@ -44,7 +49,7 @@ fi
 echo 'Loading gnome-terminal preferences'
 if ! command -v gnome-terminal &> /dev/null
 then
-    echo "gnome-terminal not found, skipping preferences installation"
+    echo "[Error] gnome-terminal not found, skipping preferences installation"
 else
     cat $BASEDIR/gterminal.preferences | dconf load /org/gnome/terminal/legacy/profiles:/
 fi
