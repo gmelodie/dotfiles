@@ -1,0 +1,7 @@
+name: custom-matches
+parent: default
+
+matches:
+  # Viana & Vargas mention
+  - trigger: ":vv"
+    replace: "@307631493 (Viana) @Vargas0o "

@@ -11,6 +11,7 @@ echo -n 'Starting full system update...'
 # Install dependencies (requires apt)
 sudo apt -y update > /dev/null 2>&1 && sudo apt -y upgrade > /dev/null 2>&1
 sudo apt install curl build-essential git python3 python3-neovim python3-virtualenvwrapper golang zsh exuberant-ctags gnome-terminal fzf nodejs dconf > /dev/null 2>&1
+snap install espanso --classic
 
 echo -e "${GREEN}Done${NC}"
 
@@ -31,6 +32,20 @@ fi
 ln -sf $BASEDIR/init.vim $HOME/.config/nvim/init.vim
 
 echo -e "${GREEN}Done${NC}"
+
+
+# --------------------- Espanso ------------------------
+echo -n 'Installing Espanso configurations (default.yml)'
+mkdir -p $HOME/.config/espanso
+if [ -e $HOME/.config/espanso/default.yml ]
+then
+    echo -e "\n${ORANGE}[Warning] Found existent default.yml, moving to default.yml.old${NC}"
+    mv $HOME/.config/espanso/default.yml $HOME/.config/espanso/default.yml.old
+fi
+
+ln -sf $BASEDIR/espanso.yml $HOME/.config/espanso/user/espanso.yml
+echo -e "${GREEN}Done${NC}"
+
 
 
 # --------------------- SSH and GPG ------------------------
