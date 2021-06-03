@@ -56,6 +56,7 @@ Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-surround'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'rust-lang/rust.vim'
+Plug 'justinmk/vim-sneak'
 
 
 "" FZF
