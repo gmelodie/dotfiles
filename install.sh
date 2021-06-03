@@ -107,6 +107,15 @@ fi
 
 ln -sf $BASEDIR/zshrc $HOME/.zshrc
 
+# copy p10k configuration file
+if [ -e $HOME/.p10k.zsh ]
+then
+    echo -e "\n${ORANGE}[Warning] Found existent p10k.zsh, moving to p10k.zsh.old${NC}"
+    mv $HOME/.p10k.zsh $HOME/p10k.zsh.old
+fi
+
+ln -sf $BASEDIR/p10k.zsh $HOME/.p10k.zsh
+
 
 echo 'All done!'
 echo 'Make sure to log out and back in so that changes can take place'

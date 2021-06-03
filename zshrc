@@ -1,3 +1,10 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
@@ -10,7 +17,8 @@ export LANG=en_US.UTF-8
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME="robbyrussell"
+# ZSH_THEME="robbyrussell"
+ZSH_THEME="powerlevel10k/powerlevel10k"
 
 # Set list of themes to load
 # Setting this variable when ZSH_THEME=random
@@ -68,8 +76,10 @@ plugins=(
   git
   vi-mode
   fzf
-  virtualenvwrapper # enter a venv automatically when cd into project
-                    # IMPORTANT: venv and dir must have the same name
+  colored-man-pages
+  fancy-ctrl-z # ctrl + z foregrounds process again
+  magic-enter
+  # zsh-z           # cd to most frequent dirs
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -84,6 +94,13 @@ source $ZSH/oh-my-zsh.sh
 # else
 #   export EDITOR='mvim'
 # fi
+
+
+# Magic Enter configs
+# MAGIC_ENTER_GIT_COMMAND='git status -u .' # -> default
+MAGIC_ENTER_GIT_COMMAND='ls' # -> default
+MAGIC_ENTER_OTHER_COMMAND='ls'
+
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
@@ -108,7 +125,6 @@ export NVM_DIR="$HOME/.nvm"
 export NVIM_APPIMAGE="$HOME/.nvim/nvim.appimage"
 export VISUAL="$NVIM_APPIMAGE"
 export EDITOR="$NVIM_APPIMAGE"
-alias oldvim=vim
 alias vim="$NVIM_APPIMAGE"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
@@ -133,3 +149,6 @@ function close_stremio {
         kill -9 $process 2>/dev/null;
     done
 }
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
