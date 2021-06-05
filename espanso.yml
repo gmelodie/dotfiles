@@ -5,3 +5,11 @@ matches:
   # Viana & Vargas mention
   - trigger: ":vv"
     replace: "@307631493 (Viana) @Vargas0o "
+
+  # My personal website
+  - trigger: ":gm"
+    replace: "https://gmcruz.me/"
+
+  # My resume
+  - trigger: ":resume"
+    replace: "https://gmcruz.me/resume.pdf"
