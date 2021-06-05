@@ -17,7 +17,19 @@ Installed by default, check `install.sh` for a list of installed modules.
 
 ## Installation
 With all the requirements installed, simply run
-`./install.sh`
+```bash
+./install.sh
+```
+
+Only update configuration files
+```bash
+./install.sh -c
+```
+
+Print usage help
+```bash
+./install.sh -h
+```
 
 Be sure to log out and log back into your account so that the changes in zsh can take place
 
