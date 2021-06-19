@@ -46,7 +46,7 @@ function install() {
     echo '############# Starting full system upgrade...'
 
     sudo apt -y update > /dev/null 2>&1 && sudo apt -y upgrade > /dev/null 2>&1
-    sudo apt install curl build-essential git python3 python3-neovim python3-virtualenvwrapper golang zsh exuberant-ctags gnome-terminal fzf nodejs dconf > /dev/null 2>&1
+    sudo apt install curl build-essential git python3 python3-neovim python3-virtualenvwrapper golang zsh exuberant-ctags gnome-terminal fzf nodejs dconf tmux > /dev/null 2>&1
 
     echo 'Installing espanso...'
     snap install espanso --classic
@@ -100,6 +100,9 @@ function config() {
 
     echo -n 'Zsh configurations (.zshrc)...'
     link_config_file $BASEDIR/zshrc $HOME/.zshrc
+
+    echo -n 'Tmux configurations (.tmux.conf)...'
+    link_config_file $BASEDIR/tmux.conf $HOME/.tmux.conf
 
     echo -n 'Loading gnome-terminal preferences...'
     if ! command -v gnome-terminal &> /dev/null
