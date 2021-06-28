@@ -140,8 +140,12 @@ export WORKON_HOME=$HOME/.virtualenvs
 export PATH=$PATH:$HOME/.local/bin
 
 # workaround for stremio not closing bug
-function close_stremio {
-    for process in $(ps aux | grep stremio | cut -d " " -f 5); do
+alias close_stremio="fclose stremio"
+
+# force close any
+# usage: fclose stremio
+function fclose {
+    for process in $(ps aux | grep $1 | cut -d " " -f 5); do
         kill -9 $process 2>/dev/null;
     done
 }
