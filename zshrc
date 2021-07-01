@@ -1,6 +1,9 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
+# Current directory (handy variable)
+CURR_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+
 # Path to your oh-my-zsh installation.
 export ZSH="/home/$USER/.oh-my-zsh"
 
@@ -149,3 +152,6 @@ function fclose {
         kill -9 $process 2>/dev/null;
     done
 }
+
+# Add scripts/ to PATH
+export PATH=$PATH:$CURR_DIR/scripts
