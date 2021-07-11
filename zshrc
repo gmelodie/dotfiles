@@ -132,6 +132,7 @@ alias vim="$NVIM_APPIMAGE"
 # GOPATH sets the workspace where go code is in
 # In this case we keep _all_ the go code in $HOME/go
 export GOPATH=$HOME/go
+export GO111MODULE='on' # dunno what it does, but related to nvim-go
 export PATH=$PATH:/usr/local/go/bin
 export PATH=$PATH:$(go env GOPATH)/bin
 
