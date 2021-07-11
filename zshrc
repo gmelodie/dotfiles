@@ -154,5 +154,8 @@ function fclose {
     done
 }
 
-# Add scripts/ to PATH
-export PATH=$PATH:$CURR_DIR/scripts
+# For my scripts
+# export PATH=$PATH:$HOME/scripts
+for script in $(ls $HOME/scripts/*.sh); do
+    source $script
+done
