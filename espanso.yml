@@ -2,14 +2,28 @@ name: custom-matches
 parent: default
 
 matches:
-  # Viana & Vargas mention
+  # Viana & Vargas mention (telegram)
   - trigger: ":vv"
     replace: "@307631493 (Viana) @Vargas0o "
 
-  # My personal website
   - trigger: ":gm"
     replace: "https://gmcruz.me/"
 
-  # My resume
   - trigger: ":resume"
     replace: "https://gmcruz.me/resume.pdf"
+
+  - trigger: ":linkedin"
+    replace: "https://www.linkedin.com/in/gabriel-de-melo-cruz/"
+
+  - trigger: ":twitter"
+    replace: "https://twitter.com/gmelodiecruz"
+
+  - trigger: ":email"
+    replace: "gabrieldemelocruz@gmail.com"
+
+  - trigger: ":github"
+    replace: "https://github.com/gmelodie/"
+
+  - trigger: ":htb"
+    replace: "https://app.hackthebox.eu/profile/138325"
+
