@@ -191,9 +191,10 @@ set incsearch
 set ignorecase
 set smartcase
 
-"" Directories for swp files
-set nobackup
-set noswapfile
+"" Directories for swp files (SET THIS)
+set directory=~/.nvim/
+" set nobackup
+" set noswapfile
 
 set fileformats=unix,dos,mac
 
