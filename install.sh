@@ -46,7 +46,7 @@ function install() {
     echo '############# Starting full system upgrade...'
 
     sudo apt -y update > /dev/null 2>&1 && sudo apt -y upgrade > /dev/null 2>&1
-    sudo apt install curl build-essential git python3 python3-neovim python3-virtualenvwrapper golang zsh exuberant-ctags gnome-terminal fzf nodejs dconf tmux > /dev/null 2>&1
+    sudo apt install -y curl build-essential git python3 python3-neovim python3-virtualenvwrapper golang zsh exuberant-ctags gnome-terminal fzf nodejs tmux
 
     echo 'Installing espanso...'
     snap install espanso --classic
@@ -64,17 +64,18 @@ function install() {
         go get github.com/gmelodie/xcreep > /dev/null 2>&1
     fi
 
-    echo 'Installing Zsh...'
-    # change default shell to zsh
-    chsh -s $(which zsh)
-    # install oh-my-zsh
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-
     echo 'Generating SSH and GPG keys'
     $BASEDIR/gen-ssh-gpg-keys.sh
 
     echo -n 'Changing dotfiles remote from HTTPS to SSH...'
     git remote set-url origin git@github.com:gmelodie/dotfiles.git
+
+    echo 'Installing Zsh...'
+    # install oh-my-zsh
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+    # change default shell to zsh
+    chsh -s $(which zsh)
+
 
     echo -e "${GREEN}Done${NC}"
 
