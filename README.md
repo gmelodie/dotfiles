@@ -45,6 +45,8 @@ Be sure to log out and log back into your account so that the changes in zsh can
 
 - `[coc.nvim] "node" is not executable` usually means you don't have `nodejs` installed.
 
+- `curl -sL install-node.vercel.app/lts | bash` just do `curl -sL install-node.vercel.app/lts | bash` (from [here](https://github.com/neoclide/coc.nvim))
+
 ## Manual configurations
 - KDE Desktop switching: `System settings` > `Workspace` > `Shortcuts` > `Kwin` and reassign "Switch to Next Desktop" to `Meta` + `Tab`
 - Terminal font: Hack Regular 12
