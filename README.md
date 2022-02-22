@@ -50,7 +50,8 @@ Be sure to log out and log back into your account so that the changes in zsh can
 - Terminal font: Hack Regular 12
 - Terminal colors: Use the [gruvbox](https://github.com/morhetz/gruvbox) theme colors
 - Using `gnome-terminal` opening a new tab is going to redirect you to the `~/` directory. In order to open the tabe in the same directory (i.e. `pwd`) you have to go to gnome-terminal > preferences > your profile > command and check `Run command as a login shell`.
-- PT keyboard layout is `Portuguese (Brasil) Nativo for US keyboards`
+- `Settings` > `Keyboard Shortcuts` > `Switch to next input source` and set it to `Ctrl+Alt+K`
+- Add two keyboard layouts: Install the `Portuguese` language packages, then set the keyboard layouts to `English(US)` and `English(US, alt., intl.)`
 - Install [Obsidian](https://obsidian.md/) and `mv` it as `/home/gmelodie/applications/obsidian.appimage`.
 - Clone the [vaults]() repo and add the following lines to `vaults/.git/config` in order to make git backup push without asking for a password:
 ```
