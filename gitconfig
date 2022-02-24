@@ -21,3 +21,4 @@
     l = log --oneline
     ch = checkout
     unadd = restore --staged
+    conflicts = diff --name-only --diff-filter=U
