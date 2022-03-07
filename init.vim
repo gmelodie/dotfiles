@@ -500,8 +500,14 @@ let g:tagbar_autoclose = 0
 " Gutentags
 " VimEnter makes the mapping run
 " after plugins are loaded (override plugins)
-autocmd VimEnter * nnoremap J <C-]>
-autocmd VimEnter * nnoremap K <C-T>
+" DANGEROUS!!! RECURSIVE MAPPINGS AHEAD
+" using recursive mappings lets us make use of
+" remaps from particular plugins (aka vim-go)
+autocmd VimEnter * nmap J <C-]>
+autocmd VimEnter * nmap K <C-t>
+let g:go_doc_keywordprg_enabled = 0 " remove stupid vim-go K mapping
+
+" need special maps when dealing with go files (vim-go gets angry)
 " tell gutentags where the root of the project is
 let g:gutentags_add_default_project_roots = 0
 let g:gutentags_project_root = ['package.json', '.git']
