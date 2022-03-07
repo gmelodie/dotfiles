@@ -74,7 +74,7 @@ plugins=(
   fzf
   colored-man-pages
   fancy-ctrl-z # ctrl + z foregrounds process again
-  magic-enter
+  # magic-enter
   # zsh-z           # cd to most frequent dirs
 )
 
@@ -94,8 +94,8 @@ source $ZSH/oh-my-zsh.sh
 
 # Magic Enter configs
 # MAGIC_ENTER_GIT_COMMAND='git status -u .' # -> default
-MAGIC_ENTER_GIT_COMMAND='ls' # -> default
-MAGIC_ENTER_OTHER_COMMAND='ls'
+# MAGIC_ENTER_GIT_COMMAND='ls' # -> default
+# MAGIC_ENTER_OTHER_COMMAND='ls'
 
 
 # Compilation flags
