@@ -3,6 +3,10 @@
 	email = gabrieldemelocruz@gmail.com
 	signingkey = 03435EF5D36BD3BDE0DEF338C8676463713F0620
 
+[rerere]
+    enabled = 1
+    autoupdate = 1
+
 [commit]
     gpgsign = true
 

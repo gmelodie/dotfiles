@@ -6,6 +6,9 @@ matches:
   - trigger: ":vv"
     replace: "@307631493 (Viana) @Vargas0o VIANOVARGAS "
 
+  - trigger: ":zoom"
+    replace: "https://protocol.zoom.us/my/gmelodie"
+
   - trigger: ":gm"
     replace: "https://gmcruz.me/"
 

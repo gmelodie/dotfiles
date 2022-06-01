@@ -45,36 +45,30 @@ function link_config_file() { # link_file(here, there)
 function install() {
     echo '############# Starting full system upgrade...'
 
-    sudo apt -y update > /dev/null 2>&1 && sudo apt -y upgrade > /dev/null 2>&1
-    sudo apt install -y curl build-essential git python3 python3-neovim python3-virtualenvwrapper golang zsh exuberant-ctags gnome-terminal fzf nodejs tmux
+    sudo apt -y update > /dev/null && sudo apt -y upgrade > /dev/null
+    sudo apt install -y curl build-essential git python3 python3-neovim python3-virtualenvwrapper golang zsh exuberant-ctags gnome-terminal fzf nodejs tmux golang-go > /dev/null
 
     echo 'Installing espanso...'
     snap install espanso --classic
 
     echo 'Installing neovim appimage...'
-    mkdir -p $HOME/.nvim > /dev/null 2>&1
-    wget -O $HOME/.nvim/nvim.appimage "https://github.com/neovim/neovim/releases/latest/download/nvim.appimage" > /dev/null 2>&1
-    chmod +x $HOME/.nvim/nvim.appimage > /dev/null 2>&1
+    mkdir -p $HOME/.nvim 2>&1
+    wget -O $HOME/.nvim/nvim.appimage "https://github.com/neovim/neovim/releases/latest/download/nvim.appimage" 2>&1
+    chmod +x $HOME/.nvim/nvim.appimage 2>&1
 
     echo 'Installing xcreep...'
-    if ! command -v go &> /dev/null 2>&1
+    if ! command -v go
     then
         echo "\n${RED}[Error] Golang not found, skipping xcreep installation${NC}"
     else
-        go get github.com/gmelodie/xcreep > /dev/null 2>&1
+        go install github.com/gmelodie/xcreep@latest 2>&1
     fi
 
-    echo 'Generating SSH and GPG keys'
-    $BASEDIR/gen-ssh-gpg-keys.sh
-
-    echo -n 'Changing dotfiles remote from HTTPS to SSH...'
-    git remote set-url origin git@github.com:gmelodie/dotfiles.git
-
-    echo 'Installing Zsh...'
+    echo 'Installing Oh my Zsh...'
     # install oh-my-zsh
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
     # change default shell to zsh
-    chsh -s $(which zsh)
+    # chsh -s $(which zsh)
 
 
     echo -e "${GREEN}Done${NC}"
@@ -101,6 +95,7 @@ function config() {
 
     echo -n 'Zsh configurations (.zshrc)...'
     link_config_file $BASEDIR/zshrc $HOME/.zshrc
+    link_config_file $BASEDIR/p10k.zsh $HOME/.p10k.zsh
 
     echo -n 'Tmux configurations (.tmux.conf)...'
     link_config_file $BASEDIR/tmux.conf $HOME/.tmux.conf
@@ -145,6 +140,8 @@ config
 
 
 echo 'All done!'
+echo -e "${GREEN}RUN THE FOLLOWING TO COMPLETE SETUP:${NC}"
+echo "chsh -s \$(which zsh)"
 echo 'Make sure to log out and back in so that changes can take place'
 
 

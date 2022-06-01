@@ -45,6 +45,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'airblade/vim-gitgutter'
+Plug 'f-person/git-blame.nvim'
 Plug 'vim-scripts/grep.vim'
 Plug 'vim-scripts/CSApprox'
 Plug 'bronson/vim-trailing-whitespace'
@@ -57,7 +58,26 @@ Plug 'tpope/vim-surround'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'rust-lang/rust.vim'
 Plug 'justinmk/vim-sneak'
+Plug 'karb94/neoscroll.nvim'
 
+"" vim-sneak + vim-surround (https://gist.github.com/LanHikari22/6b568683d81cbb7a2252fac86f6f4a4b)
+
+let g:surround_no_mappings= 1
+let g:sneak#s_next = 1 "" press s/S to go to next/previous match
+xmap <S-s> <Plug>Sneak_S
+xmap z <Plug>VSurround
+nmap yzz <Plug>Yssurround
+nmap yz  <Plug>Ysurround
+nmap dz  <Plug>Dsurround
+nmap cz  <Plug>Csurround
+omap s <Plug>Sneak_s
+" S mapped with v to make it inclusive, similarly to other backward motions in
+" my config (0 mapped to v0, ^ mapped to v^, etc)
+omap S v<Plug>Sneak_S
+
+
+"" git-blame
+let g:gitblame_enabled = 0
 
 "" FZF
 if isdirectory('/usr/local/opt/fzf')
@@ -71,6 +91,11 @@ if exists('make')
         let g:make = 'make'
 endif
 Plug 'Shougo/vimproc.vim', {'do': g:make}
+
+
+
+"" Neoscroll
+" lua require('neoscroll').setup()
 
 
 "" Vim-Session
