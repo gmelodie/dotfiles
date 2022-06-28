@@ -159,3 +159,5 @@ setopt +o nomatch # https://unix.stackexchange.com/a/310553/235577
 for script in $(ls $HOME/scripts/*.sh 2>/dev/null); do
     source $script
 done
+
+alias say="spd-say"
