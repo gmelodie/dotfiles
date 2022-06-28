@@ -113,6 +113,8 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 #
 alias gs="git status"
+alias gh="git checkout"
+alias gb="git checkout -b"
 
 
 export NVM_DIR="$HOME/.nvm"
@@ -124,6 +126,7 @@ export NVIM_APPIMAGE="$HOME/.nvim/nvim.appimage"
 export VISUAL="$NVIM_APPIMAGE"
 export EDITOR="$NVIM_APPIMAGE"
 alias vim="$NVIM_APPIMAGE"
+alias v="$NVIM_APPIMAGE"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
