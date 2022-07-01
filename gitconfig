@@ -1,7 +1,7 @@
 [user]
 	name = Gabriel Cruz
 	email = gabrieldemelocruz@gmail.com
-	signingkey = 03435EF5D36BD3BDE0DEF338C8676463713F0620
+	signingkey = E66035AE708381D50188FB8E521A99390E2C1AEE
 
 [rerere]
     enabled = 1
