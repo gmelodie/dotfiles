@@ -487,14 +487,14 @@ function! s:check_back_space() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~ '\s'
 endfunction
-inoremap <silent><expr> <Tab>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<Tab>" :
-      \ coc#refresh()
-inoremap <silent><expr> <S-Tab>
-  \ pumvisible() ? "\<C-p>" :
-  \ <SID>check_back_space() ? "\<S-Tab>" :
-  \ coc#refresh()
+
+" tab
+inoremap <silent><expr> <TAB>
+       \ coc#pum#visible() ? coc#pum#next(1):
+       \ <SID>check_back_space() ? "\<Tab>" :
+       \ coc#refresh()
+inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+inoremap <silent><expr> <c-space> coc#refresh()
 
 " UltiSnips
 let g:UltiSnipsEditSplit="vertical"
@@ -503,6 +503,7 @@ let g:UltiSnipsJumpBackwardTrigger="<S-tab>"
 " hacky CR fix https://github.com/SirVer/ultisnips/issues/376#issuecomment-69033351
 let g:UltiSnipsExpandTrigger="<nop>"
 let g:ulti_expand_or_jump_res = 0
+
 function! <SID>ExpandSnippetOrReturn()
   let snippet = UltiSnips#ExpandSnippetOrJump()
   if g:ulti_expand_or_jump_res > 0
@@ -511,7 +512,8 @@ function! <SID>ExpandSnippetOrReturn()
     return "\<CR>"
   endif
 endfunction
-inoremap <expr> <CR> pumvisible() ? "<C-R>=<SID>ExpandSnippetOrReturn()<CR>" : "\<CR>"
+
+" inoremap <expr> <CR> coc#pum#visible() ? coc#pum#confirm() : "<C-R>=<SID>ExpandSnippetOrReturn()<CR>"
 
 
 " Tagbar

@@ -164,3 +164,6 @@ for script in $(ls $HOME/scripts/*.sh 2>/dev/null); do
 done
 
 alias say="spd-say"
+
+# for lazy-commit and other scripts
+export PATH=$PATH:$HOME/dotfiles/scripts
