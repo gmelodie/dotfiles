@@ -115,6 +115,7 @@ source $ZSH/oh-my-zsh.sh
 alias gs="git status"
 alias gh="git checkout"
 alias gb="git checkout -b"
+alias gpf="git push -u origin HEAD"
 
 
 export NVM_DIR="$HOME/.nvm"

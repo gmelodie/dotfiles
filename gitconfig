@@ -25,3 +25,4 @@
     ch = checkout
     unadd = restore --staged
     conflicts = diff --name-only --diff-filter=U
+    whatadded = log --diff-filter=A

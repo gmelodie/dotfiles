@@ -30,3 +30,6 @@ matches:
   - trigger: ":htb"
     replace: "https://app.hackthebox.eu/profile/138325"
 
+  - trigger: ":estuary"
+    replace: "https://github.com/application-research/estuary"
+
