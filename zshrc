@@ -168,3 +168,5 @@ alias say="spd-say"
 
 # for lazy-commit and other scripts
 export PATH=$PATH:$HOME/dotfiles/scripts
+
+alias godog="in your face why"
