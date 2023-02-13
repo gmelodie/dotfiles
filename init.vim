@@ -255,6 +255,7 @@ else
   " IndentLine
   let g:indentLine_enabled = 1
   let g:indentLine_concealcursor = 'inc'
+  let g:indentLine_setConceal = 0
   let g:indentLine_char = '┆'
   let g:indentLine_faster = 1
 
@@ -525,14 +526,16 @@ let g:tagbar_previewwin_pos = "belowright"
 let g:tagbar_autoclose = 0
 
 
+" Go to definition
 " Gutentags
 " VimEnter makes the mapping run
 " after plugins are loaded (override plugins)
 " DANGEROUS!!! RECURSIVE MAPPINGS AHEAD
 " using recursive mappings lets us make use of
 " remaps from particular plugins (aka vim-go)
-autocmd VimEnter * nmap J <C-]>
-autocmd VimEnter * nmap K <C-t>
+"
+autocmd VimEnter * nnoremap J gd
+autocmd VimEnter * nnoremap K <C-o>
 let g:go_doc_keywordprg_enabled = 0 " remove stupid vim-go K mapping
 
 " need special maps when dealing with go files (vim-go gets angry)
@@ -619,6 +622,7 @@ let erlang_show_errors = 1
 " https://github.com/golang/tools/blob/master/gopls/doc/vim.md)
 let g:go_def_mode='gopls'
 let g:go_info_mode='gopls'
+let g:go_doc_keywordprg_enabled = 0 " remove stupid vim-go K mapping
 
 let g:go_list_type = "quickfix"
 let g:go_fmt_command = "goimports"

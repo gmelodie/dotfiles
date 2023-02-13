@@ -26,3 +26,7 @@
     unadd = restore --staged
     conflicts = diff --name-only --diff-filter=U
     whatadded = log --diff-filter=A
+[difftool "idiff"]
+	cmd = diff --unified=3 --color=always --ignore-case $LOCAL $REMOTE | less --raw-control-chars
+    prompt = 0
+    idiff = difftool --tool idiff
