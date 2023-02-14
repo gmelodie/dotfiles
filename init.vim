@@ -483,7 +483,9 @@ nnoremap <silent> <leader>r :Rg<CR>
 " https://github.com/golang/tools/blob/master/gopls/doc/vim.md)
 let g:ale_linters = {
 	\ 'go': ['gopls'],
-	\}
+    \ 'rust': ['analyzer'],
+    \ 'python': ['flake8', 'pylint'],
+\}
 
 " Coc (coc-snippets)
 " use <tab> for trigger completion and navigate to the next complete item
@@ -537,7 +539,9 @@ let g:tagbar_autoclose = 0
 " using recursive mappings lets us make use of
 " remaps from particular plugins (aka vim-go)
 "
-autocmd VimEnter * nnoremap J gd
+" autocmd VimEnter * nnoremap J gd
+" autocmd VimEnter * nnoremap K <C-o>
+autocmd VimEnter * nnoremap J :ALEGoToDefinition<CR>
 autocmd VimEnter * nnoremap K <C-o>
 let g:go_doc_keywordprg_enabled = 0 " remove stupid vim-go K mapping
 
