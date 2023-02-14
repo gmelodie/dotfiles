@@ -473,7 +473,10 @@ endif
 
 cnoremap <C-P> <C-R>=expand("%:p:h") . "/" <CR>
 nnoremap <silent> <leader>b :Buffers<CR>
-nnoremap <silent> <leader>e :FZF -m<CR>
+
+" FZF magic
+nnoremap <silent> <leader>e :Files<CR>
+nnoremap <silent> <leader>r :Rg<CR>
 
 " Ale
 " For gopls issues (source
