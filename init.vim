@@ -493,6 +493,7 @@ let g:ale_linters = {
     \ 'rust': ['analyzer'],
     \ 'python': ['flake8', 'pylint'],
 \}
+nnoremap <leader>d :ALEDetail<CR>
 
 " Coc (coc-snippets)
 " use <tab> for trigger completion and navigate to the next complete item
