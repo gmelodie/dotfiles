@@ -55,14 +55,10 @@ Plug 'dense-analysis/ale'
 Plug 'Yggdroot/indentLine'
 Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-surround'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'justinmk/vim-sneak'
 Plug 'karb94/neoscroll.nvim'
 Plug 'rust-lang/rust.vim'
 call plug#end()
-call coc#add_extension(
-  \ 'coc-rust-analyzer',
-\ )
 
 "" vim-sneak + vim-surround (https://gist.github.com/LanHikari22/6b568683d81cbb7a2252fac86f6f4a4b)
 
@@ -484,33 +480,27 @@ nnoremap <silent> <leader>b :Buffers<CR>
 nnoremap <silent> <leader>e :Files<CR>
 nnoremap <silent> <leader>r :Rg<CR>
 
+
+
 " Ale
-" For gopls issues (source
-" https://github.com/golang/tools/blob/master/gopls/doc/vim.md)
+let g:ale_completion_enabled = 1 " enable autocomplete
+
+" cycle through completions with tab
+inoremap <silent><expr> <Tab>
+      \ pumvisible() ? "\<C-n>" : "\<TAB>"
+
 let g:ale_linters = {
 	\ 'go': ['gopls'],
     \ 'rust': ['analyzer'],
     \ 'python': ['flake8', 'pylint'],
 \}
 let g:ale_fixers = {
-\   'rust': ['rustfmt'],
+\   'rust': ['rustfmt', 'remove_trailing_lines', 'trim_whitespace'],
 \}
+let g:ale_virtualtext_cursor = 'disabled' " dont show errors as comments
 nnoremap <leader>d :ALEDetail<CR>
 
-" Coc (coc-snippets)
-" use <tab> for trigger completion and navigate to the next complete item
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~ '\s'
-endfunction
 
-" tab on coc vim work correctly (from https://blog.logrocket.com/configuring-vim-rust-development/#example-configuration-vim)
-inoremap <silent><expr> <TAB>
-       \ coc#pum#visible() ? coc#pum#next(1):
-       \ <SID>check_back_space() ? "\<Tab>" :
-       \ coc#refresh()
-inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
-inoremap <silent><expr> <c-space> coc#refresh()
 
 
 " UltiSnips
@@ -530,9 +520,6 @@ function! <SID>ExpandSnippetOrReturn()
   endif
 endfunction
 
-" inoremap <expr> <CR> coc#pum#visible() ? coc#pum#confirm() : "<C-R>=<SID>ExpandSnippetOrReturn()<CR>"
-
-
 " Tagbar
 nmap <silent> <F4> :TagbarToggle<CR>
 let g:tagbar_autofocus = 1
@@ -545,7 +532,7 @@ let g:tagbar_autoclose = 0
 " autocmd VimEnter * nnoremap J gd
 " autocmd VimEnter * nnoremap K <C-o>
 autocmd VimEnter * nnoremap J :ALEGoToDefinition<CR>
-autocmd VimEnter * nnoremap K <C-o>
+autocmd VimEnter * nnoremap K <C-t>
 let g:go_doc_keywordprg_enabled = 0 " remove stupid vim-go K mapping
 
 " need special maps when dealing with go files (vim-go gets angry)

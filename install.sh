@@ -88,7 +88,6 @@ function config() {
     echo -n 'Neovim configurations (init.vim)...'
     mkdir -p $HOME/.config/nvim
     link_config_file $BASEDIR/init.vim $HOME/.config/nvim/init.vim
-    link_config_file $BASEDIR/coc-settings.json $HOME/.config/nvim/coc-settings.json
 
     echo -n 'Espanso configurations (default.yml)...'
     mkdir -p $HOME/.config/espanso
