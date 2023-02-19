@@ -59,6 +59,11 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'rust-lang/rust.vim'
 Plug 'justinmk/vim-sneak'
 Plug 'karb94/neoscroll.nvim'
+Plug 'rust-lang/rust.vim'
+call plug#end()
+call coc#add_extension(
+  \ 'coc-rust-analyzer',
+\ )
 
 "" vim-sneak + vim-surround (https://gist.github.com/LanHikari22/6b568683d81cbb7a2252fac86f6f4a4b)
 
@@ -75,6 +80,8 @@ omap s <Plug>Sneak_s
 " my config (0 mapped to v0, ^ mapped to v^, etc)
 omap S v<Plug>Sneak_S
 
+"" Rust formatting
+let g:rustfmt_autosave = 1
 
 "" git-blame
 let g:gitblame_enabled = 0
