@@ -51,12 +51,11 @@ Plug 'vim-scripts/CSApprox'
 " Plug 'bronson/vim-trailing-whitespace' TODO: uncomment once bug is fixed: https://github.com/bronson/vim-trailing-whitespace/issues/26
 Plug 'majutsushi/tagbar'
 Plug 'ludovicchabant/vim-gutentags'
-Plug 'w0rp/ale'
+Plug 'dense-analysis/ale'
 Plug 'Yggdroot/indentLine'
 Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-surround'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-" Plug 'rust-lang/rust.vim'
 Plug 'justinmk/vim-sneak'
 Plug 'karb94/neoscroll.nvim'
 Plug 'rust-lang/rust.vim'
@@ -493,6 +492,9 @@ let g:ale_linters = {
     \ 'rust': ['analyzer'],
     \ 'python': ['flake8', 'pylint'],
 \}
+let g:ale_fixers = {
+\   'rust': ['rustfmt'],
+\}
 nnoremap <leader>d :ALEDetail<CR>
 
 " Coc (coc-snippets)
@@ -502,7 +504,7 @@ function! s:check_back_space() abort
   return !col || getline('.')[col - 1]  =~ '\s'
 endfunction
 
-" tab
+" tab on coc vim work correctly (from https://blog.logrocket.com/configuring-vim-rust-development/#example-configuration-vim)
 inoremap <silent><expr> <TAB>
        \ coc#pum#visible() ? coc#pum#next(1):
        \ <SID>check_back_space() ? "\<Tab>" :
@@ -540,13 +542,6 @@ let g:tagbar_autoclose = 0
 
 
 " Go to definition
-" Gutentags
-" VimEnter makes the mapping run
-" after plugins are loaded (override plugins)
-" DANGEROUS!!! RECURSIVE MAPPINGS AHEAD
-" using recursive mappings lets us make use of
-" remaps from particular plugins (aka vim-go)
-"
 " autocmd VimEnter * nnoremap J gd
 " autocmd VimEnter * nnoremap K <C-o>
 autocmd VimEnter * nnoremap J :ALEGoToDefinition<CR>
