@@ -48,16 +48,18 @@ Plug 'airblade/vim-gitgutter'
 Plug 'f-person/git-blame.nvim'
 Plug 'vim-scripts/grep.vim'
 Plug 'vim-scripts/CSApprox'
-" Plug 'bronson/vim-trailing-whitespace' TODO: uncomment once bug is fixed: https://github.com/bronson/vim-trailing-whitespace/issues/26
+Plug 'bronson/vim-trailing-whitespace'
 Plug 'majutsushi/tagbar'
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'dense-analysis/ale'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'Yggdroot/indentLine'
 Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-surround'
 Plug 'justinmk/vim-sneak'
 Plug 'karb94/neoscroll.nvim'
 Plug 'rust-lang/rust.vim'
+Plug 'rust-analyzer/rust-analyzer', {'do': 'cargo xtask install --server'}
 call plug#end()
 
 "" vim-sneak + vim-surround (https://gist.github.com/LanHikari22/6b568683d81cbb7a2252fac86f6f4a4b)
@@ -108,17 +110,13 @@ if v:version >= 703
   Plug 'Shougo/vimshell.vim'
 endif
 
-if v:version >= 704
-  "" Snippets
-  Plug 'SirVer/ultisnips'
-endif
-
-Plug 'honza/vim-snippets'
-
 " Colorschemes
 " Plug 'tomasr/molokai'
 " Plug 'iCyMind/NeoSolarized'
 Plug 'morhetz/gruvbox'
+
+" Snippets
+Plug 'honza/vim-snippets'
 
 
 "*****************************************************************************
@@ -485,40 +483,35 @@ nnoremap <silent> <leader>r :Rg<CR>
 " Ale
 let g:ale_completion_enabled = 1 " enable autocomplete
 
-" cycle through completions with tab
-inoremap <silent><expr> <Tab>
-      \ pumvisible() ? "\<C-n>" : "\<TAB>"
 
 let g:ale_linters = {
 	\ 'go': ['gopls'],
     \ 'rust': ['analyzer'],
     \ 'python': ['flake8', 'pylint'],
+    \ 'c': ['clangd'],
 \}
 let g:ale_fixers = {
 \   'rust': ['rustfmt', 'remove_trailing_lines', 'trim_whitespace'],
+\   'c': ['clang-format'],
 \}
 let g:ale_virtualtext_cursor = 'disabled' " dont show errors as comments
 nnoremap <leader>d :ALEDetail<CR>
 
 
+" Snippets and autocompletion
+" ---------------------------
+" The configs below make keyword and snippets play nice with each other
+" This is for keywork completion
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm() : "\<CR>"
+inoremap <expr> <Tab> coc#pum#visible() ? coc#pum#next(1) : "\<Tab>"
+inoremap <expr> <S-Tab> coc#pum#visible() ? coc#pum#prev(1) : "\<S-Tab>"
+
+" This is for snippet completion
+let g:coc_snippet_next = '<tab>'
+let g:coc_snippet_prev = '<S-tab>'
 
 
-" UltiSnips
-let g:UltiSnipsEditSplit="vertical"
-let g:UltiSnipsJumpForwardTrigger="<tab>"
-let g:UltiSnipsJumpBackwardTrigger="<S-tab>"
-" hacky CR fix https://github.com/SirVer/ultisnips/issues/376#issuecomment-69033351
-let g:UltiSnipsExpandTrigger="<nop>"
-let g:ulti_expand_or_jump_res = 0
 
-function! <SID>ExpandSnippetOrReturn()
-  let snippet = UltiSnips#ExpandSnippetOrJump()
-  if g:ulti_expand_or_jump_res > 0
-    return snippet
-  else
-    return "\<CR>"
-  endif
-endfunction
 
 " Tagbar
 nmap <silent> <F4> :TagbarToggle<CR>

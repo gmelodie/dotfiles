@@ -170,3 +170,7 @@ alias say="spd-say"
 export PATH=$PATH:$HOME/dotfiles/scripts
 
 alias godog="in your face why"
+
+# Wasmer
+export WASMER_DIR="/home/gmelodie/.wasmer"
+[ -s "$WASMER_DIR/wasmer.sh" ] && source "$WASMER_DIR/wasmer.sh"
