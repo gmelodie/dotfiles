@@ -174,3 +174,7 @@ alias godog="in your face why"
 # Wasmer
 export WASMER_DIR="/home/gmelodie/.wasmer"
 [ -s "$WASMER_DIR/wasmer.sh" ] && source "$WASMER_DIR/wasmer.sh"
+export PATH=$PATH:$HOME/.wasmtime/bin
+
+# digs alias (dig simple)
+alias digs='dig +noall +answer +authority'
