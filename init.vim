@@ -534,10 +534,10 @@ let g:go_doc_keywordprg_enabled = 0 " remove stupid vim-go K mapping
 
 " need special maps when dealing with go files (vim-go gets angry)
 " tell gutentags where the root of the project is
-let g:gutentags_add_default_project_roots = 0
-let g:gutentags_project_root = ['package.json', '.git']
-" don't create 'tags' file in every dir (use .cache/vin/ctags instead)
-let g:gutentags_cache_dir = expand('~/.cache/vim/ctags/')
+" let g:gutentags_add_default_project_roots = 0
+let g:gutentags_project_root = ['Cargo.toml', 'package.json', '.git']
+" don't create 'tags' file in every dir (use .cache/nvim/ctags instead)
+let g:gutentags_cache_dir = expand('~/.cache/nvim/ctags/')
 
 
 " Disable visualbell
