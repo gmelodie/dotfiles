@@ -59,7 +59,11 @@ Plug 'tpope/vim-surround'
 Plug 'justinmk/vim-sneak'
 Plug 'karb94/neoscroll.nvim'
 Plug 'rust-lang/rust.vim'
-Plug 'rust-analyzer/rust-analyzer', {'do': 'cargo xtask install --server'}
+
+" Plug 'rust-analyzer/rust-analyzer', {'do': 'cargo xtask install --server'} " using coc-rust-analyzer: 
+" using coc-rust-analyzer instead (check coc-settings.json), also you need to
+" install the analyzer server with this `rustup component add rust-analyzer`
+
 call plug#end()
 
 "" vim-sneak + vim-surround (https://gist.github.com/LanHikari22/6b568683d81cbb7a2252fac86f6f4a4b)

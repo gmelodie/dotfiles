@@ -1,0 +1,7 @@
+{
+    "rust-analyzer.serverPath": "~/.cargo/bin/rust-analyzer",
+    "rust-analyzer.diagnostics.disabled": [
+        "unresolved-proc-macro"
+    ]
+}
+
