@@ -112,6 +112,7 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 #
+alias ghostscript="/bin/gs"
 alias gs="git status"
 alias gh="git checkout"
 alias gb="git checkout -b"
