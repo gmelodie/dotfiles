@@ -137,15 +137,18 @@ alias v="$NVIM_APPIMAGE"
 # In this case we keep _all_ the go code in $HOME/go
 export GOPATH=$HOME/go
 export GO111MODULE='on' # dunno what it does, but related to nvim-go
-export PATH=$PATH:/usr/local/go/bin
-export PATH=$PATH:$(go env GOPATH)/bin
+export PATH="$PATH:/usr/local/go/bin"
+export PATH="$PATH:$(go env GOPATH)/bin"
 
 # Some magic to make gpg2 work
 export GPG_TTY=$(tty)
 
 # Virtualenvwrapper (python) stuff
 export WORKON_HOME=$HOME/.virtualenvs
-export PATH=$PATH:$HOME/.local/bin
+export PATH="$PATH:$HOME/.local/bin"
+
+# Rust binaries installed with cargo install <pkt>
+export PATH="$PATH:$HOME/.cargo/bin"
 
 # workaround for stremio not closing bug
 alias close_stremio="fclose stremio"
@@ -168,14 +171,14 @@ done
 alias say="spd-say"
 
 # for lazy-commit and other scripts
-export PATH=$PATH:$HOME/dotfiles/scripts
+export PATH="$PATH:$HOME/dotfiles/scripts"
 
 alias godog="in your face why"
 
 # Wasmer
 export WASMER_DIR="/home/gmelodie/.wasmer"
 [ -s "$WASMER_DIR/wasmer.sh" ] && source "$WASMER_DIR/wasmer.sh"
-export PATH=$PATH:$HOME/.wasmtime/bin
+export PATH="$PATH:$HOME/.wasmtime/bin"
 
 # digs alias (dig simple)
 alias digs='dig +noall +answer +authority'
