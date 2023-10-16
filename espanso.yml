@@ -10,10 +10,10 @@ matches:
     replace: "https://protocol.zoom.us/my/gmelodie"
 
   - trigger: ":gm"
-    replace: "https://gmcruz.me/"
+    replace: "https://gmelodie.com/"
 
   - trigger: ":resume"
-    replace: "https://gmcruz.me/resume.pdf"
+    replace: "https://gmelodie.com/resume.pdf"
 
   - trigger: ":linkedin"
     replace: "https://www.linkedin.com/in/gabriel-de-melo-cruz/"
