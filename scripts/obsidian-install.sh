@@ -2,4 +2,6 @@ TAG_VERSION=$(curl -s -I https://github.com/obsidianmd/obsidian-releases/release
 DOWNLOAD_URL="https://github.com/obsidianmd/obsidian-releases/releases/download/v${TAG_VERSION}/obsidian_${TAG_VERSION}_amd64.snap"
 
 wget -P "$HOME/Downloads" $DOWNLOAD_URL
+
+sudo pkill -9 obsidian
 sudo snap install "$HOME/Downloads/obsidian_${TAG_VERSION}_amd64.snap" --dangerous --classic
