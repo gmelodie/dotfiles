@@ -182,3 +182,5 @@ export PATH="$PATH:$HOME/.wasmtime/bin"
 
 # digs alias (dig simple)
 alias digs='dig +noall +answer +authority'
+export WINEARCH=win32
+export WINEPREFIX=/home/gmelodie/wine32
