@@ -35,6 +35,9 @@ call plug#begin(expand('~/.config/nvim/plugged'))
 let g:polyglot_disabled = ['python']
 let python_highlight_all = 1
 
+" so that :checkhealth doesnt complain
+let g:loaded_node_provider = 0
+let g:loaded_perl_provider = 0
 
 "*****************************************************************************
 "" Plug install packages
@@ -155,7 +158,7 @@ Plug 'jelera/vim-javascript-syntax'
 
 " python
 "" Python Bundle
-Plug 'raimon49/requirements.txt.vim', {'for': 'requirements'}
+" Plug 'raimon49/requirements.txt.vim' " shebang requirements.txt.vim bug
 
 
 " ruby
