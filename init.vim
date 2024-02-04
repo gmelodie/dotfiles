@@ -22,7 +22,7 @@ if !filereadable(vimplug_exists)
   silent exec "!\curl -fLo " . vimplug_exists . " --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
   let g:not_finish_vimplug = "yes"
 
-  autocmd VimEnter * PlugInstall
+  " autocmd VimEnter * PlugInstall
 endif
 
 
@@ -51,16 +51,15 @@ Plug 'vim-scripts/CSApprox'
 Plug 'bronson/vim-trailing-whitespace'
 Plug 'majutsushi/tagbar'
 Plug 'ludovicchabant/vim-gutentags'
-Plug 'dense-analysis/ale'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" Plug 'dense-analysis/ale'
 Plug 'Yggdroot/indentLine'
 Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-surround'
 Plug 'justinmk/vim-sneak'
 Plug 'karb94/neoscroll.nvim'
-Plug 'rust-lang/rust.vim'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
-" Plug 'rust-analyzer/rust-analyzer', {'do': 'cargo xtask install --server'} " using coc-rust-analyzer: 
+" Plug 'rust-analyzer/rust-analyzer', {'do': 'cargo xtask install --server'}
 " using coc-rust-analyzer instead (check coc-settings.json), also you need to
 " install the analyzer server with this `rustup component add rust-analyzer`
 
@@ -138,8 +137,8 @@ Plug 'carlosgaldino/elixir-snippets'
 
 
 " go
-"" Go Lang Bundle
-Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+" Go Lang Bundle
+Plug 'fatih/vim-go'
 
 
 " html
@@ -154,12 +153,6 @@ Plug 'mattn/emmet-vim'
 "" Javascript Bundle
 Plug 'jelera/vim-javascript-syntax'
 
-
-" perl
-"" Perl Bundle
-Plug 'vim-perl/vim-perl'
-
-
 " python
 "" Python Bundle
 Plug 'raimon49/requirements.txt.vim', {'for': 'requirements'}
@@ -171,6 +164,9 @@ Plug 'tpope/vim-rake'
 Plug 'tpope/vim-projectionist'
 Plug 'thoughtbot/vim-rspec'
 Plug 'ecomba/vim-ruby-refactoring'
+
+" rust
+Plug 'rust-lang/rust.vim'
 
 
 "*****************************************************************************
@@ -484,21 +480,21 @@ nnoremap <silent> <leader>r :Rg<CR>
 
 
 " Ale
-let g:ale_completion_enabled = 1 " enable autocomplete
+" let g:ale_completion_enabled = 1 " enable autocomplete
 
 
-let g:ale_linters = {
-	\ 'go': ['gopls'],
-    \ 'rust': ['analyzer'],
-    \ 'python': ['flake8', 'pylint'],
-    \ 'c': ['clangd'],
-\}
-let g:ale_fixers = {
-\   'rust': ['rustfmt', 'remove_trailing_lines', 'trim_whitespace'],
-\   'c': ['clang-format'],
-\}
-let g:ale_virtualtext_cursor = 'disabled' " dont show errors as comments
-nnoremap <leader>d :ALEDetail<CR>
+" let g:ale_linters = {
+" 	\ 'go': ['gopls'],
+"     \ 'rust': ['analyzer'],
+"     \ 'python': ['flake8', 'pylint'],
+"     \ 'c': ['clangd'],
+" \}
+" let g:ale_fixers = {
+" \   'rust': ['rustfmt', 'remove_trailing_lines', 'trim_whitespace'],
+" \   'c': ['clang-format'],
+" \}
+" let g:ale_virtualtext_cursor = 'disabled' " dont show errors as comments
+" nnoremap <leader>d :ALEDetail<CR>
 
 
 " Snippets and autocompletion
@@ -514,8 +510,6 @@ let g:coc_snippet_next = '<tab>'
 let g:coc_snippet_prev = '<S-tab>'
 
 
-
-
 " Tagbar
 nmap <silent> <F4> :TagbarToggle<CR>
 let g:tagbar_autofocus = 1
@@ -527,8 +521,16 @@ let g:tagbar_autoclose = 0
 " Go to definition
 " autocmd VimEnter * nnoremap J gd
 " autocmd VimEnter * nnoremap K <C-o>
-autocmd VimEnter * nnoremap J :ALEGoToDefinition<CR>
-autocmd VimEnter * nnoremap K <C-t>
+"
+" autocmd VimEnter * nnoremap J :ALEGoToDefinition<CR> " do NOT use ALE, use CoC instead
+" autocmd VimEnter * nnoremap K <C-t>
+"
+" Add https://github.com/neoclide/coc.nvim/wiki/Language-servers
+" :CocInstall coc-mylangserver (get list of lang servers in link above)
+nmap <silent> J <Plug>(coc-definition)
+autocmd VimEnter * nnoremap <silent> K <C-o> " need VimEnter since K is mapped in plugin
+inoremap <silent><expr> <c-@> coc#refresh()
+
 let g:go_doc_keywordprg_enabled = 0 " remove stupid vim-go K mapping
 
 " need special maps when dealing with go files (vim-go gets angry)

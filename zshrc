@@ -116,6 +116,7 @@ alias ghostscript="/bin/gs"
 alias gs="git status"
 alias gh="git checkout"
 alias gb="git checkout -b"
+alias gd="git branch --delete"
 alias gpf="git push -u origin HEAD"
 
 
