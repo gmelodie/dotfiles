@@ -1,7 +1,5 @@
 {
-    "rust-analyzer.serverPath": "~/.cargo/bin/rust-analyzer",
-    "rust-analyzer.diagnostics.disabled": [
-        "unresolved-proc-macro"
-    ]
+    "rust-analyzer.serverPath": "/home/gmelodie/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/bin/rust-analyzer",
+    "notification.disabledProgressSources": ["*"]
 }
 

@@ -42,7 +42,7 @@ let g:loaded_perl_provider = 0
 "*****************************************************************************
 "" Plug install packages
 "*****************************************************************************
-Plug 'scrooloose/nerdtree'
+"Plug 'scrooloose/nerdtree'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
 Plug 'vim-airline/vim-airline'
@@ -50,7 +50,7 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'airblade/vim-gitgutter'
 Plug 'f-person/git-blame.nvim'
 Plug 'vim-scripts/grep.vim'
-Plug 'vim-scripts/CSApprox'
+" Plug 'vim-scripts/CSApprox'
 Plug 'bronson/vim-trailing-whitespace'
 Plug 'majutsushi/tagbar'
 Plug 'ludovicchabant/vim-gutentags'
@@ -122,7 +122,7 @@ endif
 Plug 'morhetz/gruvbox'
 
 " Snippets
-Plug 'honza/vim-snippets'
+" Plug 'honza/vim-snippets' " use :CocInstall coc-snippets instead
 
 
 "*****************************************************************************
@@ -436,10 +436,10 @@ noremap <Leader>gd :Gvdiff<CR>
 noremap <Leader>gr :Gremove<CR>
 
 " session management
-nnoremap <leader>so :OpenSession<Space>
-nnoremap <leader>ss :SaveSession<Space>
-nnoremap <leader>sd :DeleteSession<CR>
-nnoremap <leader>sc :CloseSession<CR>
+" nnoremap <leader>so :OpenSession<Space>
+" nnoremap <leader>ss :SaveSession<Space>
+" nnoremap <leader>sd :DeleteSession<CR>
+" nnoremap <leader>sc :CloseSession<CR>
 
 "" Tabs
 nnoremap <Tab> gt
@@ -512,6 +512,11 @@ inoremap <expr> <S-Tab> coc#pum#visible() ? coc#pum#prev(1) : "\<S-Tab>"
 let g:coc_snippet_next = '<tab>'
 let g:coc_snippet_prev = '<S-tab>'
 
+" Function signature help
+inoremap <silent> <leader>s <C-r>=CocActionAsync('showSignatureHelp')<CR>
+nnoremap <silent> <leader>s :call CocAction('doHover')<CR>
+autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+
 
 " Tagbar
 nmap <silent> <F4> :TagbarToggle<CR>
@@ -532,7 +537,7 @@ let g:tagbar_autoclose = 0
 " :CocInstall coc-mylangserver (get list of lang servers in link above)
 nmap <silent> J <Plug>(coc-definition)
 autocmd VimEnter * nnoremap <silent> K <C-o> " need VimEnter since K is mapped in plugin
-inoremap <silent><expr> <c-@> coc#refresh()
+" inoremap <silent><expr> <c-@> coc#refresh()
 
 let g:go_doc_keywordprg_enabled = 0 " remove stupid vim-go K mapping
 
@@ -725,9 +730,9 @@ let g:tagbar_type_ruby = {
 
 " RSpec.vim mappings
 " map <Leader>t :call RunCurrentSpecFile()<CR>
-map <Leader>s :call RunNearestSpec()<CR>
-map <Leader>l :call RunLastSpec()<CR>
-map <Leader>a :call RunAllSpecs()<CR>
+" map <Leader>s :call RunNearestSpec()<CR>
+" map <Leader>l :call RunLastSpec()<CR>
+" map <Leader>a :call RunAllSpecs()<CR>
 
 " For ruby refactory
 if has('nvim')
