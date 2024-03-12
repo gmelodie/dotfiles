@@ -1,7 +1,7 @@
 [user]
 	name = Gabriel Cruz
 	email = gabrieldemelocruz@gmail.com
-	signingkey = E66035AE708381D50188FB8E521A99390E2C1AEE
+	signingkey = 03435EF5D36BD3BDE0DEF338C8676463713F0620
 
 [rerere]
     enabled = 1
@@ -26,6 +26,9 @@
     unadd = restore --staged
     conflicts = diff --name-only --diff-filter=U
     whatadded = log --diff-filter=A
+    blame = blame -w -C -C -C
+
+
 [difftool "idiff"]
 	cmd = diff --unified=3 --color=always --ignore-case $LOCAL $REMOTE | less --raw-control-chars
     prompt = 0

@@ -48,7 +48,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'airblade/vim-gitgutter'
-Plug 'f-person/git-blame.nvim'
+" Plug 'f-person/git-blame.nvim'
 Plug 'vim-scripts/grep.vim'
 " Plug 'vim-scripts/CSApprox'
 Plug 'bronson/vim-trailing-whitespace'
@@ -516,6 +516,12 @@ let g:coc_snippet_prev = '<S-tab>'
 inoremap <silent> <leader>s <C-r>=CocActionAsync('showSignatureHelp')<CR>
 nnoremap <silent> <leader>s :call CocAction('doHover')<CR>
 autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+
+" scroll help popup
+nnoremap <nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+nnoremap <nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+inoremap <nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+inoremap <nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
 
 
 " Tagbar
