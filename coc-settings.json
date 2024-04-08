@@ -1,5 +1,10 @@
 {
     "rust-analyzer.serverPath": "/home/gmelodie/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/bin/rust-analyzer",
+    "rust-analyzer.checkOnSave.overrideCommand": [
+        "./cargo",
+        "xcheck",
+        "--json-output"
+    ],
     "notification.disabledProgressSources": ["*"]
 }
 

@@ -24,6 +24,9 @@ matches:
   - trigger: ":email"
     replace: "gabrieldemelocruz@gmail.com"
 
+  - trigger: ":name"
+    replace: "Gabriel Cruz"
+
   - trigger: ":github"
     replace: "https://github.com/gmelodie/"
 
