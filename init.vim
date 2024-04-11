@@ -55,6 +55,12 @@ Plug 'bronson/vim-trailing-whitespace'
 Plug 'majutsushi/tagbar'
 Plug 'ludovicchabant/vim-gutentags'
 " Plug 'dense-analysis/ale'
+
+" NERDTree
+Plug 'preservim/nerdtree'
+Plug 'ryanoasis/vim-devicons'
+Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+
 Plug 'Yggdroot/indentLine'
 Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-surround'
@@ -63,10 +69,14 @@ Plug 'karb94/neoscroll.nvim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " Plug 'rust-analyzer/rust-analyzer', {'do': 'cargo xtask install --server'}
-" using coc-rust-analyzer instead (check coc-settings.json), also you need to
+" use coc-rust-analyzer instead (check coc-settings.json), also you need to
 " install the analyzer server with this `rustup component add rust-analyzer`
 
 call plug#end()
+
+"" NERDTree
+let g:NERDTreeShowDevIcons = 1
+nnoremap <silent> <F3> :NERDTreeToggle<CR>
 
 "" vim-sneak + vim-surround (https://gist.github.com/LanHikari22/6b568683d81cbb7a2252fac86f6f4a4b)
 
