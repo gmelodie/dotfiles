@@ -46,11 +46,14 @@ function install() {
     echo '############# Starting full system upgrade...'
 
     sudo apt -y update > /dev/null && sudo apt -y upgrade > /dev/null
-    sudo apt install -y curl build-essential git python3 python3-neovim python3-virtualenvwrapper golang zsh universal-ctags gnome-terminal fzf nodejs tmux golang-go clang clangd kitty > /dev/null
+    sudo apt install -y curl build-essential git python3 python3-neovim python3-virtualenvwrapper golang zsh universal-ctags gnome-terminal fzf nodejs tmux golang-go clang clangd > /dev/null
 
     echo 'Installing Rust...'
     curl https://sh.rustup.rs -sSf | sh
     rustup component add rust-analyzer # install LSP for Rust
+
+    echo 'Installing alacritty...'
+    cargo install alacritty
 
     echo 'Installing espanso...'
     snap install espanso --classic
@@ -105,11 +108,12 @@ function config() {
     echo -n 'Tmux configurations (.tmux.conf)...'
     link_config_file $BASEDIR/tmux.conf $HOME/.tmux.conf
 
-    echo -n 'Kitty configurations (kitty.conf)...'
-    link_config_file $BASEDIR/kitty.conf $HOME/.config/kitty/kitty.conf
+    echo -n 'Alacritty configurations (alacritty.toml)...'
+    mkdir -p $HOME/.config/alacritty
+    link_config_file $BASEDIR/alacritty.toml $HOME/.config/alacritty/alacritty.toml
 
-    echo -n 'Adding kitty as terminal alternative (default)...'
-    sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator `which kitty` 50
+    echo -n 'Adding alacritty as terminal alternative (default)...'
+    sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator `which alacritty` 50
     sudo update-alternatives --config x-terminal-emulator
 
     echo -n 'Loading gnome-terminal preferences...'
