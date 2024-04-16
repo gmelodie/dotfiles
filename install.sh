@@ -48,6 +48,13 @@ function install() {
     sudo apt -y update > /dev/null && sudo apt -y upgrade > /dev/null
     sudo apt install -y curl build-essential git python3 python3-neovim python3-virtualenvwrapper golang zsh universal-ctags gnome-terminal fzf nodejs tmux golang-go clang clangd > /dev/null
 
+    # install meslo fonts
+    mkdir -p ~/.fonts
+    curl -L https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Regular.ttf --output ~/.fonts/'MesloLGS NF Regular.ttf'
+    curl -L https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold.ttf --output ~/.fonts/'MesloLGS NF Bold.ttf'
+    curl -L https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Italic.ttf --output ~/.fonts/'MesloLGS NF Italic.ttf'
+    curl -L https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold%20Italic.ttf --output ~/.fonts/'MesloLGS NF Bold Italic.ttf'
+
     echo 'Installing Rust...'
     curl https://sh.rustup.rs -sSf | sh
     rustup component add rust-analyzer # install LSP for Rust
