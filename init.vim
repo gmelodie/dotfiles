@@ -76,6 +76,7 @@ call plug#end()
 
 "" NERDTree
 let g:NERDTreeShowDevIcons = 1
+let g:NERDTreeWinSize = winwidth(0) * 0.20 "" use 20% of the screen
 nnoremap <silent> <F3> :NERDTreeToggle<CR>
 
 "" vim-sneak + vim-surround (https://gist.github.com/LanHikari22/6b568683d81cbb7a2252fac86f6f4a4b)
