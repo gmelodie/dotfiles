@@ -46,7 +46,8 @@ function install() {
     echo '############# Starting full system upgrade...'
 
     sudo apt -y update > /dev/null && sudo apt -y upgrade > /dev/null
-    sudo apt install -y curl build-essential git python3 python3-neovim python3-virtualenvwrapper golang zsh universal-ctags gnome-terminal fzf nodejs tmux golang-go clang clangd > /dev/null
+    sudo apt install -y curl build-essential git python3 python3-neovim python3-virtualenvwrapper golang zsh universal-ctags gnome-terminal fzf nodejs tmux golang-go clang clangd fuse libfuse2
+    sudo modprobe -v fuse
 
     # install meslo fonts
     mkdir -p ~/.fonts
