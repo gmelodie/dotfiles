@@ -59,8 +59,12 @@ function install() {
     curl https://sh.rustup.rs -sSf | sh
     rustup component add rust-analyzer # install LSP for Rust
 
-    echo 'Installing alacritty...'
-    cargo install alacritty
+    echo 'Installing keyd...'
+    git clone https://github.com/rvaiya/keyd $HOME/Downloads/keyd
+    cd $HOME/Downloads/keyd
+    make && sudo make install
+    sudo systemctl enable keyd && sudo systemctl start keyd
+    cd $BASEDIR
 
     echo 'Installing espanso...'
     snap install espanso --classic
@@ -95,6 +99,11 @@ function install() {
 # --------------------- Configuring ------------------------
 function config() {
     echo  '############# Installing configuration files...'
+
+    echo -n 'Keyd configurations (keyd.conf)...'
+    mkdir -p /etc/keyd/
+    sudo ln -sf $BASEDIR/keyd.conf /etc/keyd/keyd.conf # cant use link_config_file because need sudo
+    sudo systemctl restart keyd
 
     echo -n 'Neovim configurations (init.vim)...'
     mkdir -p $HOME/.config/nvim
