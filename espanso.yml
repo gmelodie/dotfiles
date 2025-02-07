@@ -4,7 +4,7 @@ parent: default
 matches:
   # Viana & Vargas mention (telegram)
   - trigger: ":vv"
-    replace: "@▪️MatheusViana▪️ @Vargas0o VIANOVARGAS gogogogogo"
+    replace: "@Vianotits @Vargas0o VIANOVARGAS gogogogogo"
 
   - trigger: ":zoom"
     replace: "https://protocol.zoom.us/my/gmelodie"

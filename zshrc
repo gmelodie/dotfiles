@@ -137,7 +137,7 @@ export NVIM_APPIMAGE="$HOME/.nvim/nvim.appimage"
 export VISUAL="$NVIM_APPIMAGE"
 export EDITOR="$NVIM_APPIMAGE"
 alias vim="$NVIM_APPIMAGE"
-alias v="$NVIM_APPIMAGE"
+alias vi="$NVIM_APPIMAGE"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
