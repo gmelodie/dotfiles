@@ -67,6 +67,7 @@ Plug 'tpope/vim-surround'
 Plug 'justinmk/vim-sneak'
 Plug 'karb94/neoscroll.nvim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'voldikss/vim-floaterm'
 
 " Plug 'rust-analyzer/rust-analyzer', {'do': 'cargo xtask install --server'}
 " use coc-rust-analyzer instead (check coc-settings.json), also you need to
@@ -377,12 +378,6 @@ let Grep_Skip_Dirs = '.git node_modules'
 let g:vimshell_user_prompt = 'fnamemodify(getcwd(), ":~")'
 let g:vimshell_prompt =  '$ '
 
-" terminal emulation (open terminal on new split to the right)
-if g:vim_bootstrap_editor == 'nvim'
-  nnoremap <silent> <leader>t :vsplit \| terminal<CR> \| a
-else
-  nnoremap <silent> <leader>t :vsplit \| VimShellCreate<CR> \| a
-endif
 
 "*****************************************************************************
 "" Functions
@@ -446,6 +441,9 @@ noremap <Leader>gb :Gblame<CR>
 noremap <Leader>gd :Gvdiff<CR>
 noremap <Leader>gr :Gremove<CR>
 
+"" FLoatTerm
+noremap <Leader>t :FloatermToggle<CR>
+
 " session management
 " nnoremap <leader>so :OpenSession<Space>
 " nnoremap <leader>ss :SaveSession<Space>
@@ -463,8 +461,6 @@ nnoremap <leader>. :lcd %:p:h<CR>
 "" Opens an edit command with the path of the currently edited file filled in
 noremap <Leader>e :e <C-R>=expand("%:p:h") . "/" <CR>
 
-"" Opens a tab edit command with the path of the currently edited file filled
-" noremap <Leader>te :tabe <C-R>=expand("%:p:h") . "/" <CR>
 
 "" fzf.vim
 set wildmode=list:longest,list:full
@@ -613,9 +609,6 @@ vnoremap K :m '<-2<CR>gv=gv
 
 "" Open current line on GitHub
 nnoremap <Leader>o :.Gbrowse<CR>
-
-"" Terminal emulatior
-tnoremap <Esc> <C-\><C-n>
 
 "*****************************************************************************
 "" Custom configs
