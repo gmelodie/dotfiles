@@ -75,10 +75,6 @@ Plug 'voldikss/vim-floaterm'
 
 call plug#end()
 
-"" NERDTree
-let g:NERDTreeShowDevIcons = 1
-let g:NERDTreeWinSize = winwidth(0) * 0.20 "" use 20% of the screen
-nnoremap <silent> <F3> :NERDTreeToggle<CR>
 
 "" vim-sneak + vim-surround (https://gist.github.com/LanHikari22/6b568683d81cbb7a2252fac86f6f4a4b)
 
@@ -357,13 +353,14 @@ cnoreabbrev Q q
 cnoreabbrev Qall qall
 
 "" NERDTree configuration
+let g:NERDTreeShowDevIcons = 1
 let g:NERDTreeChDirMode=2
 let g:NERDTreeIgnore=['\.rbc$', '\~$', '\.pyc$', '\.db$', '\.sqlite$', '__pycache__']
 let g:NERDTreeSortOrder=['^__\.py$', '\/$', '*', '\.swp$', '\.bak$', '\~$']
 let g:NERDTreeShowBookmarks=1
 let g:nerdtree_tabs_focus_on_files=1
 let g:NERDTreeMapOpenInTabSilent = '<RightMouse>'
-let g:NERDTreeWinSize = 50
+let g:NERDTreeWinSize = float2nr(&columns * 0.3)
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.pyc,*.db,*.sqlite
 nnoremap <silent> <F2> :NERDTreeFind<CR>
 nnoremap <silent> <F3> :NERDTreeToggle<CR>
@@ -537,7 +534,7 @@ let g:tagbar_autofocus = 1
 let g:tagbar_autopreview = 0
 let g:tagbar_previewwin_pos = "belowright"
 let g:tagbar_autoclose = 0
-
+let g:tagbar_width = float2nr(&columns * 0.4)
 
 " Go to definition
 " autocmd VimEnter * nnoremap J gd
