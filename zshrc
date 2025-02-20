@@ -194,3 +194,8 @@ alias digs='dig +noall +answer +authority'
 export WINEARCH=win32
 export WINEPREFIX=/home/gmelodie/wine32
 
+
+# add omnet++ to path
+omnet_path=$(ls -d /opt/omnetpp-* | sort -V | tail -n 1)
+export PATH="$PATH:$omnet_path/bin"
+alias omnetpp="source $omnet_path/setenv && $omnet_path/bin/omnetpp"
