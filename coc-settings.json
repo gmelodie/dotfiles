@@ -1,10 +1,27 @@
 {
-    "rust-analyzer.serverPath": "/home/gmelodie/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/bin/rust-analyzer",
+    "rust-analyzer.serverPath": "~/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/bin/rust-analyzer",
     "rust-analyzer.checkOnSave.overrideCommand": [
         "./cargo",
         "xcheck",
         "--json-output"
     ],
-    "notification.disabledProgressSources": ["*"]
+    "notification.disabledProgressSources": [
+        "*"
+    ],
+    "languageserver": {
+        "nim": {
+            "command": "nimlangserver",
+            "filetypes": [
+                "nim"
+            ],
+            "trace.server": "verbose",
+            "settings": {
+                "nim": {
+                    "nimsuggestPath": "~/.nimble/bin/nimsuggest"
+                }
+            }
+        }
+    },
+    "coc.preferences.messageLevel": "warning",
+    "coc.preferences.formatOnSave": true
 }
-

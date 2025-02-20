@@ -144,10 +144,10 @@ alias vi="$NVIM_APPIMAGE"
 # Set GOPATH and PATH for golang
 # GOPATH sets the workspace where go code is in
 # In this case we keep _all_ the go code in $HOME/go
-export GOPATH=$HOME/go
+export GOPATH="$HOME/go"
 export GO111MODULE='on' # dunno what it does, but related to nvim-go
 export PATH="$PATH:/usr/local/go/bin"
-export PATH="$PATH:$(go env GOPATH)/bin"
+export PATH="$PATH:$GOPATH/bin"
 
 # Some magic to make gpg2 work
 export GPG_TTY=$(tty)
@@ -194,3 +194,11 @@ alias digs='dig +noall +answer +authority'
 export WINEARCH=win32
 export WINEPREFIX=/home/gmelodie/wine32
 
+# make nix available
+source $HOME/.nix-profile/etc/profile.d/nix.sh
+
+# cargo run | less -R (make this work with colors)
+export CARGO_TERM_COLOR=always
+
+# nim stuff
+export PATH=/home/gmelodie/.nimble/bin:$PATH

@@ -42,7 +42,6 @@ let g:loaded_perl_provider = 0
 "*****************************************************************************
 "" Plug install packages
 "*****************************************************************************
-"Plug 'scrooloose/nerdtree'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
 Plug 'vim-airline/vim-airline'
@@ -50,16 +49,14 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'airblade/vim-gitgutter'
 " Plug 'f-person/git-blame.nvim'
 Plug 'vim-scripts/grep.vim'
-" Plug 'vim-scripts/CSApprox'
 Plug 'bronson/vim-trailing-whitespace'
 Plug 'majutsushi/tagbar'
 Plug 'ludovicchabant/vim-gutentags'
-" Plug 'dense-analysis/ale'
 
-" NERDTree
 Plug 'preservim/nerdtree'
 Plug 'ryanoasis/vim-devicons'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+Plug 'sbdchd/neoformat'
 
 Plug 'Yggdroot/indentLine'
 Plug 'sheerun/vim-polyglot'
@@ -251,7 +248,7 @@ let g:session_command_aliases = 1
 
 set mousemodel=popup
 set t_Co=256
-set guioptions=egmrti
+"set guioptions=egmrti
 set gfn=Monospace\ 10
 
 if has("gui_running")
@@ -621,6 +618,18 @@ let erlang_folding = 1
 let erlang_show_errors = 1
 
 
+" nim
+" suppress 'no change necessary' neoformat messages
+let g:neoformat_only_msg_on_error = 1
+let g:neoformat_enabled_nim = ['nph']
+" only run format on save for nim files (others should use coc.nvim)
+" TODO: have coc.nvim properly use nimlangserver's formatter (which is nph)
+augroup fmt
+  autocmd!
+  autocmd BufWritePre *.nim undojoin | Neoformat
+augroup END
+
+
 " go (vim-go)
 " For gopls issues (source
 " https://github.com/golang/tools/blob/master/gopls/doc/vim.md)
@@ -777,6 +786,7 @@ if !exists('g:airline_symbols')
   let g:airline_symbols = {}
 endif
 
+let g:airline_powerline_fonts = 1
 if !exists('g:airline_powerline_fonts')
   let g:airline#extensions#tabline#left_sep = ' '
   let g:airline#extensions#tabline#left_alt_sep = '|'
