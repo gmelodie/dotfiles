@@ -53,6 +53,7 @@ Plug 'bronson/vim-trailing-whitespace'
 Plug 'majutsushi/tagbar'
 Plug 'ludovicchabant/vim-gutentags'
 
+Plug 'nvim-treesitter/nvim-treesitter'
 Plug 'preservim/nerdtree'
 Plug 'ryanoasis/vim-devicons'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
@@ -622,11 +623,13 @@ let erlang_show_errors = 1
 " suppress 'no change necessary' neoformat messages
 let g:neoformat_only_msg_on_error = 1
 let g:neoformat_enabled_nim = ['nph']
+" tab is 2 spaces
+autocmd FileType nim setlocal shiftwidth=2 softtabstop=2 expandtab
 " only run format on save for nim files (others should use coc.nvim)
 " TODO: have coc.nvim properly use nimlangserver's formatter (which is nph)
 augroup fmt
   autocmd!
-  autocmd BufWritePre *.nim undojoin | Neoformat
+  autocmd BufWritePre *.nim Neoformat
 augroup END
 
 
