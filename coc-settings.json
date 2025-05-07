@@ -8,20 +8,6 @@
     "notification.disabledProgressSources": [
         "*"
     ],
-    "languageserver": {
-        "nim": {
-            "command": "nimlangserver",
-            "filetypes": [
-                "nim"
-            ],
-            "trace.server": "verbose",
-            "settings": {
-                "nim": {
-                    "nimsuggestPath": "~/.nimble/bin/nimsuggest"
-                }
-            }
-        }
-    },
     "coc.preferences.messageLevel": "warning",
     "coc.preferences.formatOnSave": true
 }
