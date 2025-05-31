@@ -17,7 +17,6 @@ in
     users.users.${cfg.username} = {
       isNormalUser = true;
       initialPassword = "1234";  # Don't forget to change
-      shell = pkgs.zsh;
     };
   };
 }
