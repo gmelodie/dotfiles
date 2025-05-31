@@ -4,13 +4,15 @@ read -p "Your Email: " email
 
 echo "-----------------------  SSH KEY  ------------------------"
 
-echo "\n" | ssh-keygen -C "$email" -N ""
+mkdir -p $HOME/.ssh
+
+ssh-keygen -C "$email" -N ""
 
 eval "$(ssh-agent -s)"
 
-ssh-add ~/.ssh/id_rsa
+ssh-add $HOME/.ssh/id_ed25519
 
-cat ~/.ssh/id_rsa.pub
+cat $HOME/.ssh/id_ed25519.pub
 
 echo "-----------------------  GPG KEY  ------------------------"
 
