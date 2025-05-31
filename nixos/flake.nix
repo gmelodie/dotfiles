@@ -19,6 +19,7 @@
         ./configuration.nix
         ./nvim.nix
         ./keyd.nix
+        ./zsh.nix
         # inputs.home-manager.nixosModules.default
       ];
     };
