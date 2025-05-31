@@ -18,6 +18,7 @@
       modules = [
         ./configuration.nix
         ./nvim.nix
+        ./keyd.nix
         # inputs.home-manager.nixosModules.default
       ];
     };
