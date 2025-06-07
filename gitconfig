@@ -1,7 +1,6 @@
 [user]
 	name = Gabriel Cruz
 	email = gabrieldemelocruz@gmail.com
-	signingkey = E667FA15E7AA4656C8740CBAB191B6CE1902DEC2
 
 [rerere]
     enabled = 1
@@ -37,3 +36,6 @@
 	cmd = diff --unified=3 --color=always --ignore-case $LOCAL $REMOTE | less --raw-control-chars
     prompt = 0
     idiff = difftool --tool idiff
+
+[include]
+    path = ~/.gitconfig.local
