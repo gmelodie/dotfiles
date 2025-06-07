@@ -15,7 +15,7 @@ in
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = ${hostname};
+  networking.hostName = "${hostname}";
   time.timeZone = "America/Sao_Paulo";
 
   users.users.${user} = {
@@ -59,6 +59,9 @@ in
 
   system.activationScripts.dotfiles = {
     text = ''
+      git clone https://github.com/${user}/dotfiles ${dotfiles}
+      chown -h ${user}:${user} ${dotfiles}
+
       ln -sf ${dotfiles}/zshrc /home/${user}/.zshrc
       ln -sf ${dotfiles}/gitconfig /home/${user}/.gitconfig
 
@@ -72,6 +75,13 @@ in
       chown -h ${user}:${user} /home/${user}/.gitconfig
       chown -h ${user}:${user} /home/${user}/.config/espanso/config.yml
       chown -h ${user}:${user} /home/${user}/.config/nvim/init.vim
+
+      cd ${dotfiles}/suckless/st
+      make install
+      cd ${dotfiles}/suckless/dmenu
+      make install
+      cd ${dotfiles}/suckless/dwl
+      make install
     '';
   };
 
