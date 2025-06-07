@@ -1,13 +1,12 @@
 #!/bin/bash
 
-
 RED='\033[0;31m'
 ORANGE='\033[0;33m'
 GREEN='\033[0;32m'
 NC='\033[0m' # No Color
 BASEDIR="$( cd "$(dirname "$0")" ; pwd -P )"
 
-
+MARTINHA=false
 
 function help() {
    echo "gmelodie's dotfiles install script"
@@ -17,37 +16,39 @@ function help() {
    echo "        -h       Print this help"
    echo "        -c       Only update configuration files"
    echo "        -v       Verbose"
+   echo "        -m       Martinha (includes keyd)"
    echo
 }
-
-
 
 function link_config_file() { # link_file(here, there)
     src=$1
     dst=$2
 
-    if [ -e $dst ]
-    then
-        echo -e "\n${ORANGE}[Warning] Found existent $1, moving to $1.old${NC}"
+    if [ -e $dst ]; then
+        echo -e "\n${ORANGE}[Warning] Found existing $dst, moving to $dst.old${NC}"
         mv $dst $dst.old
     fi
 
     ln -sf $src $dst
-
     echo -e "${GREEN}Done${NC}"
-
 }
 
-
-
-
-# --------------------- Installing ------------------------
-function install() {
-    echo '############# Starting full system upgrade...'
-
+function install_debian() {
+    echo '############# Starting full system upgrade (APT)...'
     sudo apt -y update > /dev/null && sudo apt -y upgrade > /dev/null
-    sudo apt install -y curl build-essential git python3 python3-neovim golang zsh universal-ctags gnome-terminal fzf nodejs tmux golang-go clang clangd ripgrep
+    sudo apt install -y curl build-essential git python3 python3-neovim golang zsh universal-ctags fzf nodejs golang-go clang clangd ripgrep snapd
+}
 
+function install_archlinux() {
+    echo '############# Starting full system upgrade (Pacman)...'
+    sudo pacman -Syu --noconfirm
+    sudo pacman -S --noconfirm curl build-essential base-devel git python python-pynvim go zsh universal-ctags fzf nodejs tmux clang clang-analyzer ripgrep neovim mesa xorg-xwayland libxkbcommon wayland wlroots ly
+    # Enable ly display manager
+    sudo systemctl enable ly.service
+    sudo systemctl start ly.service
+}
+
+function post_install() {
     # install meslo fonts
     mkdir -p ~/.fonts
     curl -L https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Regular.ttf --output ~/.fonts/'MesloLGS NF Regular.ttf'
@@ -56,54 +57,57 @@ function install() {
     curl -L https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold%20Italic.ttf --output ~/.fonts/'MesloLGS NF Bold Italic.ttf'
 
     echo 'Installing Rust...'
-    curl https://sh.rustup.rs -sSf | sh
-    rustup component add rust-analyzer # install LSP for Rust
+    curl https://sh.rustup.rs -sSf | sh -s -- -y
+    source $HOME/.cargo/env
+    rustup component add rust-analyzer
 
-    echo 'Installing keyd...'
-    git clone https://github.com/rvaiya/keyd $HOME/Downloads/keyd
-    cd $HOME/Downloads/keyd
-    make && sudo make install
-    sudo systemctl enable keyd && sudo systemctl start keyd
-    cd $BASEDIR
-
-    echo 'Installing espanso...'
-    snap install espanso --classic
-
-    echo 'Installing neovim appimage...'
-    mkdir -p $HOME/.nvim 2>&1
-    wget -O $HOME/.nvim/nvim.appimage "https://github.com/neovim/neovim/releases/latest/download/nvim.appimage" 2>&1
-    chmod +x $HOME/.nvim/nvim.appimage 2>&1
-
-    echo 'Installing xcreep...'
-    if ! command -v go
-    then
-        echo "\n${RED}[Error] Golang not found, skipping xcreep installation${NC}"
-    else
-        go install github.com/gmelodie/xcreep@latest 2>&1
+    if $MARTINHA; then
+        echo 'Installing keyd...'
+        git clone https://github.com/rvaiya/keyd $HOME/Downloads/keyd
+        cd $HOME/Downloads/keyd
+        make && sudo make install
+        sudo systemctl enable keyd && sudo systemctl start keyd
+        cd $BASEDIR
     fi
 
-    echo 'Installing Oh my Zsh...'
-    # install oh-my-zsh
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-    # change default shell to zsh
-    # chsh -s $(which zsh)
+    echo 'Installing espanso...'
+    if command -v snap &> /dev/null; then
+        sudo snap install espanso --classic
+    else
+        mkdir -p ~/opt
+        wget -O ~/opt/Espanso.AppImage 'https://github.com/espanso/espanso/releases/download/v2.2.1/Espanso-X11.AppImage'
+        chmod u+x ~/opt/Espanso.AppImage
+        sudo ~/opt/Espanso.AppImage env-path register
+    fi
+    sudo espanso service register
 
+    echo 'Installing neovim appimage...'
+    mkdir -p $HOME/.nvim
+    wget -O $HOME/.nvim/nvim.appimage "https://github.com/neovim/neovim/releases/latest/download/nvim.appimage"
+    chmod +x $HOME/.nvim/nvim.appimage
+
+    echo 'Installing xcreep...'
+    if ! command -v go &> /dev/null; then
+        echo -e "\n${RED}[Error] Golang not found, skipping xcreep installation${NC}"
+    else
+        go install github.com/gmelodie/xcreep@latest
+    fi
+
+    echo 'Installing Oh My Zsh...'
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 
     echo -e "${GREEN}Done${NC}"
+}
 
-} # --------------------- END Installing ------------------------
-
-
-
-
-# --------------------- Configuring ------------------------
 function config() {
     echo  '############# Installing configuration files...'
 
-    echo -n 'Keyd configurations (keyd.conf)...'
-    mkdir -p /etc/keyd/
-    sudo ln -sf $BASEDIR/keyd.conf /etc/keyd/keyd.conf # cant use link_config_file because need sudo
-    sudo systemctl restart keyd
+    if $MARTINHA; then
+        echo -n 'Keyd configurations (keyd.conf)...'
+        mkdir -p /etc/keyd/
+        sudo ln -sf $BASEDIR/keyd.conf /etc/keyd/keyd.conf
+        sudo systemctl restart keyd
+    fi
 
     echo -n 'Neovim configurations (init.vim)...'
     mkdir -p $HOME/.config/nvim
@@ -119,44 +123,50 @@ function config() {
 
     echo -n 'Zsh configurations (.zshrc)...'
     link_config_file $BASEDIR/zshrc $HOME/.zshrc
+}
 
-    echo -n 'Loading gnome-terminal preferences...'
-    if ! command -v gnome-terminal &> /dev/null
-    then
-        echo "\n${RED}[Error] gnome-terminal not found, skipping preferences installation${NC}"
-    else
-        cat $BASEDIR/gterminal.preferences | dconf load /org/gnome/terminal/legacy/profiles:/
-        echo -e "${GREEN}Done${NC}"
-    fi
-
-} # --------------------- END Configuring ------------------------
+function build_suckless() {
+    echo -n 'Building dwl...'
+    sudo make -C $BASEDIR/suckless/dwl clean install
+    echo -n 'Building dmenu...'
+    sudo make -C $BASEDIR/suckless/dmenu clean install
+    echo -n 'Building st...'
+    sudo make -C $BASEDIR/suckless/st clean install
+}
 
 
-while getopts ":hc" option; do
-   case $option in
-        h) # display Help
+# -------------- Parse options ----------------
+while getopts ":hcmv" option; do
+    case $option in
+        h)
             help
             exit;;
-
-        c) # configs-only
+        c)
             config
             exit;;
-
-        \?) # incorrect option
+        m)
+            MARTINHA=true
+            ;;
+        \?)
             echo "Error: Invalid option"
             exit;;
-   esac
+    esac
 done
 
+# -------------- Start install ----------------
+if grep -qi archlinux /etc/os-release; then
+    install_archlinux
+    build_suckless
+else
+    install_debian
+fi
 
+post_install
 
-install
 config
 
-
-echo 'All done!'
+echo -e "${GREEN}All done!${NC}"
 echo -e "${GREEN}RUN THE FOLLOWING TO COMPLETE SETUP:${NC}"
 echo "chsh -s \$(which zsh)"
-echo 'Make sure to log out and back in so that changes can take place'
-
+echo "Make sure to log out and back in so that changes can take place"
 
