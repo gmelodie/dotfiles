@@ -1,7 +1,7 @@
 [user]
 	name = Gabriel Cruz
 	email = gabrieldemelocruz@gmail.com
-	signingkey = 03435EF5D36BD3BDE0DEF338C8676463713F0620
+	signingkey = E667FA15E7AA4656C8740CBAB191B6CE1902DEC2
 
 [rerere]
     enabled = 1
@@ -16,6 +16,9 @@
 [pull]
     rebase = interactive
 
+[push]
+    autoSetupRemote = true
+
 [alias]
     a = add --all
     d = diff
@@ -23,6 +26,7 @@
     c = commit
     l = log --oneline
     ch = checkout
+    oops = commit --amend --no-edit
     unadd = restore --staged
     conflicts = diff --name-only --diff-filter=U
     whatadded = log --diff-filter=A
