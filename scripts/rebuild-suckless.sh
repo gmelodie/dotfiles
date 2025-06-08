@@ -1,0 +1,6 @@
+cd $HOME/dotfiles/suckless/dmenu
+sudo make clean install
+cd $HOME/dotfiles/suckless/st
+sudo make clean install
+cd $HOME/dotfiles/suckless/dwm
+sudo make clean install

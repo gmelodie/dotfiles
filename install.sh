@@ -41,8 +41,13 @@ function install_debian() {
 
 function install_archlinux() {
     echo '############# Starting full system upgrade (Pacman)...'
-    sudo pacman -Syu --noconfirm
-    sudo pacman -S --noconfirm curl build-essential base-devel git python python-pynvim go zsh universal-ctags fzf nodejs tmux clang clang-analyzer ripgrep neovim mesa xorg-xwayland libxkbcommon wayland wlroots ly
+    sudo pacman -Syu
+    sudo pacman -S curl build-essential base-devel git python python-pynvim python-pip, python-pipxgo zsh universal-ctags fzf nodejs tmux clang clang-analyzer ripgrep neovim mesa ly libx11 libxft xorg-server xorg-xinit terminus-font wget xorg-xauth xorg-apps openssh feh imagemagick
+    pipx install pywal
+    git clone https://aur.archlinux.org/yay-bin.git /tmp/yay-bin
+    cd /tmp/yay-bin
+    makepkg -si
+    yay -S librewolf-bin
     # Enable ly display manager
     sudo systemctl enable ly.service
     sudo systemctl start ly.service
@@ -103,10 +108,14 @@ function config() {
     echo  '############# Installing configuration files...'
 
     if $MARTINHA; then
-        echo -n 'Keyd configurations (keyd.conf)...'
-        mkdir -p /etc/keyd/
+        echo 'Keyd configurations (keyd.conf)...'
+        sudo mkdir -p /etc/keyd/
         sudo ln -sf $BASEDIR/keyd.conf /etc/keyd/keyd.conf
         sudo systemctl restart keyd
+
+        echo 'X11 touchpad configurations (30-touchpad.conf)...'
+        sudo mkdir -p /etc/X11/xorg.conf.d/
+        sudo ln -sf $BASEDIR/30-touchpad.conf /etc/X11/xorg.conf.d/30-touchpad.conf
     fi
 
     echo -n 'Neovim configurations (init.vim)...'
@@ -123,11 +132,14 @@ function config() {
 
     echo -n 'Zsh configurations (.zshrc)...'
     link_config_file $BASEDIR/zshrc $HOME/.zshrc
+
+    echo -n 'xinitrc startup (dwm)...'
+    link_config_file $BASEDIR/xinitrc $HOME/.xinitrc
 }
 
 function build_suckless() {
-    echo -n 'Building dwl...'
-    sudo make -C $BASEDIR/suckless/dwl clean install
+    echo -n 'Building dwm...'
+    sudo make -C $BASEDIR/suckless/dwm clean install
     echo -n 'Building dmenu...'
     sudo make -C $BASEDIR/suckless/dmenu clean install
     echo -n 'Building st...'
@@ -167,6 +179,6 @@ config
 
 echo -e "${GREEN}All done!${NC}"
 echo -e "${GREEN}RUN THE FOLLOWING TO COMPLETE SETUP:${NC}"
-echo "chsh -s \$(which zsh)"
+echo "chsh -s /usr/bin/zsh"
 echo "Make sure to log out and back in so that changes can take place"
 

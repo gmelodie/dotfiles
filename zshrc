@@ -133,11 +133,10 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # change default text editor to nvim
-export NVIM_APPIMAGE="$HOME/.nvim/nvim.appimage"
-export VISUAL="$NVIM_APPIMAGE"
-export EDITOR="$NVIM_APPIMAGE"
-alias vim="$NVIM_APPIMAGE"
-alias vi="$NVIM_APPIMAGE"
+export VISUAL=nvim
+export EDITOR=nvim
+alias vim=nvim
+alias vi=nvim
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
@@ -194,11 +193,11 @@ alias digs='dig +noall +answer +authority'
 export WINEARCH=win32
 export WINEPREFIX=/home/gmelodie/wine32
 
-# make nix available
-source $HOME/.nix-profile/etc/profile.d/nix.sh
-
 # cargo run | less -R (make this work with colors)
 export CARGO_TERM_COLOR=always
 
 # nim stuff
 export PATH=/home/gmelodie/.nimble/bin:$PATH
+
+# rebuild suckless
+alias suckr="$HOME/dotfiles/scripts/rebuild-suckless.sh"
