@@ -5,11 +5,8 @@
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-static char *font = "Hack Nerd Font Mono:pixelsize=22:antialias=true:autohint=true";
+static char *font = "Hack Nerd Font:pixelsize=23:antialias=true:autohint=true";
 static int borderpx = 2;
-
-unsigned int bg = 0, bgUnfocused = 16;
-float alpha = 0.93, alphaUnfocused = 0.6;
 
 /*
  * What program is execed by st depends of these precedence rules:
@@ -94,7 +91,10 @@ char *termname = "st-256color";
  *
  *	stty tabs
  */
-unsigned int tabspaces = 4;
+unsigned int tabspaces = 8;
+
+/* bg opacity */
+float alpha = 0.93, alphaUnfocused = 0.6;
 
 /* Terminal colors (16 first used in escape sequence) */
 static const char *colorname[] = {
@@ -136,6 +136,7 @@ unsigned int defaultbg = 256;
 unsigned int defaultfg = 257;
 unsigned int defaultcs = 258;
 static unsigned int defaultrcs = 259;
+unsigned int bg = 0, bgUnfocused = 16;
 
 /*
  * Default shape of cursor
