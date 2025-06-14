@@ -122,10 +122,10 @@ Plug 'honza/vim-snippets'
 
 
 lua require('lsp.rust')
-lua require('lsp.c')
-lua require('lsp.go')
-lua require('lsp.python')
-lua require('lsp.nim')
+" lua require('lsp.c')
+" lua require('lsp.go')
+" lua require('lsp.python')
+" lua require('lsp.nim')
 
 " c
 Plug 'vim-scripts/c.vim', {'for': ['c', 'cpp']}
@@ -489,7 +489,7 @@ nnoremap <silent> <leader>r :Rg<CR>
 
 
 " Go to definition
-autocmd VimEnter * nnoremap J gd
+nnoremap J <Cmd>lua vim.lsp.buf.definition()<CR>
 autocmd VimEnter * nnoremap K <C-o>
 "
 

@@ -1,1 +1,0 @@
-/home/gmelodie/dotfiles/nvim/lua/lsp/python.lua

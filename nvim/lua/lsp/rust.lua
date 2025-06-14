@@ -1,1 +1,1 @@
-/home/gmelodie/dotfiles/nvim/lua/lsp/rust.lua
+require'lspconfig'.rust_analyzer.setup({})
