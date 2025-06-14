@@ -2,3 +2,7 @@ tags
 *.o
 *.orig
 *.rej
+dwm
+st
+dmenu
+config.h
