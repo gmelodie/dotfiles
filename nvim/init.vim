@@ -50,6 +50,7 @@ Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'} " replace ctags
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-tree/nvim-tree.lua' " replace nerdtree
 Plug 'kyazdani42/nvim-web-devicons' " for nvim-tree
+Plug 'gmelodie/project.nvim' " for pwd
 
 Plug 'neovim/nvim-lspconfig'
 
@@ -192,18 +193,23 @@ endif
 
 " nvim-tree
 lua << EOF
-  -- disable netrw at the very start of your init.lua
-  vim.g.loaded_netrw = 1
-  vim.g.loaded_netrwPlugin = 1
+  require("project_nvim").setup {
+      -- dirs that contain the following are set as root
+      patterns = { ".git", "_darcs", ".hg", ".bzr", ".svn", "Makefile", "package.json", ".nimble", "Cargo.toml", "Makefile" },
+  }
 
-  -- optionally enable 24-bit colour
+  -- enable 24-bit colour
   vim.opt.termguicolors = true
 
-  -- empty setup using defaults
   require("nvim-tree").setup({
-      hijack_cursor = true,
       filters = {
         custom = { '.git' },
+      },
+      sync_root_with_cwd = true,
+      respect_buf_cwd = true,
+      update_focused_file = {
+        enable = true,
+        update_root = true
       },
   })
 EOF
@@ -405,12 +411,6 @@ noremap <Leader>gr :Gremove<CR>
 "" FLoatTerm
 noremap <Leader>t :FloatermToggle<CR>
 
-" session management
-" nnoremap <leader>so :OpenSession<Space>
-" nnoremap <leader>ss :SaveSession<Space>
-" nnoremap <leader>sd :DeleteSession<CR>
-" nnoremap <leader>sc :CloseSession<CR>
-
 "" Tabs
 nnoremap <Tab> gt
 nnoremap <S-Tab> gT
@@ -443,25 +443,6 @@ nnoremap <silent> <leader>e :Files<CR>
 nnoremap <silent> <leader>r :Rg<CR>
 
 
-
-" Ale
-" let g:ale_completion_enabled = 1 " enable autocomplete
-
-
-" let g:ale_linters = {
-" 	\ 'go': ['gopls'],
-"     \ 'rust': ['analyzer'],
-"     \ 'python': ['flake8', 'pylint'],
-"     \ 'c': ['clangd'],
-" \}
-" let g:ale_fixers = {
-" \   'rust': ['rustfmt', 'remove_trailing_lines', 'trim_whitespace'],
-" \   'c': ['clang-format'],
-" \}
-" let g:ale_virtualtext_cursor = 'disabled' " dont show errors as comments
-" nnoremap <leader>d :ALEDetail<CR>
-
-
 " Go to definition
 nnoremap J <Cmd>lua vim.lsp.buf.definition()<CR>
 autocmd VimEnter * nnoremap K <C-o>
@@ -473,11 +454,6 @@ let g:go_doc_keywordprg_enabled = 0 " remove stupid vim-go K mapping
 set noerrorbells visualbell t_vb=
 if has('autocmd')
   autocmd GUIEnter * set visualbell t_vb=
-endif
-
-"" Copy/Paste/Cut
-if has('unnamedplus')
-  " set clipboard=unnamed,unnamedplus
 endif
 
 noremap YY "+y<CR>
