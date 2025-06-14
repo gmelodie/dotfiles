@@ -9,7 +9,7 @@ endif
 
 let vimplug_exists=expand('~/.config/nvim/autoload/plug.vim')
 
-let g:vim_bootstrap_langs = "c,elixir,erlang,go,html,javascript,perl,python,ruby"
+let g:vim_bootstrap_langs = "c,go,html,javascript,python"
 let g:vim_bootstrap_editor = "nvim"				" nvim or vim
 
 if !filereadable(vimplug_exists)
@@ -37,30 +37,26 @@ let python_highlight_all = 1
 
 " so that :checkhealth doesnt complain
 let g:loaded_node_provider = 0
-let g:loaded_perl_provider = 0
 
 "*****************************************************************************
 "" Plug install packages
 "*****************************************************************************
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
 Plug 'airblade/vim-gitgutter'
 Plug 'f-person/git-blame.nvim'
 Plug 'vim-scripts/grep.vim'
 Plug 'bronson/vim-trailing-whitespace'
-Plug 'majutsushi/tagbar'
-Plug 'ludovicchabant/vim-gutentags'
 
-Plug 'nvim-treesitter/nvim-treesitter'
-Plug 'preservim/nerdtree'
+Plug 'stevearc/aerial.nvim' " replace tagbar
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'} " replace ctags
+Plug 'nvim-lua/plenary.nvim'
+Plug 'preservim/nerdtree' " todo: replace by nvim-tree
+
 Plug 'ryanoasis/vim-devicons'
-Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plug 'sbdchd/neoformat'
 
 Plug 'Yggdroot/indentLine'
-Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-surround'
 Plug 'justinmk/vim-sneak'
 Plug 'karb94/neoscroll.nvim'
@@ -109,7 +105,6 @@ endif
 Plug 'Shougo/vimproc.vim', {'do': g:make}
 
 
-
 "" Neoscroll
 " lua require('neoscroll').setup()
 
@@ -122,10 +117,9 @@ if v:version >= 703
   Plug 'Shougo/vimshell.vim'
 endif
 
-" Colorschemes
-" Plug 'tomasr/molokai'
-" Plug 'iCyMind/NeoSolarized'
-Plug 'morhetz/gruvbox'
+" Colorscheme
+Plug 'ellisonleao/gruvbox.nvim'
+Plug 'itchyny/lightline.vim'
 
 " Snippets
 " Plug 'honza/vim-snippets' " use :CocInstall coc-snippets instead
@@ -138,11 +132,6 @@ Plug 'morhetz/gruvbox'
 " c
 Plug 'vim-scripts/c.vim', {'for': ['c', 'cpp']}
 Plug 'ludwig/split-manpage.vim'
-
-
-" elixir
-Plug 'elixir-lang/vim-elixir'
-Plug 'carlosgaldino/elixir-snippets'
 
 
 " go
@@ -166,13 +155,6 @@ Plug 'jelera/vim-javascript-syntax'
 "" Python Bundle
 " Plug 'raimon49/requirements.txt.vim' " shebang requirements.txt.vim bug
 
-
-" ruby
-Plug 'tpope/vim-rails'
-Plug 'tpope/vim-rake'
-Plug 'tpope/vim-projectionist'
-Plug 'thoughtbot/vim-rspec'
-Plug 'ecomba/vim-ruby-refactoring'
 
 " rust
 Plug 'rust-lang/rust.vim'
@@ -269,16 +251,6 @@ else
 
 endif
 
-syntax on
-set ruler
-set number
-set background=dark
-set termguicolors
-
-" Relative line numbers (toggle when using multiple windows)
-" See vim-numbertoggle plugin (does the same thing)
-set relativenumber
-
 augroup numbertoggle
   autocmd!
   autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
@@ -286,16 +258,43 @@ augroup numbertoggle
 augroup END
 
 
-"" Set colorscheme
-let no_buffers_menu=1
-if !exists('g:not_finish_vimplug')
-  " colorscheme molokai
-  colorscheme gruvbox
-  " colorscheme NeoSolarized
-endif
+" Gruvbox colorscheme
+syntax on
+set ruler
+set number
+set background=dark
+set termguicolors
+set background=dark
+set relativenumber
+
+" no annoying italics
+lua << EOF
+require("gruvbox").setup({
+  italic = {
+    strings = false,
+    comments = false,
+    folds = false,
+    emphasis = false,
+  }
+})
+EOF
+colorscheme gruvbox
 
 
+" Lightline (only show name of non-focused file)
+let g:lightline = {}
+let g:lightline.component_function = { 'lineinfo': 'LightlineLineinfo' }
 
+function! LightlineLineinfo() abort
+    if winwidth(0) < 86
+        return ''
+    endif
+
+    let l:current_line = printf('%-3s', line('.'))
+    let l:max_line = printf('%-3s', line('$'))
+    let l:lineinfo = ' ' . l:current_line . '/' . l:max_line
+    return l:lineinfo
+endfunction
 
 "" Disable the blinking cursor.
 set gcr=a:blinkon0
@@ -324,16 +323,6 @@ if exists("*fugitive#statusline")
   set statusline+=%{fugitive#statusline()}
 endif
 set diffopt+=vertical
-
-" vim-airline
-" let g:airline_theme = 'powerlineish'  " in case you want a dark background
-let g:airline_theme = 'gruvbox'  " in case you want a dark background
-" let g:airline#extensions#syntastic#enabled = 1
-let g:airline#extensions#branch#enabled = 1
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tagbar#enabled = 1
-let g:airline_skip_empty_sections = 1
-
 
 "*****************************************************************************
 "" Abbreviations
@@ -526,14 +515,6 @@ inoremap <nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(
 inoremap <nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
 
 
-" Tagbar
-nmap <silent> <F4> :TagbarToggle<CR>
-let g:tagbar_autofocus = 1
-let g:tagbar_autopreview = 0
-let g:tagbar_previewwin_pos = "belowright"
-let g:tagbar_autoclose = 0
-let g:tagbar_width = float2nr(&columns * 0.4)
-
 " Go to definition
 " autocmd VimEnter * nnoremap J gd
 " autocmd VimEnter * nnoremap K <C-o>
@@ -548,14 +529,6 @@ autocmd VimEnter * nnoremap <silent> K <C-o> " need VimEnter since K is mapped i
 " inoremap <silent><expr> <c-@> coc#refresh()
 
 let g:go_doc_keywordprg_enabled = 0 " remove stupid vim-go K mapping
-
-" need special maps when dealing with go files (vim-go gets angry)
-" tell gutentags where the root of the project is
-" let g:gutentags_add_default_project_roots = 0
-let g:gutentags_project_root = ['Cargo.toml', 'package.json', '.git']
-" don't create 'tags' file in every dir (use .cache/nvim/ctags instead)
-let g:gutentags_cache_dir = expand('~/.cache/nvim/ctags/')
-
 
 " Disable visualbell
 set noerrorbells visualbell t_vb=
@@ -613,10 +586,31 @@ nnoremap <Leader>o :.Gbrowse<CR>
 autocmd FileType c setlocal tabstop=4 shiftwidth=4 expandtab
 autocmd FileType cpp setlocal tabstop=4 shiftwidth=4 expandtab
 
+" Treesitter
+lua << EOF
+require'nvim-treesitter.configs'.setup {
+  ensure_installed = { "lua", "python", "javascript", "html", "css", "go", "c", "rust", "nim", "bash" },
+  highlight = {
+    enable = true,
+    additional_vim_regex_highlighting = false,
+  },
+}
+EOF
 
-" erlang
-let erlang_folding = 1
-let erlang_show_errors = 1
+
+" Aerial
+lua << EOF
+require("aerial").setup({
+  backends = { "treesitter", "lsp", "markdown" },
+  layout = {
+    default_direction = "right",
+    max_width = {40, 0.25},
+  },
+  show_guides = true,
+  filter_kind = false, -- Show all symbol kinds
+})
+EOF
+nnoremap <F4> :AerialToggle!<CR>
 
 
 " nim
@@ -709,9 +703,6 @@ augroup vimrc-javascript
 augroup END
 
 
-" perl
-
-
 " python
 " vim-python
 augroup vimrc-python
@@ -720,57 +711,6 @@ augroup vimrc-python
       \ formatoptions+=croq softtabstop=4
       \ cinwords=if,elif,else,for,while,try,except,finally,def,class,with
 augroup END
-
-" vim-airline
-let g:airline#extensions#virtualenv#enabled = 0
-
-
-" ruby
-let g:rubycomplete_buffer_loading = 1
-let g:rubycomplete_classes_in_global = 1
-let g:rubycomplete_rails = 1
-
-augroup vimrc-ruby
-  autocmd!
-  autocmd BufNewFile,BufRead *.rb,*.rbw,*.gemspec setlocal filetype=ruby
-  autocmd FileType ruby set tabstop=2|set shiftwidth=2|set expandtab softtabstop=2
-augroup END
-
-let g:tagbar_type_ruby = {
-    \ 'kinds' : [
-        \ 'm:modules',
-        \ 'c:classes',
-        \ 'd:describes',
-        \ 'C:contexts',
-        \ 'f:methods',
-        \ 'F:singleton methods'
-    \ ]
-\ }
-
-" RSpec.vim mappings
-" map <Leader>t :call RunCurrentSpecFile()<CR>
-" map <Leader>s :call RunNearestSpec()<CR>
-" map <Leader>l :call RunLastSpec()<CR>
-" map <Leader>a :call RunAllSpecs()<CR>
-
-" For ruby refactory
-if has('nvim')
-  runtime! macros/matchit.vim
-else
-  packadd! matchit
-endif
-
-" Ruby refactory
-nnoremap <leader>rap  :RAddParameter<cr>
-nnoremap <leader>rcpc :RConvertPostConditional<cr>
-nnoremap <leader>rel  :RExtractLet<cr>
-vnoremap <leader>rec  :RExtractConstant<cr>
-vnoremap <leader>relv :RExtractLocalVariable<cr>
-nnoremap <leader>rit  :RInlineTemp<cr>
-vnoremap <leader>rrlv :RRenameLocalVariable<cr>
-vnoremap <leader>rriv :RRenameInstanceVariable<cr>
-vnoremap <leader>rem  :RExtractMethod<cr>
-
 
 "*****************************************************************************
 "*****************************************************************************
@@ -783,43 +723,6 @@ endif
 "*****************************************************************************
 "" Convenience variables
 "*****************************************************************************
-
-" vim-airline
-if !exists('g:airline_symbols')
-  let g:airline_symbols = {}
-endif
-
-let g:airline_powerline_fonts = 1
-if !exists('g:airline_powerline_fonts')
-  let g:airline#extensions#tabline#left_sep = ' '
-  let g:airline#extensions#tabline#left_alt_sep = '|'
-  let g:airline_left_sep          = '▶'
-  let g:airline_left_alt_sep      = '»'
-  let g:airline_right_sep         = '◀'
-  let g:airline_right_alt_sep     = '«'
-  let g:airline#extensions#branch#prefix     = '⤴' "➔, ➥, ⎇
-  let g:airline#extensions#readonly#symbol   = '⊘'
-  let g:airline#extensions#linecolumn#prefix = '¶'
-  let g:airline#extensions#paste#symbol      = 'ρ'
-  let g:airline_symbols.linenr    = '␊'
-  let g:airline_symbols.branch    = '⎇'
-  let g:airline_symbols.paste     = 'ρ'
-  let g:airline_symbols.paste     = 'Þ'
-  let g:airline_symbols.paste     = '∥'
-  let g:airline_symbols.whitespace = 'Ξ'
-else
-  let g:airline#extensions#tabline#left_sep = ''
-  let g:airline#extensions#tabline#left_alt_sep = ''
-
-  " powerline symbols
-  let g:airline_left_sep = ''
-  let g:airline_left_alt_sep = ''
-  let g:airline_right_sep = ''
-  let g:airline_right_alt_sep = ''
-  let g:airline_symbols.branch = ''
-  let g:airline_symbols.readonly = ''
-  let g:airline_symbols.linenr = ''
-endif
 
 
 " be able to go up and down single row at md and txt files
