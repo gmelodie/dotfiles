@@ -115,6 +115,7 @@ Plug 'itchyny/lightline.vim'
 " Snippets
 Plug 'honza/vim-snippets'
 
+call plug#end()
 
 "*****************************************************************************
 "" LSPs
@@ -122,51 +123,14 @@ Plug 'honza/vim-snippets'
 
 
 lua require('lsp.rust')
-" lua require('lsp.c')
-" lua require('lsp.go')
-" lua require('lsp.python')
+lua require('lsp.c')
+lua require('lsp.go')
+lua require('lsp.python')
 " lua require('lsp.nim')
 
-" c
-Plug 'vim-scripts/c.vim', {'for': ['c', 'cpp']}
-Plug 'ludwig/split-manpage.vim'
-
-
-" go
-" Go Lang Bundle
-Plug 'fatih/vim-go'
-
-
-" html
-"" HTML Bundle
-Plug 'hail2u/vim-css3-syntax'
-Plug 'gorodinskiy/vim-coloresque'
-Plug 'tpope/vim-haml'
-Plug 'mattn/emmet-vim'
-
-
-" javascript
-"" Javascript Bundle
-Plug 'jelera/vim-javascript-syntax'
-
-" python
-"" Python Bundle
-" Plug 'raimon49/requirements.txt.vim' " shebang requirements.txt.vim bug
-
-
-" rust
-Plug 'rust-lang/rust.vim'
-
-
 "*****************************************************************************
 "*****************************************************************************
 
-"" Include user's extra bundle
-if filereadable(expand("~/.config/nvim/local_bundles.vim"))
-  source ~/.config/nvim/local_bundles.vim
-endif
-
-call plug#end()
 
 " Required:
 filetype plugin indent on
