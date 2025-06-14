@@ -29,12 +29,6 @@ endif
 " Required:
 call plug#begin(expand('~/.config/nvim/plugged'))
 
-" Syntax highlight
-" Default highlight is better than polyglot
-" Needs to be before the Plug loading line
-let g:polyglot_disabled = ['python']
-let python_highlight_all = 1
-
 " so that :checkhealth doesnt complain
 let g:loaded_node_provider = 0
 
@@ -53,6 +47,8 @@ Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'} " replace ctags
 Plug 'nvim-lua/plenary.nvim'
 Plug 'preservim/nerdtree' " todo: replace by nvim-tree
 
+Plug 'neovim/nvim-lspconfig'
+
 Plug 'ryanoasis/vim-devicons'
 Plug 'sbdchd/neoformat'
 
@@ -60,12 +56,7 @@ Plug 'Yggdroot/indentLine'
 Plug 'tpope/vim-surround'
 Plug 'justinmk/vim-sneak'
 Plug 'karb94/neoscroll.nvim'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'voldikss/vim-floaterm'
-
-" Plug 'rust-analyzer/rust-analyzer', {'do': 'cargo xtask install --server'}
-" use coc-rust-analyzer instead (check coc-settings.json), also you need to
-" install the analyzer server with this `rustup component add rust-analyzer`
 
 call plug#end()
 
@@ -122,12 +113,19 @@ Plug 'ellisonleao/gruvbox.nvim'
 Plug 'itchyny/lightline.vim'
 
 " Snippets
-" Plug 'honza/vim-snippets' " use :CocInstall coc-snippets instead
+Plug 'honza/vim-snippets'
 
 
 "*****************************************************************************
-"" Custom bundles
+"" LSPs
 "*****************************************************************************
+
+
+lua require('lsp.rust')
+lua require('lsp.c')
+lua require('lsp.go')
+lua require('lsp.python')
+lua require('lsp.nim')
 
 " c
 Plug 'vim-scripts/c.vim', {'for': ['c', 'cpp']}
@@ -264,7 +262,6 @@ set ruler
 set number
 set background=dark
 set termguicolors
-set background=dark
 set relativenumber
 
 " no annoying italics
@@ -491,42 +488,10 @@ nnoremap <silent> <leader>r :Rg<CR>
 " nnoremap <leader>d :ALEDetail<CR>
 
 
-" Snippets and autocompletion
-" ---------------------------
-" The configs below make keyword and snippets play nice with each other
-" This is for keywork completion
-inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm() : "\<CR>"
-inoremap <expr> <Tab> coc#pum#visible() ? coc#pum#next(1) : "\<Tab>"
-inoremap <expr> <S-Tab> coc#pum#visible() ? coc#pum#prev(1) : "\<S-Tab>"
-
-" This is for snippet completion
-let g:coc_snippet_next = '<tab>'
-let g:coc_snippet_prev = '<S-tab>'
-
-" Function signature help
-inoremap <silent> <leader>s <C-r>=CocActionAsync('showSignatureHelp')<CR>
-nnoremap <silent> <leader>s :call CocAction('doHover')<CR>
-autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-
-" scroll help popup
-nnoremap <nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-nnoremap <nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
-inoremap <nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
-inoremap <nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
-
-
 " Go to definition
-" autocmd VimEnter * nnoremap J gd
-" autocmd VimEnter * nnoremap K <C-o>
+autocmd VimEnter * nnoremap J gd
+autocmd VimEnter * nnoremap K <C-o>
 "
-" autocmd VimEnter * nnoremap J :ALEGoToDefinition<CR> " do NOT use ALE, use CoC instead
-" autocmd VimEnter * nnoremap K <C-t>
-"
-" Add https://github.com/neoclide/coc.nvim/wiki/Language-servers
-" :CocInstall coc-mylangserver (get list of lang servers in link above)
-nmap <silent> J <Plug>(coc-definition)
-autocmd VimEnter * nnoremap <silent> K <C-o> " need VimEnter since K is mapped in plugin
-" inoremap <silent><expr> <c-@> coc#refresh()
 
 let g:go_doc_keywordprg_enabled = 0 " remove stupid vim-go K mapping
 
@@ -601,12 +566,12 @@ EOF
 " Aerial
 lua << EOF
 require("aerial").setup({
-  backends = { "treesitter", "lsp", "markdown" },
-  layout = {
-    default_direction = "right",
-    max_width = {40, 0.25},
-  },
   show_guides = true,
+  layout = {
+    max_width = { 80, 0.35 },
+    width = nil,
+    min_width = { 40, 0.25 },
+  },
   filter_kind = false, -- Show all symbol kinds
 })
 EOF
@@ -619,8 +584,7 @@ let g:neoformat_only_msg_on_error = 1
 let g:neoformat_enabled_nim = ['nph']
 " tab is 2 spaces
 autocmd FileType nim setlocal shiftwidth=2 softtabstop=2 expandtab
-" only run format on save for nim files (others should use coc.nvim)
-" TODO: have coc.nvim properly use nimlangserver's formatter (which is nph)
+" only run format on save for nim files (others should use lsps)
 augroup fmt
   autocmd!
   autocmd BufWritePre *.nim Neoformat

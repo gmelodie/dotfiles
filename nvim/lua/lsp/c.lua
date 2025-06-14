@@ -1,0 +1,1 @@
+/home/gmelodie/dotfiles/nvim/lua/lsp/c.lua

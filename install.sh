@@ -20,7 +20,7 @@ function help() {
    echo
 }
 
-function link_config_file() { # link_file(here, there)
+function link_config() { # link_file(here, there)
     src=$1
     dst=$2
 
@@ -118,23 +118,27 @@ function config() {
         sudo ln -sf $BASEDIR/30-touchpad.conf /etc/X11/xorg.conf.d/30-touchpad.conf
     fi
 
-    echo -n 'Neovim configurations (init.vim)...'
-    mkdir -p $HOME/.config/nvim
-    link_config_file $BASEDIR/init.vim $HOME/.config/nvim/init.vim
-    link_config_file $BASEDIR/coc-settings.json $HOME/.config/nvim/coc-settings.json
+    echo -n 'Neovim configurations (init.vim, etc.)...'
+    mkdir -p $HOME/.config/nvim/lua/lsp
+    ln -sf $BASEDIR/nvim/init.vim $HOME/.config/nvim/init.vim
+    for file in $BASEDIR/nvim/lua/lsp/*; do
+	filename=$(basename "$file")
+	ln -sf $BASEDIR/nvim/lua/lsp/$filename $HOME/.config/nvim/lua/lsp/$filename
+    done
+
 
     echo -n 'Espanso configurations (default.yml)...'
     mkdir -p $HOME/.config/espanso
-    link_config_file $BASEDIR/espanso.yml $HOME/.config/espanso/default.yml
+    link_config $BASEDIR/espanso.yml $HOME/.config/espanso/default.yml
 
     echo -n 'Git configurations (.gitconfig)...'
-    link_config_file $BASEDIR/gitconfig $HOME/.gitconfig
+    link_config $BASEDIR/gitconfig $HOME/.gitconfig
 
     echo -n 'Zsh configurations (.zshrc)...'
-    link_config_file $BASEDIR/zshrc $HOME/.zshrc
+    link_config $BASEDIR/zshrc $HOME/.zshrc
 
     echo -n 'xinitrc startup (dwm)...'
-    link_config_file $BASEDIR/xinitrc $HOME/.xinitrc
+    link_config $BASEDIR/xinitrc $HOME/.xinitrc
 }
 
 function build_suckless() {
