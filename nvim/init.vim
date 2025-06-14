@@ -63,7 +63,23 @@ Plug 'justinmk/vim-sneak'
 Plug 'karb94/neoscroll.nvim'
 Plug 'voldikss/vim-floaterm'
 
+Plug 'bkad/CamelCaseMotion'
+
 call plug#end()
+
+" camel case motion
+map <silent> w <Plug>CamelCaseMotion_w
+map <silent> b <Plug>CamelCaseMotion_b
+map <silent> e <Plug>CamelCaseMotion_e
+sunmap w
+sunmap b
+sunmap e
+omap <silent> iw <Plug>CamelCaseMotion_iw
+xmap <silent> iw <Plug>CamelCaseMotion_iw
+omap <silent> ib <Plug>CamelCaseMotion_ib
+xmap <silent> ib <Plug>CamelCaseMotion_ib
+omap <silent> ie <Plug>CamelCaseMotion_ie
+xmap <silent> ie <Plug>CamelCaseMotion_ie
 
 
 "" vim-sneak + vim-surround (https://gist.github.com/LanHikari22/6b568683d81cbb7a2252fac86f6f4a4b)
@@ -80,6 +96,7 @@ omap s <Plug>Sneak_s
 " S mapped with v to make it inclusive, similarly to other backward motions in
 " my config (0 mapped to v0, ^ mapped to v^, etc)
 omap S v<Plug>Sneak_S
+
 
 "" alpha.nvim (startify theme)
 lua << EOF
