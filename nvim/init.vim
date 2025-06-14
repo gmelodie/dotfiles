@@ -48,7 +48,8 @@ Plug 'echasnovski/mini.icons'
 Plug 'stevearc/aerial.nvim' " replace tagbar
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'} " replace ctags
 Plug 'nvim-lua/plenary.nvim'
-Plug 'preservim/nerdtree' " todo: replace by nvim-tree
+Plug 'nvim-tree/nvim-tree.lua' " replace nerdtree
+Plug 'kyazdani42/nvim-web-devicons' " for nvim-tree
 
 Plug 'neovim/nvim-lspconfig'
 
@@ -189,6 +190,25 @@ else
     set shell=/bin/sh
 endif
 
+" nvim-tree
+lua << EOF
+  -- disable netrw at the very start of your init.lua
+  vim.g.loaded_netrw = 1
+  vim.g.loaded_netrwPlugin = 1
+
+  -- optionally enable 24-bit colour
+  vim.opt.termguicolors = true
+
+  -- empty setup using defaults
+  require("nvim-tree").setup({
+      hijack_cursor = true,
+      filters = {
+        custom = { '.git' },
+      },
+  })
+EOF
+nnoremap <silent> <F3> :NvimTreeToggle<CR>
+
 " session management
 let g:session_directory = "~/.config/nvim/session"
 let g:session_autoload = "no"
@@ -308,18 +328,6 @@ cnoreabbrev W w
 cnoreabbrev Q q
 cnoreabbrev Qall qall
 
-"" NERDTree configuration
-let g:NERDTreeShowDevIcons = 1
-let g:NERDTreeChDirMode=2
-let g:NERDTreeIgnore=['\.rbc$', '\~$', '\.pyc$', '\.db$', '\.sqlite$', '__pycache__']
-let g:NERDTreeSortOrder=['^__\.py$', '\/$', '*', '\.swp$', '\.bak$', '\~$']
-let g:NERDTreeShowBookmarks=1
-let g:nerdtree_tabs_focus_on_files=1
-let g:NERDTreeMapOpenInTabSilent = '<RightMouse>'
-let g:NERDTreeWinSize = float2nr(&columns * 0.3)
-set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.pyc,*.db,*.sqlite
-nnoremap <silent> <F2> :NERDTreeFind<CR>
-nnoremap <silent> <F3> :NERDTreeToggle<CR>
 
 " grep.vim
 nnoremap <silent> <leader>f :Rgrep<CR>
@@ -419,12 +427,6 @@ noremap <Leader>e :e <C-R>=expand("%:p:h") . "/" <CR>
 set wildmode=list:longest,list:full
 set wildignore+=*.o,*.obj,.git,*.rbc,*.pyc,__pycache__
 let $FZF_DEFAULT_COMMAND =  "find * -path '*/\.*' -prune -o -path 'node_modules/**' -prune -o -path 'target/**' -prune -o -path 'dist/**' -prune -o  -type f -print -o -type l -print 2> /dev/null"
-
-" The Silver Searcher
-if executable('ag')
-  let $FZF_DEFAULT_COMMAND = 'ag --hidden --ignore .git -g ""'
-  set grepprg=ag\ --nogroup\ --nocolor
-endif
 
 " ripgrep
 if executable('rg')
