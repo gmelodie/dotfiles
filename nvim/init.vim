@@ -42,6 +42,9 @@ Plug 'f-person/git-blame.nvim'
 Plug 'vim-scripts/grep.vim'
 Plug 'bronson/vim-trailing-whitespace'
 
+Plug 'goolord/alpha-nvim'
+Plug 'echasnovski/mini.icons'
+
 Plug 'stevearc/aerial.nvim' " replace tagbar
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'} " replace ctags
 Plug 'nvim-lua/plenary.nvim'
@@ -75,6 +78,11 @@ omap s <Plug>Sneak_s
 " S mapped with v to make it inclusive, similarly to other backward motions in
 " my config (0 mapped to v0, ^ mapped to v^, etc)
 omap S v<Plug>Sneak_S
+
+"" alpha.nvim (startify theme)
+lua << EOF
+require'alpha'.setup(require'alpha.themes.startify'.config)
+EOF
 
 "" Rust formatting
 let g:rustfmt_autosave = 1
