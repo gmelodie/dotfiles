@@ -42,25 +42,19 @@ function install_debian() {
 function install_archlinux() {
     echo '############# Starting full system upgrade (Pacman)...'
     sudo pacman -Syu
-    sudo pacman -S curl build-essential base-devel git python python-pynvim python-pip, python-pipxgo zsh universal-ctags fzf nodejs tmux clang clang-analyzer ripgrep neovim mesa ly libx11 libxft xorg-server xorg-xinit terminus-font wget xorg-xauth xorg-apps openssh feh imagemagick
+    sudo pacman -S curl build-essential base-devel git python python-pynvim python-pip, python-pipxgo zsh universal-ctags fzf nodejs tmux clang clang-analyzer ripgrep neovim mesa ly libx11 libxft xorg-server xorg-xinit terminus-font wget xorg-xauth xorg-apps openssh feh imagemagick pipewire pipewire-pulse pipewire-alse pipewire-jack pipewire-audio wireplumber alsa-utils alsa-firmware bluez bluez-utils bluez-deprecated-tools brightnessct blueman xclip
+    systemctl --user enable --now pipewire pipewire-pulse wireplumber
+    sudo systemctl enable --now bluetooth
     pipx install pywal
     git clone https://aur.archlinux.org/yay-bin.git /tmp/yay-bin
     cd /tmp/yay-bin
     makepkg -si
     yay -S librewolf-bin
     # Enable ly display manager
-    sudo systemctl enable ly.service
-    sudo systemctl start ly.service
+    sudo systemctl enable --now ly.service
 }
 
 function post_install() {
-    # install meslo fonts
-    mkdir -p ~/.fonts
-    curl -L https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Regular.ttf --output ~/.fonts/'MesloLGS NF Regular.ttf'
-    curl -L https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold.ttf --output ~/.fonts/'MesloLGS NF Bold.ttf'
-    curl -L https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Italic.ttf --output ~/.fonts/'MesloLGS NF Italic.ttf'
-    curl -L https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold%20Italic.ttf --output ~/.fonts/'MesloLGS NF Bold Italic.ttf'
-
     echo 'Installing Rust...'
     curl https://sh.rustup.rs -sSf | sh -s -- -y
     source $HOME/.cargo/env

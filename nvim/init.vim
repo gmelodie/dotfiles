@@ -50,7 +50,7 @@ Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'} " replace ctags
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-tree/nvim-tree.lua' " replace nerdtree
 Plug 'kyazdani42/nvim-web-devicons' " for nvim-tree
-Plug 'gmelodie/project.nvim' " for pwd
+Plug 'DrKJeff16/project.nvim' " for pwd
 
 Plug 'neovim/nvim-lspconfig'
 
