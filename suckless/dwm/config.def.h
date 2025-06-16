@@ -91,7 +91,8 @@ static const Layout layouts[] = {
 	{ MOD, XK_x,     ACTION##stack, {.i = -1 } },
 
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
-#define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
+#define SHCMD(cmd)  (const Arg){ .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
+
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
@@ -113,6 +114,8 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_l,      setcfact,       {.f = -0.25} },
 	{ MODKEY|ShiftMask,             XK_o,      setcfact,       {.f =  0.00} },
 	{ MODKEY,                       XK_Return, zoom,           {0} },
+
+    /* vanity gaps */
 	{ MODKEY|Mod4Mask,              XK_u,      incrgaps,       {.i = +1 } },
 	{ MODKEY|Mod4Mask|ShiftMask,    XK_u,      incrgaps,       {.i = -1 } },
 	{ MODKEY|Mod4Mask,              XK_i,      incrigaps,      {.i = +1 } },
@@ -129,8 +132,9 @@ static const Key keys[] = {
 	{ MODKEY|Mod4Mask|ShiftMask,    XK_9,      incrovgaps,     {.i = -1 } },
 	{ MODKEY|Mod4Mask,              XK_0,      togglegaps,     {0} },
 	{ MODKEY|Mod4Mask|ShiftMask,    XK_0,      defaultgaps,    {0} },
+
 	{ MODKEY,                       XK_Tab,    view,           {0} },
-	{ MODKEY|ShiftMask,             XK_c,      killclient,     {0} },
+	{ MODKEY,             XK_c,      killclient,     {0} },
 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
 	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} },
 	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
@@ -142,6 +146,8 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
+
+    /* tag keys */
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
@@ -152,6 +158,18 @@ static const Key keys[] = {
 	TAGKEYS(                        XK_8,                      7)
 	TAGKEYS(                        XK_9,                      8)
 	{ MODKEY|ShiftMask,             XK_BackSpace, quit,        {0} },
+
+    /* fn keys */
+    { 0,                            XF86XK_KbdBrightnessUp,     spawn,      SHCMD("/home/gmelodie/dotfiles/scripts/kblight.sh") },
+    { 0,                            XF86XK_AudioMute,     spawn,      SHCMD("wpctl set-mute @DEFAULT_SINK@ toggle") },
+    { 0,                            XF86XK_AudioLowerVolume,     spawn,      SHCMD("wpctl set-volume @DEFAULT_SINK@ 5%-") },
+    { 0,                            XF86XK_AudioRaiseVolume,     spawn,      SHCMD("wpctl set-volume @DEFAULT_SINK@ 5%+") },
+    { 0,                            XF86XK_AudioPrev,     spawn,      SHCMD("playerctl previous") },
+    { 0,                            XF86XK_AudioNext,     spawn,      SHCMD("playerctl next") },
+    { 0,                            XF86XK_AudioPlay,     spawn,      SHCMD("playerctl play-pause") },
+    { 0,                            XF86XK_MonBrightnessUp,     spawn,      SHCMD("brightnessctl set 5%+") },
+    { 0,                            XF86XK_MonBrightnessDown,   spawn,      SHCMD("brightnessctl set 5%-") }
+    // f11 print screenshot
 };
 
 /* button definitions */
