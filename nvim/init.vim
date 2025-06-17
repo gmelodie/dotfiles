@@ -709,3 +709,6 @@ function! LineDiff(...)
     normal n
 endfunction
 
+" autocompile dwmblocks when changing blocks.h
+autocmd BufWritePost ~/dotfiles/suckless/dwmblocks/blocks.h !cd ~/dotfiles/suckless/dwmblocks; sudo make install && { killall -q dwmblocks;setsid dwmblocks & }
+
