@@ -169,9 +169,9 @@ static const Key keys[] = {
 
     /* fn keys */
     { 0,                            XF86XK_KbdBrightnessUp,     spawn,      SHCMD("/home/gmelodie/dotfiles/scripts/kblight.sh") },
-    { 0,                            XF86XK_AudioMute,     spawn,      SHCMD("wpctl set-mute @DEFAULT_SINK@ toggle") },
-    { 0,                            XF86XK_AudioLowerVolume,     spawn,      SHCMD("wpctl set-volume @DEFAULT_SINK@ 5%-") },
-    { 0,                            XF86XK_AudioRaiseVolume,     spawn,      SHCMD("wpctl set-volume @DEFAULT_SINK@ 5%+") },
+    { 0,                            XF86XK_AudioMute,     spawn,      SHCMD("wpctl set-mute @DEFAULT_SINK@ toggle; pkill -RTMIN+10 dwmblocks") },
+    { 0,                            XF86XK_AudioLowerVolume,     spawn,      SHCMD("wpctl set-volume @DEFAULT_SINK@ 5%-; pkill -RTMIN+10 dwmblocks") },
+    { 0,                            XF86XK_AudioRaiseVolume,     spawn,      SHCMD("wpctl set-volume @DEFAULT_SINK@ 5%+; pkill -RTMIN+10 dwmblocks") },
     { 0,                            XF86XK_AudioPrev,     spawn,      SHCMD("playerctl previous") },
     { 0,                            XF86XK_AudioNext,     spawn,      SHCMD("playerctl next") },
     { 0,                            XF86XK_AudioPlay,     spawn,      SHCMD("playerctl play-pause") },

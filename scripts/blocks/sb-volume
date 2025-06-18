@@ -3,29 +3,25 @@
 # Get the volume line
 vol_info="$(wpctl get-volume @DEFAULT_SINK@)"
 
-# If muted, print 🔇 and exit
-echo "$vol_info" | grep -q '\[MUTED\]' && echo 🔇 && exit
-
 # Extract the raw float value (0.0 - 1.0)
 vol_float=$(echo "$vol_info" | awk '{print $2}')
 
 # Convert to percentage (0–100)
 vol_int=$(printf "%.0f" "$(echo "$vol_float * 100" | bc -l)")
 
-# Format volume string
-vol_fmt=$(printf "%3d" "$vol_int")
+muted="$(echo "$vol_info" | awk '{print $3}')"
 
 # Choose icon
-if [ "$vol_int" -ge 70 ]; then
+if [ "$muted" = "[MUTED]" ]; then
+    icon="🔇"
+elif [ "$vol_int" -ge 70 ]; then
     icon="🔊"
 elif [ "$vol_int" -ge 30 ]; then
     icon="🔉"
-elif [ "$vol_int" -ge 1 ]; then
-    icon="🔈"
 else
-    echo 🔇
-    exit
+    icon="🔈"
 fi
 
-echo "$icon $vol_fmt%"
+# Ensure output width is 6 characters (e.g., "🔊  75% ")
+printf "%s %3d%%" "$icon" "$vol_int"
 

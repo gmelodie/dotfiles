@@ -13,8 +13,8 @@ static const Block blocks[] = {
 };
 
 //sets delimiter between status commands. NULL character ('\0') means no delimiter.
-static char delim[] = "|";
-static int delimLen = 2;
+static char delim[] = " | ";
+static int delimLen = 3;
 
 // Have dwmblocks automatically recompile and run when you edit this file in
 // vim with the following line in your vimrc/init.vim:
