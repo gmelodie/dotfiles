@@ -127,6 +127,9 @@ alias gb="git checkout -b"
 alias gd="git branch --delete"
 alias gpf="git push -u origin HEAD"
 
+# FZF
+export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --glob "!.git/*"'
+alias f="fzf"
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
@@ -202,3 +205,6 @@ export CARGO_TERM_COLOR=always
 
 # nim stuff
 export PATH=/home/gmelodie/.nimble/bin:$PATH
+
+# syntax highligthing for man pages
+export MANPAGER="less -R --use-color -Dd+r -Du+b"
