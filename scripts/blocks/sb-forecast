@@ -9,16 +9,9 @@ weatherreport="${XDG_CACHE_HOME:-$HOME/.cache}/weatherreport"
 # Get a weather report from 'wttr.in' and save it locally.
 getforecast() { timeout --signal=1 2s curl -sf "$url/$LOCATION" > "$weatherreport" || exit 1; }
 
-# Forecast should be updated only once a day.
-checkforecast() {
-	[ -s "$weatherreport" ] && [ "$(stat -c %y "$weatherreport" 2>/dev/null |
-		cut -d' ' -f1)" = "$(date '+%Y-%m-%d')" ]
-}
-
 getprecipchance() {
 	echo "$weatherdata" | sed '16q;d' |    # Extract line 16 from file
-		grep -wo "[0-9]*%" |           # Find a sequence of digits followed by '%'
-		sort -rn |                     # Sort in descending order
+		grep -wo "[0-9]*%"  |           # Find a sequence of digits followed by '%'
 		head -1q                       # Extract first line
 }
 
@@ -48,6 +41,6 @@ case $BLOCK_BUTTON in
 	6) setsid -f "$TERMINAL" -e "$EDITOR" "$0" ;;
 esac
 
-checkforecast || getforecast
+getforecast
 
 showweather
