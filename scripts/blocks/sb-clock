@@ -26,4 +26,5 @@ case $BLOCK_BUTTON in
 	6) setsid -f "$TERMINAL" -e "$EDITOR" "$0" ;;
 esac
 
-date "+%a %d/%m %I:%M%p"
+dateStr=$(date "+%a %d/%m %I:%M%p")
+echo "| $dateStr"
