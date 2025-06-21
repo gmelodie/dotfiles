@@ -296,6 +296,7 @@ colorscheme gruvbox
 " Lightline (only show name of non-focused file)
 let g:lightline = {}
 let g:lightline.component_function = { 'lineinfo': 'LightlineLineinfo' }
+set noshowmode " do not show the -- INSERT -- string
 
 function! LightlineLineinfo() abort
     if winwidth(0) < 86
