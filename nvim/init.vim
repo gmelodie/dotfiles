@@ -130,7 +130,8 @@ endif
 
 " Colorscheme
 Plug 'ellisonleao/gruvbox.nvim'
-Plug 'itchyny/lightline.vim'
+Plug 'nvim-lualine/lualine.nvim'
+Plug 'romgrk/barbar.nvim'
 
 " Snippets
 Plug 'honza/vim-snippets'
@@ -286,21 +287,59 @@ EOF
 colorscheme gruvbox
 
 
-" Lightline (only show name of non-focused file)
-let g:lightline = {}
-let g:lightline.component_function = { 'lineinfo': 'LightlineLineinfo' }
-set noshowmode " do not show the -- INSERT -- string
+"" Lualine
+lua << END
+require('lualine').setup {
+  options = {
+    icons_enabled = true,
+    theme = 'auto',
+    component_separators = { left = '', right = ''},
+    section_separators = { left = '', right = ''},
+    disabled_filetypes = {
+      statusline = {},
+      winbar = {},
+    },
+    ignore_focus = {},
+    always_divide_middle = true,
+    always_show_tabline = true,
+    globalstatus = false,
+  },
+  sections = {
+    lualine_a = {'mode'},
+    lualine_b = {'filename'},
+    lualine_c = {'diff'},
+    lualine_x = {},
+    lualine_y = {'progress'},
+    lualine_z = {'location'}
+  },
+  inactive_sections = {
+    lualine_a = {},
+    lualine_b = {},
+    lualine_c = {'filename'},
+    lualine_x = {'location'},
+    lualine_y = {},
+    lualine_z = {}
+  },
+  tabline = {},
+  winbar = {},
+  inactive_winbar = {},
+  extensions = {}
+}
+END
 
-function! LightlineLineinfo() abort
-    if winwidth(0) < 86
-        return ''
-    endif
 
-    let l:current_line = printf('%-3s', line('.'))
-    let l:max_line = printf('%-3s', line('$'))
-    let l:lineinfo = ' ' . l:current_line . '/' . l:max_line
-    return l:lineinfo
-endfunction
+"" Barbar (tabline)
+lua << END
+require('barbar').setup({
+    clickable = false,
+    animation = false,
+    icons = {
+        buffer_index = true,
+        button = "",
+    },
+})
+END
+
 
 "" Disable the blinking cursor.
 set gcr=a:blinkon0
@@ -316,8 +355,6 @@ set modelines=10
 set title
 set titleold="Terminal"
 set titlestring=%F
-
-set statusline=%F%m%r%h%w%=(%{&ff}/%Y)\ (line\ %l\/%L,\ col\ %c)\
 
 " Search mappings: These will make it so that going to the next one in a
 " search will center on the line it's found in.
