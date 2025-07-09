@@ -42,7 +42,7 @@ function install_debian() {
 function install_archlinux() {
     echo '############# Starting full system upgrade (Pacman)...'
     sudo pacman -Syu
-    sudo pacman -Sy curl build-essential base-devel git python python-pynvim python-pip, python-pipxgo zsh universal-ctags fzf nodejs tmux clang clang-analyzer ripgrep neovim mesa ly libx11 libxft xorg-server xorg-xinit terminus-font wget xorg-xauth xorg-apps openssh feh imagemagick pipewire pipewire-pulse pipewire-alse pipewire-jack pipewire-audio wireplumber alsa-utils alsa-firmware bluez bluez-utils bluez-deprecated-tools brightnessctl blueman xclip playerctl wikiman arch-wiki-docs ranger
+    sudo pacman -Sy curl build-essential base-devel git python python-pynvim python-pip, python-pipxgo zsh universal-ctags fzf nodejs tmux clang clang-analyzer ripgrep neovim mesa ly libx11 libxft xorg-server xorg-xinit terminus-font wget xorg-xauth xorg-apps openssh feh imagemagick pipewire pipewire-pulse pipewire-alse pipewire-jack pipewire-audio wireplumber alsa-utils alsa-firmware bluez bluez-utils bluez-deprecated-tools brightnessctl blueman xclip playerctl wikiman arch-wiki-docs ranger mpd rmpc
     systemctl --user enable --now pipewire pipewire-pulse wireplumber
     sudo systemctl enable --now bluetooth
     pipx install pywal
@@ -133,6 +133,10 @@ function config() {
 
     echo -n 'xinitrc startup (dwm)...'
     link_config $BASEDIR/xinitrc $HOME/.xinitrc
+
+    echo -n 'mpd config...'
+    mkdir -p $HOME/.config/mpd
+    link_config $BASEDIR/mpd.conf HOME/.config/mpd/mpd.conf
 }
 
 function build_suckless() {
