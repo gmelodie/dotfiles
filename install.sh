@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e # stop when a command fails
+
 RED='\033[0;31m'
 ORANGE='\033[0;33m'
 GREEN='\033[0;32m'
@@ -41,17 +43,17 @@ function install_debian() {
 
 function install_archlinux() {
     echo '############# Starting full system upgrade (Pacman)...'
-    sudo pacman -Syu
-    sudo pacman -Sy curl build-essential base-devel git python python-pynvim python-pip, python-pipxgo zsh universal-ctags fzf nodejs tmux clang clang-analyzer ripgrep neovim mesa ly libx11 libxft xorg-server xorg-xinit terminus-font wget xorg-xauth xorg-apps openssh feh imagemagick pipewire pipewire-pulse pipewire-alse pipewire-jack pipewire-audio wireplumber alsa-utils alsa-firmware bluez bluez-utils bluez-deprecated-tools brightnessctl blueman xclip playerctl wikiman arch-wiki-docs ranger mpd mpc rmpc
-    systemctl --user enable --now pipewire pipewire-pulse wireplumber
-    sudo systemctl enable --now bluetooth
-    pipx install pywal
+    sudo pacman -Syyu
+    sudo pacman -S wget curl base-devel git python python-pynvim python-pip python-pipx zsh fzf clang clang-analyzer ripgrep neovim mesa ly libx11 libxft xorg-server xorg-xinit xorg-xauth xorg-apps openssh feh picom imagemagick pipewire pipewire-pulse pipewire-alsa pipewire-audio wireplumber alsa-utils alsa-firmware bluez bluez-utils bluez-deprecated-tools brightnessctl blueman xclip playerctl wikiman arch-wiki-docs ranger mpd mpc rmpc nerd-fonts noto-fonts-emoji
+
     git clone https://aur.archlinux.org/yay-bin.git /tmp/yay-bin
     cd /tmp/yay-bin
     makepkg -si
     yay -S librewolf-bin
-    # Enable ly display manager
-    sudo systemctl enable --now ly.service
+
+    # Enable services
+    systemctl --user enable --now pipewire pipewire-pulse wireplumber
+    sudo systemctl enable --now bluetooth ly
 }
 
 function post_install() {
@@ -149,6 +151,8 @@ function build_suckless() {
     sudo make -C $BASEDIR/suckless/dwm clean install
     echo -n 'Building dmenu...'
     sudo make -C $BASEDIR/suckless/dmenu clean install
+    echo -n 'Building dwmblocks...'
+    sudo make -C $BASEDIR/suckless/dwmblocks clean install
     echo -n 'Building st...'
     sudo make -C $BASEDIR/suckless/st clean install
 }
