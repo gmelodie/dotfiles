@@ -172,7 +172,7 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_BackSpace, quit,        {0} },
 
     /* application bindings */
-    { MODKEY,			XK_m,          spawn,      {.v = (const char*[]){ "st", "-e", "termusic", NULL } } },
+    { MODKEY,			XK_m,          spawn,      {.v = (const char*[]){ "st", "-e", "rmpc", NULL } } },
     { MODKEY,			XK_w,          spawn,      {.v = (const char*[]){ BROWSER, NULL } } },
     { MODKEY,			XK_n,          spawn,      {.v = (const char*[]){ "st", "-e", "nvim", NULL } } },
     { MODKEY,			XK_o,          spawn,      {.v = (const char*[]){ "st", "-e", "zsh", "-ic", "ranger", NULL } } },
