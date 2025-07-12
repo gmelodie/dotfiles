@@ -26,11 +26,6 @@
         vertical_align: Center,
         horizontal_align: Center,
     ),
-    audio_output {
-        type        "pipewire"
-        name        "PipeWire Output"
-    },
-
     keybinds: (
         global: {
             ":":       CommandMode,
