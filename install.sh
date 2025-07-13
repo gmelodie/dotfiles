@@ -44,7 +44,7 @@ function install_debian() {
 function install_archlinux() {
     echo '############# Starting full system upgrade (Pacman)...'
     sudo pacman -Syyu
-    sudo pacman -S wget curl base-devel git python python-pynvim python-pip python-pipx zsh fzf clang clang-analyzer ripgrep neovim mesa ly libx11 libxft xorg-server xorg-xinit xorg-xauth xorg-apps openssh feh picom imagemagick pipewire pipewire-pulse pipewire-alsa pipewire-audio wireplumber alsa-utils alsa-firmware bluez bluez-utils bluez-deprecated-tools brightnessctl blueman xclip playerctl wikiman arch-wiki-docs ranger mpd mpc rmpc nerd-fonts noto-fonts-emoji
+    sudo pacman -S wget curl base-devel git python python-pynvim python-pip python-pipx zsh fzf clang clang-analyzer ripgrep neovim mesa ly libx11 libxft xorg-server xorg-xinit xorg-xauth xorg-apps xorg-setxkbmap openssh feh picom imagemagick pipewire pipewire-pulse pipewire-alsa pipewire-audio wireplumber alsa-utils alsa-firmware bluez bluez-utils bluez-deprecated-tools brightnessctl blueman xclip playerctl wikiman arch-wiki-docs ranger mpd mpc rmpc nerd-fonts noto-fonts-emoji libnotify
 
     git clone https://aur.archlinux.org/yay-bin.git /tmp/yay-bin
     cd /tmp/yay-bin
@@ -136,14 +136,17 @@ function config() {
     echo -n 'xinitrc startup (dwm)...'
     link_config $BASEDIR/xinitrc $HOME/.xinitrc
 
+    echo -n 'XCompose (for cedilha)...'
+    link_config $BASEDIR/XCompose $HOME/.XCompose
+
     echo -n 'mpd config...'
     mkdir -p $HOME/.config/mpd
     mkdir -p $HOME/.config/mpd/playlists
-    link_config $BASEDIR/mpd.conf HOME/.config/mpd/mpd.conf
+    link_config $BASEDIR/mpd.conf $HOME/.config/mpd/mpd.conf
 
     echo -n 'rmpc config...'
     mkdir -p $HOME/.config/rmpc
-    link_config $BASEDIR/rmpc.ron HOME/.config/rmpc/config.ron
+    link_config $BASEDIR/rmpc.ron $HOME/.config/rmpc/config.ron
 }
 
 function build_suckless() {

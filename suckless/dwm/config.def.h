@@ -126,6 +126,17 @@ static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() 
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", normbgcolor, "-nf", normbordercolor, "-sb", selbgcolor, "-sf", selfgcolor, NULL };
 static const char *termcmd[]  = { "st", NULL };
 
+// change keyboard layouts (us int vs us)
+static const char *kbdtogglecmd[] = { "/bin/sh", "-c",
+    "variant=$(setxkbmap -query | grep variant | awk '{print $2}'); "
+    "if [ \"$variant\" = \"intl\" ]; then "
+    "setxkbmap us; "
+    "else "
+    "setxkbmap us -variant intl; "
+    "fi",
+NULL };
+
+
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
@@ -172,6 +183,9 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_BackSpace, quit,        {0} },
+
+    // change keyboard layout
+	{ ControlMask,             XK_k,        spawn,      { .v= kbdtogglecmd} },
 
     /* application bindings */
     { MODKEY,			XK_m,          spawn,      {.v = (const char*[]){ "st", "-e", "rmpc", NULL } } },
