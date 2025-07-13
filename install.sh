@@ -44,7 +44,7 @@ function install_debian() {
 function install_archlinux() {
     echo '############# Starting full system upgrade (Pacman)...'
     sudo pacman -Syyu
-    sudo pacman -S wget curl base-devel git python python-pynvim python-pip python-pipx zsh fzf clang clang-analyzer ripgrep neovim mesa ly libx11 libxft xorg-server xorg-xinit xorg-xauth xorg-apps xorg-setxkbmap libnotify slock xss-lock openssh feh picom imagemagick pipewire pipewire-pulse pipewire-alsa pipewire-audio wireplumber alsa-utils alsa-firmware bluez bluez-utils bluez-deprecated-tools brightnessctl blueman xclip playerctl wikiman arch-wiki-docs ranger mpd mpc rmpc nerd-fonts noto-fonts-emoji
+    sudo pacman -S wget curl base-devel git python python-pynvim python-pip python-pipx zsh fzf clang clang-analyzer ripgrep neovim mesa ly libx11 libxft xorg-server xorg-xinit xorg-xauth xorg-apps xorg-setxkbmap libnotify slock xss-lock openssh feh picom imagemagick pipewire pipewire-pulse pipewire-alsa pipewire-audio wireplumber alsa-utils alsa-firmware pavucontrol bluez bluez-utils bluez-deprecated-tools brightnessctl blueman xclip playerctl wikiman arch-wiki-docs ranger mpd mpc rmpc nerd-fonts noto-fonts-emoji
 
     git clone https://aur.archlinux.org/yay-bin.git /tmp/yay-bin
     cd /tmp/yay-bin
