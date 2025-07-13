@@ -1,5 +1,6 @@
 #!/bin/bash
 
+set -e # stop when a command fails
 
 RED='\033[0;31m'
 ORANGE='\033[0;33m'
@@ -7,7 +8,7 @@ GREEN='\033[0;32m'
 NC='\033[0m' # No Color
 BASEDIR="$( cd "$(dirname "$0")" ; pwd -P )"
 
-
+MARTINHA=false
 
 function help() {
    echo "gmelodie's dotfiles install script"
@@ -17,164 +18,181 @@ function help() {
    echo "        -h       Print this help"
    echo "        -c       Only update configuration files"
    echo "        -v       Verbose"
+   echo "        -m       Martinha (includes keyd)"
    echo
 }
 
-
-
-function link_config_file() { # link_file(here, there)
+function link_config() { # link_file(here, there)
     src=$1
     dst=$2
 
-    if [ -e $dst ]
-    then
-        echo -e "\n${ORANGE}[Warning] Found existent $1, moving to $1.old${NC}"
+    if [ -e $dst ]; then
+        echo -e "\n${ORANGE}[Warning] Found existing $dst, moving to $dst.old${NC}"
         mv $dst $dst.old
     fi
 
     ln -sf $src $dst
-
     echo -e "${GREEN}Done${NC}"
-
 }
 
-
-
-
-# --------------------- Installing ------------------------
-function install() {
-    echo '############# Starting full system upgrade...'
-
+function install_debian() {
+    echo '############# Starting full system upgrade (APT)...'
     sudo apt -y update > /dev/null && sudo apt -y upgrade > /dev/null
-    sudo apt install -y curl build-essential git python3 python3-neovim python3-virtualenvwrapper golang zsh universal-ctags gnome-terminal fzf nodejs tmux golang-go clang clangd fuse libfuse2 ripgrep
-    sudo modprobe -v fuse
+    sudo apt install -y curl build-essential git python3 python3-neovim golang zsh universal-ctags fzf nodejs golang-go clang clangd ripgrep snapd
+}
 
-    # install meslo fonts
-    mkdir -p ~/.fonts
-    curl -L https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Regular.ttf --output ~/.fonts/'MesloLGS NF Regular.ttf'
-    curl -L https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold.ttf --output ~/.fonts/'MesloLGS NF Bold.ttf'
-    curl -L https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Italic.ttf --output ~/.fonts/'MesloLGS NF Italic.ttf'
-    curl -L https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold%20Italic.ttf --output ~/.fonts/'MesloLGS NF Bold Italic.ttf'
+function install_archlinux() {
+    echo '############# Starting full system upgrade (Pacman)...'
+    sudo pacman -Syyu
+    sudo pacman -S wget curl base-devel git python python-pynvim python-pip python-pipx zsh fzf clang clang-analyzer ripgrep neovim mesa ly libx11 libxft xorg-server xorg-xinit xorg-xauth xorg-apps xorg-setxkbmap libnotify slock xss-lock openssh feh picom imagemagick pipewire pipewire-pulse pipewire-alsa pipewire-audio wireplumber alsa-utils alsa-firmware pavucontrol bluez bluez-utils bluez-deprecated-tools brightnessctl blueman xclip playerctl wikiman arch-wiki-docs ranger mpd mpc rmpc nerd-fonts noto-fonts-emoji
 
+    git clone https://aur.archlinux.org/yay-bin.git /tmp/yay-bin
+    cd /tmp/yay-bin
+    makepkg -si
+    yay -S librewolf-bin
+
+    # Enable services
+    systemctl --user enable --now pipewire pipewire-pulse wireplumber
+    sudo systemctl enable --now bluetooth ly
+}
+
+function post_install() {
     echo 'Installing Rust...'
-    curl https://sh.rustup.rs -sSf | sh
-    rustup component add rust-analyzer # install LSP for Rust
+    curl https://sh.rustup.rs -sSf | sh -s -- -y
+    source $HOME/.cargo/env
+    rustup component add rust-analyzer
 
-    echo 'Installing keyd...'
-    git clone https://github.com/rvaiya/keyd $HOME/Downloads/keyd
-    cd $HOME/Downloads/keyd
-    make && sudo make install
-    sudo systemctl enable keyd && sudo systemctl start keyd
-    cd $BASEDIR
-
-    echo 'Installing espanso...'
-    snap install espanso --classic
-
-    echo 'Installing neovim appimage...'
-    mkdir -p $HOME/.nvim 2>&1
-    wget -O $HOME/.nvim/nvim.appimage "https://github.com/neovim/neovim/releases/latest/download/nvim.appimage" 2>&1
-    chmod +x $HOME/.nvim/nvim.appimage 2>&1
-
-    echo 'Installing xcreep...'
-    if ! command -v go
-    then
-        echo "\n${RED}[Error] Golang not found, skipping xcreep installation${NC}"
-    else
-        go install github.com/gmelodie/xcreep@latest 2>&1
+    if $MARTINHA; then
+        echo 'Installing keyd...'
+        git clone https://github.com/rvaiya/keyd $HOME/Downloads/keyd
+        cd $HOME/Downloads/keyd
+        make && sudo make install
+        sudo systemctl enable keyd && sudo systemctl start keyd
+        cd $BASEDIR
     fi
 
-    echo 'Installing Oh my Zsh...'
-    # install oh-my-zsh
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-    # change default shell to zsh
-    # chsh -s $(which zsh)
+    echo 'Installing espanso...'
+    if command -v snap &> /dev/null; then
+        sudo snap install espanso --classic
+    else
+        mkdir -p ~/opt
+        wget -O ~/opt/Espanso.AppImage 'https://github.com/espanso/espanso/releases/download/v2.2.1/Espanso-X11.AppImage'
+        chmod u+x ~/opt/Espanso.AppImage
+        sudo ~/opt/Espanso.AppImage env-path register
+    fi
+    sudo espanso service register
 
+    echo 'Installing neovim appimage...'
+    mkdir -p $HOME/.nvim
+    wget -O $HOME/.nvim/nvim.appimage "https://github.com/neovim/neovim/releases/latest/download/nvim.appimage"
+    chmod +x $HOME/.nvim/nvim.appimage
+
+    echo 'Installing xcreep...'
+    if ! command -v go &> /dev/null; then
+        echo -e "\n${RED}[Error] Golang not found, skipping xcreep installation${NC}"
+    else
+        go install github.com/gmelodie/xcreep@latest
+    fi
+
+    echo 'Installing Oh My Zsh...'
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 
     echo -e "${GREEN}Done${NC}"
+}
 
-} # --------------------- END Installing ------------------------
-
-
-
-
-# --------------------- Configuring ------------------------
 function config() {
     echo  '############# Installing configuration files...'
 
-    echo -n 'Keyd configurations (keyd.conf)...'
-    mkdir -p /etc/keyd/
-    sudo ln -sf $BASEDIR/keyd.conf /etc/keyd/keyd.conf # cant use link_config_file because need sudo
-    sudo systemctl restart keyd
+    if $MARTINHA; then
+        echo 'Keyd configurations (keyd.conf)...'
+        sudo mkdir -p /etc/keyd/
+        sudo ln -sf $BASEDIR/keyd.conf /etc/keyd/keyd.conf
+        sudo systemctl restart keyd
 
-    echo -n 'Neovim configurations (init.vim)...'
-    mkdir -p $HOME/.config/nvim
-    link_config_file $BASEDIR/init.vim $HOME/.config/nvim/init.vim
-    link_config_file $BASEDIR/coc-settings.json $HOME/.config/nvim/coc-settings.json
+        echo 'X11 touchpad configurations (30-touchpad.conf)...'
+        sudo mkdir -p /etc/X11/xorg.conf.d/
+        sudo ln -sf $BASEDIR/30-touchpad.conf /etc/X11/xorg.conf.d/30-touchpad.conf
+    fi
+
+    echo -n 'Neovim configurations (init.vim, etc.)...'
+    mkdir -p $HOME/.config/nvim/lua/lsp
+    ln -sf $BASEDIR/nvim/init.vim $HOME/.config/nvim/init.vim
+    for file in $BASEDIR/nvim/lua/lsp/*; do
+	filename=$(basename "$file")
+	ln -sf $BASEDIR/nvim/lua/lsp/$filename $HOME/.config/nvim/lua/lsp/$filename
+    done
+
 
     echo -n 'Espanso configurations (default.yml)...'
     mkdir -p $HOME/.config/espanso
-    link_config_file $BASEDIR/espanso.yml $HOME/.config/espanso/default.yml
+    link_config $BASEDIR/espanso.yml $HOME/.config/espanso/default.yml
 
     echo -n 'Git configurations (.gitconfig)...'
-    link_config_file $BASEDIR/gitconfig $HOME/.gitconfig
+    link_config $BASEDIR/gitconfig $HOME/.gitconfig
 
     echo -n 'Zsh configurations (.zshrc)...'
-    link_config_file $BASEDIR/zshrc $HOME/.zshrc
-    link_config_file $BASEDIR/p10k.zsh $HOME/.p10k.zsh
+    link_config $BASEDIR/zshrc $HOME/.zshrc
 
-    echo -n 'Tmux configurations (.tmux.conf)...'
-    link_config_file $BASEDIR/tmux.conf $HOME/.tmux.conf
+    echo -n 'xinitrc startup (dwm)...'
+    link_config $BASEDIR/xinitrc $HOME/.xinitrc
 
-    echo -n 'Alacritty configurations (alacritty.toml)...'
-    mkdir -p $HOME/.config/alacritty
-    link_config_file $BASEDIR/alacritty.toml $HOME/.config/alacritty/alacritty.toml
+    echo -n 'XCompose (for cedilha)...'
+    link_config $BASEDIR/XCompose $HOME/.XCompose
 
-    echo -n 'Adding alacritty as terminal alternative (default)...'
-    sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator `which alacritty` 50
-    sudo update-alternatives --config x-terminal-emulator
+    echo -n 'mpd config...'
+    mkdir -p $HOME/.config/mpd
+    mkdir -p $HOME/.config/mpd/playlists
+    link_config $BASEDIR/mpd.conf $HOME/.config/mpd/mpd.conf
 
-    echo -n 'Loading gnome-terminal preferences...'
-    if ! command -v gnome-terminal &> /dev/null
-    then
-        echo "\n${RED}[Error] gnome-terminal not found, skipping preferences installation${NC}"
-    else
-        cat $BASEDIR/gterminal.preferences | dconf load /org/gnome/terminal/legacy/profiles:/
-        echo -e "${GREEN}Done${NC}"
-    fi
+    echo -n 'rmpc config...'
+    mkdir -p $HOME/.config/rmpc
+    link_config $BASEDIR/rmpc.ron $HOME/.config/rmpc/config.ron
+}
 
-    echo -n 'Copying desktop icons...'
-    # Symlink application desktop icons
-    ln -sf $BASEDIR/applications/* $HOME/.local/share/applications
-    echo -e "${GREEN}Done${NC}"
+function build_suckless() {
+    echo -n 'Building dwm...'
+    sudo make -C $BASEDIR/suckless/dwm clean install
+    echo -n 'Building dmenu...'
+    sudo make -C $BASEDIR/suckless/dmenu clean install
+    echo -n 'Building dwmblocks...'
+    sudo make -C $BASEDIR/suckless/dwmblocks clean install
+    echo -n 'Building st...'
+    sudo make -C $BASEDIR/suckless/st clean install
+}
 
-} # --------------------- END Configuring ------------------------
 
-
-while getopts ":hc" option; do
-   case $option in
-        h) # display Help
+# -------------- Parse options ----------------
+while getopts ":hcmv" option; do
+    case $option in
+        h)
             help
             exit;;
-
-        c) # configs-only
+        c)
             config
             exit;;
-
-        \?) # incorrect option
+        m)
+            MARTINHA=true
+            ;;
+        \?)
             echo "Error: Invalid option"
             exit;;
-   esac
+    esac
 done
 
+# -------------- Start install ----------------
+if grep -qi archlinux /etc/os-release; then
+    install_archlinux
+    build_suckless
+else
+    install_debian
+fi
 
+post_install
 
-install
 config
 
-
-echo 'All done!'
+echo -e "${GREEN}All done!${NC}"
 echo -e "${GREEN}RUN THE FOLLOWING TO COMPLETE SETUP:${NC}"
-echo "chsh -s \$(which zsh)"
-echo 'Make sure to log out and back in so that changes can take place'
-
+echo "chsh -s /usr/bin/zsh"
+echo "Make sure to log out and back in so that changes can take place"
 

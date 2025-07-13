@@ -1,0 +1,26 @@
+#!/bin/sh
+
+case "$BLOCK_BUTTON" in
+    1) wpctl set-mute @DEFAULT_SINK@ toggle && pkill -RTMIN+10 dwmblocks ;;
+    4) wpctl set-volume @DEFAULT_SINK@ 5%+ && pkill -RTMIN+10 dwmblocks ;;
+    5) wpctl set-volume @DEFAULT_SINK@ 5%- && pkill -RTMIN+10 dwmblocks ;;
+    6) st -e "$EDITOR" "$0" ;;
+esac
+
+vol_info="$(wpctl get-volume @DEFAULT_SINK@ 2>/dev/null)"
+vol_float=$(echo "$vol_info" | awk '{print $2}')
+vol_int=$(printf "%.0f" "$(echo "$vol_float * 100" | bc -l)")
+muted="$(echo "$vol_info" | awk '{print $3}')"
+
+if [ "$muted" = "[MUTED]" ]; then
+    icon="🔇"
+elif [ "$vol_int" -ge 70 ]; then
+    icon="🔊"
+elif [ "$vol_int" -ge 30 ]; then
+    icon="🔉"
+else
+    icon="🔈"
+fi
+
+printf "%s %3d%%" "$icon" "$vol_int"
+

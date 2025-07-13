@@ -1,7 +1,6 @@
 [user]
 	name = Gabriel Cruz
 	email = gabrieldemelocruz@gmail.com
-	signingkey = 03435EF5D36BD3BDE0DEF338C8676463713F0620
 
 [rerere]
     enabled = 1
@@ -16,6 +15,9 @@
 [pull]
     rebase = interactive
 
+[push]
+    autoSetupRemote = true
+
 [alias]
     a = add --all
     d = diff
@@ -23,6 +25,7 @@
     c = commit
     l = log --oneline
     ch = checkout
+    oops = commit --amend --no-edit
     unadd = restore --staged
     conflicts = diff --name-only --diff-filter=U
     whatadded = log --diff-filter=A
@@ -33,3 +36,6 @@
 	cmd = diff --unified=3 --color=always --ignore-case $LOCAL $REMOTE | less --raw-control-chars
     prompt = 0
     idiff = difftool --tool idiff
+
+[include]
+    path = ~/.gitconfig.local
