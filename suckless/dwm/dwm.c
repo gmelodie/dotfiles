@@ -240,6 +240,7 @@ static void spawn(const Arg *arg);
 static int stackpos(const Arg *arg);
 static void tag(const Arg *arg);
 static void tagmon(const Arg *arg);
+static void tagmonandfocus(const Arg *arg);
 static void togglebar(const Arg *arg);
 static void togglefloating(const Arg *arg);
 static void togglelayout(const Arg *arg);
@@ -2008,6 +2009,13 @@ tagmon(const Arg *arg)
 		return;
 	sendmon(selmon->sel, dirtomon(arg->i));
 }
+
+static void
+tagmonandfocus(const Arg *arg) {
+    tagmon(arg);      // move window to other monitor
+    focusmon(arg);    // focus that monitor
+}
+
 
 void
 togglebar(const Arg *arg)
