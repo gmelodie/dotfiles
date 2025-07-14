@@ -35,6 +35,7 @@ alias gh="git checkout"
 alias gb="git checkout -b"
 alias gd="git branch --delete"
 alias gpf="git push -u origin HEAD"
+alias gpoops="git add . && git oops && git push -f"
 
 # FZF
 export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --glob "!.git/*"'

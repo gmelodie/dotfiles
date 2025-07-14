@@ -237,6 +237,7 @@ static void seturgent(Client *c, int urg);
 static void showhide(Client *c);
 static void sigstatusbar(const Arg *arg);
 static void spawn(const Arg *arg);
+static void spawngames(const Arg *arg);
 static int stackpos(const Arg *arg);
 static void tag(const Arg *arg);
 static void tagmon(const Arg *arg);
@@ -1961,6 +1962,30 @@ spawn(const Arg *arg)
 		die("dwm: execvp '%s' failed:", ((char **)arg->v)[0]);
 	}
 }
+
+static void
+spawngames(const Arg *arg) {
+    // launch Discord
+    if (fork() == 0) {
+        if (dpy)
+            close(ConnectionNumber(dpy));
+        setsid();
+        execlp("discord", "discord", NULL);
+        fprintf(stderr, "discord failed to start\n");
+        exit(1);
+    }
+
+    // launch Lutris
+    if (fork() == 0) {
+        if (dpy)
+            close(ConnectionNumber(dpy));
+        setsid();
+        execlp("lutris", "lutris", NULL);
+        fprintf(stderr, "lutris failed to start\n");
+        exit(1);
+    }
+}
+
 
 int
 stackpos(const Arg *arg) {
