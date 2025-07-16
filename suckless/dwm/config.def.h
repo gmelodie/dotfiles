@@ -64,7 +64,7 @@ static const Rule rules[] = {
 	{ "Firefox", NULL,                    NULL,           1 << 8,    0,          0,          -1,        -1 },
 	{ "St",      NULL,                    NULL,           0,         0,          1,           0,        -1 },
 	{ "discord", NULL,                    NULL,           0,         0,          0,           0,        1 },
-	{ "Lutris",  "net.lutris.Lutris",     NULL,           0,         0,          0,           0,        1 },
+	{ "Lutris",  "net.lutris.Lutris",     NULL,           0,         0,          0,           0,        0 },
 	{ NULL,      NULL,     "              Event Tester",  0,         0,          0,           1,        -1 }, /* xev */
 };
 
@@ -106,8 +106,10 @@ static const Layout layouts[] = {
 	{ MODKEY|ControlMask|ShiftMask, KEY,      toggletag,      {.ui = 1 << TAG} },
 #define STACKKEYS(MOD,ACTION) \
 	{ MOD, XK_j,     ACTION##stack, {.i = INC(+1) } }, \
+	{ MOD, XK_l,     ACTION##stack, {.i = INC(+1) } }, \
 	{ MOD, XK_Tab,     ACTION##stack, {.i = INC(+1) } }, \
 	{ MOD, XK_k,     ACTION##stack, {.i = INC(-1) } }, \
+	{ MOD, XK_h,     ACTION##stack, {.i = INC(-1) } }, \
 	{ MOD, XK_grave, ACTION##stack, {.i = PREVSEL } },// \
 //	{ MOD, XK_q,     ACTION##stack, {.i = 0 } }, \
 	{ MOD, XK_a,     ACTION##stack, {.i = 1 } }, \
@@ -146,11 +148,11 @@ static const Key keys[] = {
 	STACKKEYS(MODKEY|ShiftMask,                push)
 	{ MODKEY,                       XK_i,      incnmaster,     {.i = +1 } },
 	{ MODKEY,                       XK_d,      incnmaster,     {.i = -1 } },
-	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
-	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
-	{ MODKEY|ShiftMask,             XK_h,      setcfact,       {.f = +0.25} },
-	{ MODKEY|ShiftMask,             XK_l,      setcfact,       {.f = -0.25} },
-	{ MODKEY|ShiftMask,             XK_o,      setcfact,       {.f =  0.00} },
+	// { MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
+	// { MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
+	// { MODKEY|ShiftMask,             XK_h,      setcfact,       {.f = +0.25} },
+	// { MODKEY|ShiftMask,             XK_l,      setcfact,       {.f = -0.25} },
+	// { MODKEY|ShiftMask,             XK_o,      setcfact,       {.f =  0.00} },
 	{ MODKEY,                       XK_Return, zoom,           {0} },
 
     /* vanity gaps */
