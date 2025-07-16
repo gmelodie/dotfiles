@@ -64,7 +64,7 @@ static const Rule rules[] = {
 	{ "Firefox",                  NULL,                NULL,     1 << 8,    0,          0,          -1,        -1 },
 	{ "St",                       NULL,                NULL,     0,         0,          1,           0,        -1 },
 	{ "discord",                  NULL,                NULL,     0,         0,          0,           0,        1 },
-	{ "Lutris",                   "net.lutris.Lutris", NULL,     0,         0,          0,           0,        0 },
+	{ "Lutris",                   "net.lutris.Lutris", NULL,     1 << 2,    0,          0,           0,        0 },
     { "heroesofthestorm_x64.exe", NULL,                NULL,     1 << 2,    1,          -1,          0,        0 },
 
 	{ NULL,                       NULL,  "Event Tester",  0,    0,          0,           1,        -1 }, /* xev */
@@ -175,9 +175,10 @@ static const Key keys[] = {
 	{ MODKEY|Mod4Mask,              XK_0,      togglegaps,     {0} },
 	{ MODKEY|Mod4Mask|ShiftMask,    XK_0,      defaultgaps,    {0} },
 
-	// { MODKEY,                       XK_Tab,    view,           {0} },
-	{ MODKEY,             XK_q,      killclient,     {0} },
-	{ MODKEY|ShiftMask,                       XK_m,      togglelayout, {0} },
+	// { MODKEY,                    XK_Tab,    view,           {0} },
+	{ MODKEY,                       XK_q,      killclient,     {0} },
+	{ MODKEY|ShiftMask,             XK_m,      togglelayout,   {0} },
+	{ MODKEY|ShiftMask,             XK_f,      fullscreen,     {0} },
 	{ MODKEY,                       XK_space,  setlayout,      {0} },
 	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
 	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
