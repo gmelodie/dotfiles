@@ -129,6 +129,8 @@ static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() 
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", normbgcolor, "-nf", normbordercolor, "-sb", selbgcolor, "-sf", selfgcolor, NULL };
 static const char *termcmd[]  = { "st", NULL };
 static const char *lockcmd[]  = { "slock", NULL };
+static const char *screenshotcmd[] = { "/bin/sh", "-c", "maim -s | xclip -selection clipboard -t image/png -i", NULL };
+
 
 // change keyboard layouts (us int vs us)
 static const char *kbdtogglecmd[] = { "/bin/sh", "-c",
@@ -193,6 +195,8 @@ static const Key keys[] = {
 	{ ControlMask,             XK_k,        spawn,      { .v= kbdtogglecmd} },
     // screen lock (super + L)
 	{ Mod4Mask,             XK_l,        spawn,      { .v= lockcmd} },
+    // take screenshot (print screenshot)
+	{ 0,             XK_Print,        spawn,      { .v= screenshotcmd} },
 
     /* application bindings */
     { MODKEY,			XK_m,          spawn,      {.v = (const char*[]){ "st", "-e", "rmpc", NULL } } },

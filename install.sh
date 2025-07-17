@@ -44,7 +44,7 @@ function install_debian() {
 function install_archlinux() {
     echo '############# Starting full system upgrade (Pacman)...'
     sudo pacman -Syyu
-    sudo pacman -S wget curl base-devel git python python-pynvim python-pip python-pipx zsh fzf clang clang-analyzer ripgrep neovim mesa ly libx11 libxft xorg-server xorg-xinit xorg-xauth xorg-apps xorg-setxkbmap xdg-utils libnotify slock openssh feh picom imagemagick \
+    sudo pacman -S wget curl base-devel git python python-pynvim python-pip python-pipx zsh fzf clang clang-analyzer ripgrep neovim mesa ly libx11 libxft xorg-server xorg-xinit xorg-xauth xorg-apps xorg-setxkbmap xdg-utils libnotify slock openssh feh picom imagemagick maim \
         pipewire pipewire-pulse pipewire-alsa pipewire-audio bc wireplumber alsa-utils alsa-firmware pavucontrol bluez bluez-utils bluez-deprecated-tools blueman playerctl mpd mpc rmpc \
         brightnessctl xclip wikiman arch-wiki-docs ranger nerd-fonts noto-fonts-emoji
     # bc is used for calculating int volume levels from floats
