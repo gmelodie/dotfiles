@@ -129,6 +129,9 @@ function config() {
     echo -n 'Zsh configurations (.zshrc)...'
     link_config $BASEDIR/zshrc $HOME/.zshrc
 
+    echo -n 'Tmux configurations (.tmux.conf)...'
+    link_config $BASEDIR/tmux.conf $HOME/.tmux.conf
+
     echo -n 'xinitrc startup (dwm)...'
     link_config $BASEDIR/xinitrc $HOME/.xinitrc
 
