@@ -44,7 +44,7 @@ function install_debian() {
 function install_archlinux() {
     echo '############# Starting full system upgrade (Pacman)...'
     sudo pacman -Syyu
-    sudo pacman -S wget curl base-devel git python python-pynvim python-pip python-pipx zsh fzf clang clang-analyzer ripgrep neovim mesa ly libx11 libxft xorg-server xorg-xinit xorg-xauth xorg-apps xorg-setxkbmap xdg-utils libnotify slock xidlehook openssh feh picom imagemagick \
+    sudo pacman -S wget curl base-devel git python python-pynvim python-pip python-pipx zsh fzf clang clang-analyzer ripgrep neovim mesa ly libx11 libxft xorg-server xorg-xinit xorg-xauth xorg-apps xorg-setxkbmap xdg-utils libnotify slock openssh feh picom imagemagick \
         pipewire pipewire-pulse pipewire-alsa pipewire-audio bc wireplumber alsa-utils alsa-firmware pavucontrol bluez bluez-utils bluez-deprecated-tools blueman playerctl mpd mpc rmpc \
         brightnessctl xclip wikiman arch-wiki-docs ranger nerd-fonts noto-fonts-emoji
     # bc is used for calculating int volume levels from floats
@@ -52,7 +52,7 @@ function install_archlinux() {
     git clone https://aur.archlinux.org/yay-bin.git /tmp/yay-bin
     cd /tmp/yay-bin
     makepkg -si
-    yay -S librewolf-bin
+    yay -S librewolf-bin xidlehook
 
     # Enable services
     systemctl --user enable --now pipewire pipewire-pulse wireplumber
@@ -89,13 +89,6 @@ function post_install() {
     mkdir -p $HOME/.nvim
     wget -O $HOME/.nvim/nvim.appimage "https://github.com/neovim/neovim/releases/latest/download/nvim.appimage"
     chmod +x $HOME/.nvim/nvim.appimage
-
-    echo 'Installing xcreep...'
-    if ! command -v go &> /dev/null; then
-        echo -e "\n${RED}[Error] Golang not found, skipping xcreep installation${NC}"
-    else
-        go install github.com/gmelodie/xcreep@latest
-    fi
 
     echo 'Installing Oh My Zsh...'
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"

@@ -1,0 +1,16 @@
+#!/bin/bash
+# example: ./xcreep.sh somefile.txt
+
+if [ $# -ne 1 ]; then
+    echo "Usage: $0 <INPUTFILE>"
+    exit 1
+fi
+
+INPUTFILE=$1
+
+if [ ! -f "$INPUTFILE" ]; then
+    echo "Error: File '$INPUTFILE' not found."
+    exit 1
+fi
+
+cat "$INPUTFILE" | xclip -selection clipboard
