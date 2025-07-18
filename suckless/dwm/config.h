@@ -206,6 +206,7 @@ static const Key keys[] = {
     { MODKEY,			XK_n,          spawn,      {.v = (const char*[]){ "st", "-e", "nvim", NULL } } },
     { MODKEY,			XK_o,          spawn,      {.v = (const char*[]){ "st", "-e", "zsh", "-ic", "ranger", NULL } } },
     { MODKEY|ShiftMask,	XK_h,          spawn,      {.v = (const char*[]){ "st", "-e", "htop", NULL } } },
+    { MODKEY,			XK_d,          spawn,      {.v = (const char*[]){ "discord", NULL } } },
     { MODKEY,	        XK_g,          spawngames, {0} },
 
 
