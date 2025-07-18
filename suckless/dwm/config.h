@@ -194,8 +194,8 @@ static const Key keys[] = {
 
     // change keyboard layout
 	{ ControlMask,                     XK_k,        spawn,      { .v= kbdtogglecmd} },
-    // screen lock (super + L)
-	{ MODKEY,                          XK_l,        spawn,      { .v= lockcmd} },
+    // screen lock
+	{ MODKEY|ControlMask|ShiftMask,    XK_l,        spawn,      { .v= lockcmd} },
     // take screenshot (print screen   shot)
 	{ 0,                               XK_Print,    spawn,      { .v= screenshotcmd} },
 	{ MODKEY|ControlMask|ShiftMask,    XK_p,        spawn,      {.v = poweroffcmd } },
