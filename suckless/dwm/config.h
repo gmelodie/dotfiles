@@ -190,7 +190,7 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_comma,  tagmonandfocus, {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period, tagmonandfocus, {.i = +1 } },
-	{ MODKEY|ShiftMask,             XK_BackSpace, quit,        {0} },
+	{ MODKEY|ControlMask|ShiftMask, XK_q,      quit,           {0} },
 
     // change keyboard layout
 	{ ControlMask,                     XK_k,        spawn,      { .v= kbdtogglecmd} },
