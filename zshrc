@@ -99,5 +99,5 @@ export MANPAGER="less -R --use-color -Dd+r -Du+b"
 alias suckr=rebuild-suckless
 
 # Start tmux automatically if not already inside tmux
-[ -z "$TMUX" ] && exec tmux
+# [ -z "$TMUX" ] && exec tmux
 
