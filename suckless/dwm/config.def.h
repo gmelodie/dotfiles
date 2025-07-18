@@ -99,8 +99,8 @@ static const Layout layouts[] = {
 };
 
 /* key definitions */
-#define MODKEY Mod1Mask
 #define SUPER Mod4Mask
+#define MODKEY Mod4Mask
 #define TAGKEYS(KEY,TAG) \
 	{ MODKEY,                       KEY,      view,           {.ui = 1 << TAG} }, \
 	{ MODKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
@@ -194,7 +194,7 @@ static const Key keys[] = {
     // change keyboard layout
 	{ ControlMask,             XK_k,        spawn,      { .v= kbdtogglecmd} },
     // screen lock (super + L)
-	{ Mod4Mask,             XK_l,        spawn,      { .v= lockcmd} },
+	{ MODKEY,             XK_l,        spawn,      { .v= lockcmd} },
     // take screenshot (print screenshot)
 	{ 0,             XK_Print,        spawn,      { .v= screenshotcmd} },
 
