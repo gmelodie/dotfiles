@@ -122,7 +122,7 @@ static const Layout layouts[] = {
 #define SHCMD(cmd)  (Arg){ .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
 #define STATUSBAR "dwmblocks"
-#define BROWSER "librewolf"
+#define BROWSER "firefox"
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
