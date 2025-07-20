@@ -2,5 +2,5 @@ tags
 *.o
 *.orig
 *.rej
-suckless/dwmblocks/build/dmwblocks
+suckless/dwmblocks/build/*
 

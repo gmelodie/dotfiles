@@ -13,7 +13,7 @@ xidlehook --not-when-fullscreen --not-when-audio --timer 600 'slock' '' &
 
 [ ! -s ~/.config/mpd/pid ] && mpd && mpc pause # start mpd paused
 
-librewolf &
+firefox &
 st &
 
 exec dwm
