@@ -3,4 +3,5 @@ tags
 *.orig
 *.rej
 suckless/dwmblocks/build/*
+suckless/dwm/dwm
 

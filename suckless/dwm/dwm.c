@@ -2396,8 +2396,7 @@ updatestatus(void)
 
 	}
     // update status in all monitors
-    for (m = mons; m; m = m ->next)
-        drawbar(selmon);
+    drawbars();
 }
 
 void
