@@ -138,6 +138,9 @@ function config() {
     echo -n 'XCompose (for cedilha)...'
     link_config $BASEDIR/XCompose $HOME/.XCompose
 
+    echo -n 'Xresources (for larger font sizes)...'
+    link_config $BASEDIR/Xresources $HOME/.Xresources
+
     echo -n 'mpd config...'
     mkdir -p $HOME/.config/mpd
     mkdir -p $HOME/.config/mpd/playlists

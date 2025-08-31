@@ -18,7 +18,7 @@
 
 // Define blocks for the status feed as X(icon, cmd, interval, signal).
 #define BLOCKS(X) \
-    X("", "/home/gmelodie/dotfiles/scripts/blocks/sb-clock", 60, 1)  \
+    X("", "/home/gmelodie/dotfiles/scripts/blocks/sb-clock", 10, 1)  \
     X("", "/home/gmelodie/dotfiles/scripts/blocks/sb-memory", 10, 14) \
     X("", "/home/gmelodie/dotfiles/scripts/blocks/sb-forecast", 18000, 5) \
     X("", "/home/gmelodie/dotfiles/scripts/blocks/sb-nettraf", 3, 16)  \
