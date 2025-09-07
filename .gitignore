@@ -4,4 +4,7 @@ tags
 *.rej
 suckless/dwmblocks/build/*
 suckless/dwm/dwm
+suckless/dwm/dwm.o
+suckless/st/st
+suckless/st/st.o
 

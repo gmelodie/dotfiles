@@ -76,6 +76,8 @@ export PATH="$PATH:$HOME/dotfiles/scripts"
 # for dwmblocks
 export PATH="$PATH:$HOME/dotfiles/scripts/blocks"
 
+export PATH="$PATH:$HOME/.local/share/gem/ruby/3.4.0/bin"
+
 # Wasmer
 export WASMER_DIR="/home/gmelodie/.wasmer"
 [ -s "$WASMER_DIR/wasmer.sh" ] && source "$WASMER_DIR/wasmer.sh"
