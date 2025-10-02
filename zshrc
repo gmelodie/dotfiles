@@ -51,6 +51,16 @@ export EDITOR=nvim
 alias vim=nvim
 alias vi=nvim
 
+# open all files with this pattern in them
+vgr() {
+  if [ $# -eq 0 ]; then
+    echo "Usage: vgr <pattern> [rg-options...]"
+    return 1
+  fi
+  rg -l "$@" | xargs -r nvim
+}
+
+
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # Set GOPATH and PATH for golang
