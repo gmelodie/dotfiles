@@ -112,4 +112,3 @@ alias suckr=rebuild-suckless
 
 # Start tmux automatically if not already inside tmux
 # [ -z "$TMUX" ] && exec tmux
-
