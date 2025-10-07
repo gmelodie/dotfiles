@@ -1,0 +1,10 @@
+#!/bin/bash
+MPD_PLAYLIST_DIR=~/.config/mpd/playlists
+mkdir -p "$MPD_PLAYLIST_DIR"
+
+for d in ~/Music/playlists/*/; do
+    name=$(basename "$d")
+    find "$d" -type f -name "*.mp3" > "$MPD_PLAYLIST_DIR/$name.m3u"
+done
+
+mpc update

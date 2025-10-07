@@ -5,13 +5,13 @@ dwmblocks &
 
 xset r rate 200 40 # repeat delay (for backspace & other keys)
 
-# screen saving
-xidlehook --not-when-fullscreen --not-when-audio --timer 600 'slock' '' &
-
-
-[ ! -s ~/.config/mpd/pid ] && mpd && mpc pause # start mpd paused
+# start mpd paused
+pgrep -x mpd >/dev/null || { mpd && mpc pause; }
 
 firefox &
 st &
+
+# screen saving
+xidlehook --not-when-fullscreen --not-when-audio --timer 600 'slock' '' &
 
 exec dwm

@@ -150,8 +150,9 @@ function config() {
     link_config $BASEDIR/mpd.conf $HOME/.config/mpd/mpd.conf
 
     echo -n 'rmpc config...'
-    mkdir -p $HOME/.config/rmpc
-    link_config $BASEDIR/rmpc.ron $HOME/.config/rmpc/config.ron
+    mkdir -p $HOME/.config/rmpc/themes
+    link_config $BASEDIR/rmpc.ron $HOME/.config/rmpc/rmpc.ron
+    link_config $BASEDIR/gmelodies-theme.ron $HOME/.config/rmpc/themes/gmelodies-theme.ron
 }
 
 function build_suckless() {
