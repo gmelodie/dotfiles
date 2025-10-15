@@ -11,7 +11,11 @@ pgrep -x mpd >/dev/null || { mpd && mpc pause; }
 firefox &
 st &
 
-# screen saving
-xidlehook --not-when-fullscreen --not-when-audio --timer 600 'slock' '' &
+# Disable X's built-in screen blanking and DPMS
+xset s off            # disable screen saver
+xset -dpms            # disable DPMS power saving
+xset s noblank        # don't blank the video device
+# run slock when idle for 10mins and no audio/video playing
+xidlehook --not-when-fullscreen --not-when-audio --timer 600 '/usr/sbin/slock' '' &
 
 exec dwm
