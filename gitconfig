@@ -30,6 +30,11 @@
     conflicts = diff --name-only --diff-filter=U
     whatadded = log --diff-filter=A
     blame = blame -w -C -C -C
+    up = "!f() { \
+        branch=$(git rev-parse --abbrev-ref HEAD); \
+        git checkout master && git pull && git checkout \"$branch\" && git rebase master; \
+    }; f"
+
 
 
 [difftool "idiff"]
