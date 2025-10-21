@@ -3,6 +3,9 @@ tags
 *.orig
 *.rej
 suckless/dwmblocks/build/*
+suckless/dmenu/dmenu
+suckless/dmenu/stest
+suckless/dmenu/*.o
 suckless/dwm/dwm
 suckless/dwm/dwm.o
 suckless/st/st

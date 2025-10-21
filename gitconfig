@@ -3,7 +3,7 @@
 	email = gabe@gmelodie.com
 
 [rerere]
-    enabled = 1
+	enabled = false
     autoupdate = 1
 
 [commit]
