@@ -132,6 +132,9 @@ function config() {
     echo -n 'zprofile configurations...'
     link_config $BASEDIR/zprofile $HOME/.zprofile
 
+    echo -n 'picom configurations...'
+    link_config $BASEDIR/picom.conf $HOME/.config/picom.conf
+
     echo -n 'Tmux configurations (.tmux.conf)...'
     link_config $BASEDIR/tmux.conf $HOME/.tmux.conf
 
