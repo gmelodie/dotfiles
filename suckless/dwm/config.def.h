@@ -64,6 +64,7 @@ static const Rule rules[] = {
 	{ "Firefox",                  NULL,                NULL,     1 << 8,    0,          0,          -1,        -1 },
 	{ "St",                       NULL,                NULL,     0,         0,          1,           0,        -1 },
 	{ "discord",                  NULL,                NULL,     0,         0,          0,           0,        1 },
+	{ "signal-desktop",                  NULL,                NULL,     0,         0,          0,           0,        1 },
 	{ "Lutris",                   "net.lutris.Lutris", NULL,     1 << 2,    0,          0,           0,        0 },
     { "heroesofthestorm_x64.exe", NULL,                NULL,     1 << 2,    1,          -1,          0,        0 },
 
@@ -207,6 +208,7 @@ static const Key keys[] = {
     { MODKEY,			XK_o,          spawn,      {.v = (const char*[]){ "st", "-e", "zsh", "-ic", "ranger", NULL } } },
     { MODKEY|ShiftMask,	XK_h,          spawn,      {.v = (const char*[]){ "st", "-e", "htop", NULL } } },
     { MODKEY,			XK_d,          spawn,      {.v = (const char*[]){ "discord", NULL } } },
+    { MODKEY,			XK_s,          spawn,      {.v = (const char*[]){ "signal-desktop", NULL } } },
     { MODKEY,	        XK_g,          spawngames, {0} },
 
 
