@@ -37,9 +37,91 @@ alias gd="git branch --delete"
 alias gpf="git push -u origin HEAD"
 alias gpoops="git add . && git oops && git push -f"
 
+
+
 # FZF
-export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --glob "!.git/*"'
-alias f="fzf"
+alias f='fzf'
+# Default command for finding files (using fd)
+export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
+
+# Default options applied to all fzf invocations
+export FZF_DEFAULT_OPTS='
+  --height 40%
+  --layout=reverse
+  --border
+  --inline-info
+  --preview "bat --style=numbers --color=always --line-range :500 {}"
+  --preview-window=right:50%:hidden
+  --bind "ctrl-/:toggle-preview"
+  --bind "ctrl-y:execute-silent(echo {} | pbcopy)"
+'
+
+# Ctrl+T configuration (file finder)
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_CTRL_T_OPTS="
+  --preview 'bat --color=always --line-range :50 {}'
+  --bind 'ctrl-/:change-preview-window(down|hidden|)'
+"
+
+# Alt+C configuration (directory finder)
+export FZF_ALT_C_COMMAND='fd --type d --hidden --follow --exclude .git'
+export FZF_ALT_C_OPTS="
+  --preview 'tree -C {} | head -50'
+"
+
+# Ctrl+R configuration (history search)
+export FZF_CTRL_R_OPTS="
+  --preview 'echo {}'
+  --preview-window up:3:hidden:wrap
+  --bind 'ctrl-/:toggle-preview'
+  --bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort'
+  --color header:italic
+  --header 'You are pindotitson'
+"
+
+# for fzf history
+[[ -r "/usr/share/z/z.sh" ]] && source /usr/share/z/z.sh
+
+fzf-smart-cd() {
+  local dir
+  dir=$(
+    {
+      z -l 2>/dev/null | sed 's/^[0-9,.]* *//'
+      fd --type d --hidden --exclude .git
+    } | awk '!seen[$0]++' |
+      fzf --height 40% --reverse
+  )
+
+  [[ -n "$dir" ]] && cd "$dir"
+  zle reset-prompt
+}
+zle -N fzf-smart-cd
+bindkey '^E' fzf-smart-cd
+
+fkill() {
+  local pids
+  pids=$(
+    ps -eo pid=,comm=,args= --sort=-%cpu |
+    awk -v OFS='\t' '{print $1, $2}' |
+    fzf -m \
+      --delimiter=$'\t' \
+      --with-nth=1,2,3 \
+      --preview 'echo PID: {3}' |
+    cut -f3
+  )
+
+  [[ -n "$pids" ]] && echo "$pids" | xargs kill -${1:-9}
+}
+
+
+alias fssh='ssh $(grep "^Host" ~/.ssh/config | grep -v "[?*]" | cut -d " " -f2- | fzf)'
+
+# Jump to frequently used directories (requires z or autojump)
+fz() {
+  local dir
+  dir=$(z -l 2>&1 | fzf --height 40% --nth 2.. --reverse --inline-info +s --tac --query "${*}" | sed 's/^[0-9,.]* *//')
+  cd "$dir"
+}
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
@@ -60,8 +142,6 @@ vgr() {
   rg -l "$@" | xargs -r nvim
 }
 
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # Set GOPATH and PATH for golang
 # GOPATH sets the workspace where go code is in
