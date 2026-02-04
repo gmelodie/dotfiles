@@ -190,7 +190,4 @@ export MANPAGER="less -R --use-color -Dd+r -Du+b"
 # rebuild suckless
 alias suckr=rebuild-suckless
 
-# Start tmux automatically if not already inside tmux
-# [ -z "$TMUX" ] && exec tmux
-
  . $HOME/.nix-profile/etc/profile.d/nix.sh
