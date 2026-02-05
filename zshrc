@@ -190,4 +190,11 @@ export MANPAGER="less -R --use-color -Dd+r -Du+b"
 # rebuild suckless
 alias suckr=rebuild-suckless
 
+<<<<<<< Updated upstream
  . $HOME/.nix-profile/etc/profile.d/nix.sh
+=======
+[ -z "$HOME/.nix-profile/etc/profile.d/nix.sh" ] && . $HOME/.nix-profile/etc/profile.d/nix.sh
+
+alias lsrecent='ls -t | head -n 10'
+alias o='xdg-open'
+>>>>>>> Stashed changes
