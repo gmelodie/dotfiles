@@ -2,10 +2,18 @@ tags
 *.o
 *.orig
 *.rej
+
 suckless/dwmblocks/build/*
 suckless/dwm/dwm
 suckless/dwm/dwm.o
 suckless/st/st
 suckless/st/st.o
 suckless/st/x.o
+suckless/dmenu/dmenu
+suckless/dmenu/dmenu.o
+suckless/dmenu/drw.o
+suckless/dmenu/stest
+suckless/dmenu/stest.o
+suckless/dmenu/util.o
+
 
