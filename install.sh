@@ -141,6 +141,9 @@ function config() {
     echo -n 'xinitrc startup (dwm)...'
     link_config $BASEDIR/xinitrc $HOME/.xinitrc
 
+    echo -n 'xprofile...'
+    link_config $BASEDIR/xprofile $HOME/.xprofile
+
     echo -n 'XCompose (for cedilha)...'
     link_config $BASEDIR/XCompose $HOME/.XCompose
 
