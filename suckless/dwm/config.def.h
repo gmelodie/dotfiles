@@ -11,8 +11,8 @@ static const unsigned int snap      = 32;       /* snap pixel */
 static const int swallowfloating    = 0;        /* 1 means swallow floating windows by default */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const char *fonts[]          = { "Hack Nerd Font:size=16" };
-static const char dmenufont[]       = "Hack Nerd Font:size=16";
+static const char *fonts[]          = { "Hack Nerd Font:size=18" };
+static const char dmenufont[]       = "Hack Nerd Font:size=18";
 
 // Opacity levels
 static const unsigned int baralpha = 0xb0;      // opacity
@@ -64,9 +64,9 @@ static const Rule rules[] = {
 	{ "Firefox",                  NULL,                NULL,     1 << 8,    0,          0,          -1,        -1 },
 	{ "St",                       NULL,                NULL,     0,         0,          1,           0,        -1 },
 	{ "discord",                  NULL,                NULL,     0,         0,          0,           0,        1 },
-	{ "signal-desktop",                  NULL,                NULL,     0,         0,          0,           0,        1 },
+	{ "Signal",                  NULL,                NULL,     0,         0,          0,           0,        1 },
 	{ "Lutris",                   "net.lutris.Lutris", NULL,     1 << 2,    0,          0,           0,        0 },
-    { "heroesofthestorm_x64.exe", NULL,                NULL,     1 << 2,    1,          -1,          0,        0 },
+    { "steam_app_default", NULL,                NULL,     1 << 2,    1,          -1,          0,        0 },
 
 	{ NULL,                       NULL,  "Event Tester",  0,    0,          0,           1,        -1 }, /* xev */
 };

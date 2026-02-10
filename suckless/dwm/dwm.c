@@ -1987,13 +1987,15 @@ spawngames(const Arg *arg) {
         exit(1);
     }
 
-    // launch Lutris
+    // launch heroes of the storm from Lutris
     if (fork() == 0) {
         if (dpy)
             close(ConnectionNumber(dpy));
         setsid();
-        execlp("lutris", "lutris", NULL);
-        fprintf(stderr, "lutris failed to start\n");
+        execlp("lutris", "lutris",
+               "lutris:rungame/heroes-of-the-storm",
+               NULL);
+        fprintf(stderr, "Heroes of the Storm failed to start\n");
         exit(1);
     }
 }

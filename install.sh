@@ -46,7 +46,7 @@ function install_archlinux() {
     sudo pacman -Syyu
     sudo pacman -S wget curl base-devel git python bat fd z python-pynvim python-pip python-pipx zsh fzf clang clang-analyzer ripgrep neovim mesa ly libx11 libxft xorg-server xorg-xinit xorg-xauth xorg-apps xorg-setxkbmap xdg-utils libnotify slock openssh feh picom imagemagick maim \
         pipewire pipewire-pulse pipewire-alsa pipewire-audio bc wireplumber alsa-utils alsa-firmware pavucontrol bluez bluez-utils bluez-deprecated-tools blueman playerctl mpd mpc rmpc \
-        brightnessctl xclip wikiman arch-wiki-docs ranger nerd-fonts noto-fonts-emoji
+        brightnessctl xclip wikiman arch-wiki-docs ranger nerd-fonts noto-fonts-emoji xsettingsd
     # bc is used for calculating int volume levels from floats
 
     git clone https://aur.archlinux.org/yay-bin.git /tmp/yay-bin
@@ -146,6 +146,10 @@ function config() {
 
     echo -n 'Xresources (for larger font sizes)...'
     link_config $BASEDIR/Xresources $HOME/.Xresources
+
+    echo -n 'xsettingsd (for gtx 2, 3 and 4)...'
+    mkdir -p $HOME/.config/xsettingsd
+    link_config $BASEDIR/xsettingsd $HOME/.config/xsettingsd/xsettingsd.conf
 
     echo -n 'mpd config...'
     mkdir -p $HOME/.config/mpd
