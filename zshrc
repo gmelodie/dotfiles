@@ -134,7 +134,7 @@ alias vim=nvim
 alias vi=nvim
 
 # open all files with this pattern in them
-vgr() {
+vrg() {
   if [ $# -eq 0 ]; then
     echo "Usage: vgr <pattern> [rg-options...]"
     return 1
@@ -150,6 +150,8 @@ export GOPATH="$HOME/go"
 export GO111MODULE='on' # dunno what it does, but related to nvim-go
 export PATH="$PATH:/usr/local/go/bin"
 export PATH="$PATH:$GOPATH/bin"
+
+export PATH="$PATH:$HOME/bin"
 
 # Some magic to make gpg2 work
 export GPG_TTY=$(tty)
