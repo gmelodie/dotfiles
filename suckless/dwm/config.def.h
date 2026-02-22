@@ -63,8 +63,8 @@ static const Rule rules[] = {
 	{ "Gimp",                     NULL,                NULL,     0,         1,          0,           0,        -1 },
 	{ "Firefox",                  NULL,                NULL,     0,         0,          0,          -1,        -1 },
 	{ "St",                       NULL,                NULL,     0,         0,          1,           0,        -1 },
-	{ "discord",                  NULL,                NULL,     1 << 1,    0,          0,           0,        1 },
 	{ "Signal",                   NULL,                NULL,     1 << 1,    0,          0,           0,        1 },
+	{ "discord",                  NULL,                NULL,     1 << 2,    0,          0,           0,        1 },
 	{ "Lutris",                   "net.lutris.Lutris", NULL,     1 << 2,    0,          0,           0,        0 },
     { "steam_app_default",        NULL,                NULL,     1 << 2,    1,          -1,          0,        0 },
 
