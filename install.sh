@@ -110,9 +110,10 @@ function config() {
         sudo ln -sf $BASEDIR/30-touchpad.conf /etc/X11/xorg.conf.d/30-touchpad.conf
     fi
 
-    echo -n 'Neovim configurations (init.vim, etc.)...'
+    echo -n 'Neovim configurations (init.lua, etc.)...'
     mkdir -p $HOME/.config/nvim/lua/lsp
-    ln -sf $BASEDIR/nvim/init.vim $HOME/.config/nvim/init.vim
+    rm -f $HOME/.config/nvim/init.vim
+    ln -sf $BASEDIR/nvim/init.lua $HOME/.config/nvim/init.lua
     for file in $BASEDIR/nvim/lua/lsp/*; do
 	filename=$(basename "$file")
 	ln -sf $BASEDIR/nvim/lua/lsp/$filename $HOME/.config/nvim/lua/lsp/$filename
