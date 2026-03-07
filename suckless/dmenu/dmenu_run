@@ -1,2 +1,1 @@
-#!/bin/sh
-dmenu_path | dmenu "$@" | ${SHELL:-"/bin/sh"} &
+/usr/local/bin/dmenu_run
