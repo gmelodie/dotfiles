@@ -121,6 +121,7 @@ typedef struct {
 	int size;      /* size of buffer */
 	int cur;       /* start of active screen */
 	int off;       /* scrollback line offset */
+	int freeze_idx; /* absolute buffer index of frozen view top, -1 if not frozen */
 	TCursor sc;    /* saved cursor */
 } LineBuffer;
 
@@ -206,6 +207,7 @@ static void tscrolldown(int, int);
 static void tsetattr(const int *, int);
 static void tsetchar(Rune, const Glyph *, int, int);
 static void tsetdirt(int, int);
+static void tsetdirtall(void);
 static void tsetscroll(int, int);
 static void tswapscreen(void);
 static void tsetmode(int, int, const int *, int);
@@ -982,10 +984,22 @@ tattrset(int attr)
 	return 0;
 }
 
+static void
+tsetdirtall(void)
+{
+	int i;
+	for (i = 0; i < term.row; i++)
+		term.dirty[i] = 1;
+}
+
 void
 tsetdirt(int top, int bot)
 {
 	int i;
+
+	/* While frozen, block dirty updates so live output doesn't repaint the view */
+	if (!IS_SET(MODE_ALTSCREEN) && TSCREEN.freeze_idx >= 0)
+		return;
 
 	LIMIT(top, 0, term.row-1);
 	LIMIT(bot, 0, term.row-1);
@@ -1051,6 +1065,7 @@ treset(void)
 		}};
 		term.screen[i].cur = 0;
 		term.screen[i].off = 0;
+		term.screen[i].freeze_idx = -1;
 		for (j = 0; j < term.row; ++j) {
 			if (term.col != term.linelen)
 				term.screen[i].buffer[j] = xrealloc(term.screen[i].buffer[j], term.col * sizeof(Glyph));
@@ -1105,7 +1120,11 @@ kscrollup(const Arg *a)
 	while (!TLINE(-n)) --n;
 	TSCREEN.off += n;
 	selscroll(0, n);
-	tfulldirt();
+	if (TSCREEN.freeze_idx >= 0)
+		TSCREEN.freeze_idx = (TSCREEN.freeze_idx - n + TSCREEN.size) % TSCREEN.size;
+	else
+		TSCREEN.freeze_idx = TLINEOFFSET(0);
+	tsetdirtall();
 }
 
 void
@@ -1121,7 +1140,24 @@ kscrolldown(const Arg *a)
 	if (n > TSCREEN.off) n = TSCREEN.off;
 	TSCREEN.off -= n;
 	selscroll(0, -n);
-	tfulldirt();
+	if (TSCREEN.off == 0) {
+		TSCREEN.freeze_idx = -1;
+		selclear();
+	} else if (TSCREEN.freeze_idx >= 0) {
+		TSCREEN.freeze_idx = (TSCREEN.freeze_idx + n) % TSCREEN.size;
+	}
+	tsetdirtall();
+}
+
+void
+kscrollbottom(const Arg *a)
+{
+	if (IS_SET(MODE_ALTSCREEN) || TSCREEN.off == 0)
+		return;
+	TSCREEN.off = 0;
+	TSCREEN.freeze_idx = -1;
+	selclear();
+	tsetdirtall();
 }
 
 void
@@ -1221,7 +1257,9 @@ tscrollup(int orig, int n)
 	tclearregion(0, term.bot-n+1, term.linelen-1, term.bot);
 	/* Redraw portion of the screen that has scrolled */
 	tsetdirt(orig, term.bot-n+1);
-	selscroll(orig, -n);
+	/* Don't adjust selection when frozen: view didn't move */
+	if (TSCREEN.freeze_idx < 0)
+		selscroll(orig, -n);
 }
 
 void
@@ -2789,11 +2827,15 @@ drawregion(int x1, int y1, int x2, int y2)
 {
 	int y, L;
 
-	L = TLINEOFFSET(y1);
+	if (TSCREEN.freeze_idx >= 0)
+		L = (TSCREEN.freeze_idx + y1) % TSCREEN.size;
+	else
+		L = TLINEOFFSET(y1);
 	for (y = y1; y < y2; y++) {
 		if (term.dirty[y]) {
 			term.dirty[y] = 0;
-			xdrawline(TSCREEN.buffer[L], x1, y, x2);
+			if (TSCREEN.buffer[L])
+				xdrawline(TSCREEN.buffer[L], x1, y, x2);
 		}
 		L = (L + 1) % TSCREEN.size;
 	}

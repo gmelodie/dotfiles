@@ -62,6 +62,7 @@ static void zoomreset(const Arg *);
 static void ttysend(const Arg *);
 void kscrollup(const Arg *);
 void kscrolldown(const Arg *);
+void kscrollbottom(const Arg *);
 
 /* config.h for applying patches and the configuration. */
 #include "config.h"
@@ -1904,6 +1905,7 @@ kpress(XEvent *ev)
 
 	/* 2. custom keys from config.h */
 	if ((customkey = kmap(ksym, e->state))) {
+		kscrollbottom(NULL);
 		ttywrite(customkey, strlen(customkey), 1);
 		return;
 	}
@@ -1923,6 +1925,7 @@ kpress(XEvent *ev)
 			len = 2;
 		}
 	}
+	kscrollbottom(NULL);
 	ttywrite(buf, len, 1);
 }
 
