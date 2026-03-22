@@ -53,7 +53,7 @@ export FZF_DEFAULT_OPTS='
   --preview "bat --style=numbers --color=always --line-range :500 {}"
   --preview-window=right:50%:hidden
   --bind "ctrl-/:toggle-preview"
-  --bind "ctrl-y:execute-silent(echo {} | pbcopy)"
+  --bind "ctrl-y:execute-silent(echo {} | xclip -selection clipboard)"
 '
 
 # Ctrl+T configuration (file finder)
@@ -74,7 +74,7 @@ export FZF_CTRL_R_OPTS="
   --preview 'echo {}'
   --preview-window up:3:hidden:wrap
   --bind 'ctrl-/:toggle-preview'
-  --bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort'
+  --bind 'ctrl-y:execute-silent(echo -n {2..} | xclip -selection clipboard)+abort'
   --color header:italic
   --header 'You are pindotitson'
 "
