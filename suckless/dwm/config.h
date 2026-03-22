@@ -62,9 +62,9 @@ static const Rule rules[] = {
 	/* class                      instance             title     tags mask  isfloating  isterminal  noswallow  monitor */
 	{ "Gimp",                     NULL,                NULL,     0,         1,          0,           0,        -1 },
 	{ "Firefox",                  NULL,                NULL,     0,         0,          0,          -1,        -1 },
-	{ "St",                       NULL,                NULL,     0,         0,          1,           0,        -1 },
-	{ "discord",                  NULL,                NULL,     1 << 1,    0,          0,           0,        1 },
+	{ "Alacritty",                       NULL,                NULL,     0,         0,          1,           0,        -1 },
 	{ "Signal",                   NULL,                NULL,     1 << 1,    0,          0,           0,        1 },
+	{ "discord",                  NULL,                NULL,     1 << 2,    0,          0,           0,        1 },
 	{ "Lutris",                   "net.lutris.Lutris", NULL,     1 << 2,    0,          0,           0,        0 },
     { "steam_app_default",        NULL,                NULL,     1 << 2,    1,          -1,          0,        0 },
 
@@ -128,7 +128,7 @@ static const Layout layouts[] = {
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", normbgcolor, "-nf", normbordercolor, "-sb", selbgcolor, "-sf", selfgcolor, NULL };
-static const char *termcmd[]  = { "st", NULL };
+static const char *termcmd[]  = { "alacritty", NULL };
 static const char *lockcmd[]  = { "slock", NULL };
 static const char *screenshotcmd[] = { "/bin/sh", "-c", "maim -s | xclip -selection clipboard -t image/png -i", NULL };
 static const char *poweroffcmd[] = { "/bin/sh", "-c", "poweroff", NULL };
@@ -202,11 +202,11 @@ static const Key keys[] = {
 	{ MODKEY|ControlMask|ShiftMask,    XK_p,        spawn,      {.v = poweroffcmd } },
 
     /* application bindings */
-    { MODKEY,			XK_m,          spawn,      {.v = (const char*[]){ "st", "-e", "rmpc", NULL } } },
+    { MODKEY,			XK_m,          spawn,      {.v = (const char*[]){ "alacritty", "-e", "rmpc", NULL } } },
     { MODKEY,			XK_w,          spawn,      {.v = (const char*[]){ BROWSER, NULL } } },
-    { MODKEY,			XK_n,          spawn,      {.v = (const char*[]){ "st", "-e", "nvim", NULL } } },
-    { MODKEY,			XK_o,          spawn,      {.v = (const char*[]){ "st", "-e", "zsh", "-ic", "ranger", NULL } } },
-    { MODKEY|ShiftMask,	XK_h,          spawn,      {.v = (const char*[]){ "st", "-e", "htop", NULL } } },
+    { MODKEY,			XK_n,          spawn,      {.v = (const char*[]){ "alacritty", "-e", "nvim", NULL } } },
+    { MODKEY,			XK_o,          spawn,      {.v = (const char*[]){ "alacritty", "-e", "zsh", "-ic", "ranger", NULL } } },
+    { MODKEY|ShiftMask,	XK_h,          spawn,      {.v = (const char*[]){ "alacritty", "-e", "htop", NULL } } },
     { MODKEY,			XK_d,          spawn,      {.v = (const char*[]){ "discord", NULL } } },
     { MODKEY,			XK_s,          spawn,      {.v = (const char*[]){ "signal-desktop", NULL } } },
     { MODKEY,	        XK_g,          spawngames, {0} },

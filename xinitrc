@@ -25,7 +25,7 @@ xsettingsd &
 firefox &
 signal-desktop &
 discord &
-st &
+alacritty &
 
 exec dwm
 

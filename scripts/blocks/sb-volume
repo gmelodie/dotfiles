@@ -4,7 +4,7 @@ case "$BLOCK_BUTTON" in
     1) wpctl set-mute @DEFAULT_SINK@ toggle && pkill -RTMIN+10 dwmblocks ;;
     4) wpctl set-volume @DEFAULT_SINK@ 5%+ && pkill -RTMIN+10 dwmblocks ;;
     5) wpctl set-volume @DEFAULT_SINK@ 5%- && pkill -RTMIN+10 dwmblocks ;;
-    6) st -e "$EDITOR" "$0" ;;
+    6) alacritty -e "$EDITOR" "$0" ;;
 esac
 
 vol_info="$(wpctl get-volume @DEFAULT_SINK@ 2>/dev/null)"

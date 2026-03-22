@@ -44,7 +44,7 @@ function install_debian() {
 function install_archlinux() {
     echo '############# Starting full system upgrade (Pacman)...'
     sudo pacman -Syyu
-    sudo pacman -S wget curl base-devel git python bat fd z python-pynvim python-pip python-pipx zsh fzf clang clang-analyzer ripgrep neovim mesa ly libx11 libxft xorg-server xorg-xinit xorg-xauth xorg-apps xorg-setxkbmap xdg-utils libnotify slock openssh feh picom imagemagick maim \
+    sudo pacman -S wget curl base-devel git python bat fd z python-pynvim python-pip python-pipx zsh fzf clang clang-analyzer ripgrep neovim mesa ly libx11 libxft xorg-server xorg-xinit xorg-xauth xorg-apps xorg-setxkbmap xdg-utils libnotify slock openssh feh picom imagemagick maim alacritty \
         pipewire pipewire-pulse pipewire-alsa pipewire-audio bc wireplumber alsa-utils alsa-firmware pavucontrol bluez bluez-utils bluez-deprecated-tools blueman playerctl mpd mpc rmpc \
         brightnessctl xclip wikiman arch-wiki-docs ranger nerd-fonts noto-fonts-emoji xsettingsd
     # bc is used for calculating int volume levels from floats
@@ -151,6 +151,10 @@ function config() {
     echo -n 'Xresources (for larger font sizes)...'
     link_config $BASEDIR/Xresources $HOME/.Xresources
 
+    echo -n 'Alacritty configurations (alacritty.toml)...'
+    mkdir -p $HOME/.config/alacritty
+    link_config $BASEDIR/alacritty/alacritty.toml $HOME/.config/alacritty/alacritty.toml
+
     echo -n 'xsettingsd (for gtx 2, 3 and 4)...'
     mkdir -p $HOME/.config/xsettingsd
     link_config $BASEDIR/xsettingsd $HOME/.config/xsettingsd/xsettingsd.conf
@@ -173,8 +177,6 @@ function build_suckless() {
     sudo make -C $BASEDIR/suckless/dmenu clean install
     echo -n 'Building dwmblocks...'
     sudo make -C $BASEDIR/suckless/dwmblocks clean install
-    echo -n 'Building st...'
-    sudo make -C $BASEDIR/suckless/st clean install
 }
 
 
