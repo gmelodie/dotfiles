@@ -27,6 +27,8 @@ plugins=(
   fancy-ctrl-z # ctrl + z foregrounds process again
 )
 
+ZSH_THEME_GIT_PROMPT_DIRTY=" %{$fg[red]%}✗%{$reset_color%}"
+
 source $ZSH/oh-my-zsh.sh
 
 alias ghostscript="/bin/gs"
