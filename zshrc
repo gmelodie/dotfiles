@@ -34,10 +34,12 @@ source $ZSH/oh-my-zsh.sh
 alias ghostscript="/bin/gs"
 alias gs="git status"
 alias gh="git checkout"
+alias ghub="gh"
 alias gb="git checkout -b"
 alias gd="git branch --delete"
 alias gpf="git push -u origin HEAD"
 alias gpoops="git add . && git oops && git push -f"
+alias gl='git pull && git fetch origin master:master'
 
 
 
@@ -198,3 +200,5 @@ alias suckr=rebuild-suckless
 
 alias lsrecent='ls -t | head -n 10'
 alias o='xdg-open'
+alias ai-docker="$HOME/repos/ai-docker/ai.sh"
+
