@@ -1,0 +1,93 @@
+#!/bin/bash
+# Presentation mirror: DP-4 full screen, eDP-1 shows same content scaled/centered.
+# Usage: mirror-presentation [restore]
+set -euo pipefail
+
+LAPTOP="eDP-1"
+
+detect_external() {
+    for dp in DP-1 DP-2 DP-3 DP-4; do
+        xrandr | grep -q "^${dp} connected" && { echo "$dp"; return; }
+    done
+    echo ""
+}
+
+EXTERNAL="${MIRROR_EXTERNAL:-$(detect_external)}"
+
+# Optional: set to a value < 1.0 to shrink content area on laptop (e.g. 0.75)
+LAPTOP_FILL="${MIRROR_FILL:-1.0}"
+
+get_preferred_res() {
+    xrandr | awk -v out="$1" '
+        $0 ~ "^"out" " { found=1; next }
+        found && /^ +[0-9]+x[0-9]+/ { print $1; exit }
+        found && !/^ / { exit }
+    '
+}
+
+mirror() {
+    local ext_res lap_res
+    ext_res=$(get_preferred_res "$EXTERNAL")
+    lap_res=$(get_preferred_res "$LAPTOP")
+
+    [[ -z "$EXTERNAL" ]] && { echo "error: no external display found (checked DP-1..DP-4)" >&2; exit 1; }
+    [[ -z "$ext_res" ]] && { echo "error: $EXTERNAL not connected" >&2; exit 1; }
+    [[ -z "$lap_res" ]] && { echo "error: $LAPTOP not found" >&2; exit 1; }
+
+    local ext_w ext_h lap_w lap_h
+    ext_w=${ext_res%x*}; ext_h=${ext_res#*x}
+    lap_w=${lap_res%x*}; lap_h=${lap_res#*x}
+
+    # Fit ext_res into LAPTOP_FILL fraction of laptop's physical screen, preserving AR.
+    # ratio: how many physical laptop pixels per virtual (external) pixel.
+    local ratio content_w content_h off_x off_y scale tx ty
+    ratio=$(awk "BEGIN {
+        avail_w = $lap_w * $LAPTOP_FILL
+        avail_h = $lap_h * $LAPTOP_FILL
+        rx = avail_w / $ext_w
+        ry = avail_h / $ext_h
+        print (rx < ry) ? rx : ry
+    }")
+
+    content_w=$(awk "BEGIN { printf \"%d\", int($ext_w * $ratio + 0.5) }")
+    content_h=$(awk "BEGIN { printf \"%d\", int($ext_h * $ratio + 0.5) }")
+    off_x=$(awk "BEGIN { printf \"%d\", int(($lap_w - $content_w) / 2 + 0.5) }")
+    off_y=$(awk "BEGIN { printf \"%d\", int(($lap_h - $content_h) / 2 + 0.5) }")
+
+    # xrandr --transform maps output (physical) coords → framebuffer (virtual) coords.
+    # [ S  0  tx ]   physical (px,py) → virtual (px*S + tx, py*S + ty)
+    # [ 0  S  ty ]
+    # [ 0  0   1 ]
+    # S = 1/ratio so that content_w physical pixels span exactly ext_w virtual pixels.
+    # tx/ty shift so the centered region starts at virtual (0,0).
+    scale=$(awk "BEGIN { printf \"%.8f\", 1.0 / $ratio }")
+    tx=$(awk "BEGIN { printf \"%.4f\", -$off_x / $ratio }")
+    ty=$(awk "BEGIN { printf \"%.4f\", -$off_y / $ratio }")
+
+    echo "external ($EXTERNAL): ${ext_res} — full screen"
+    echo "laptop   ($LAPTOP):   showing ${content_w}x${content_h} centered at (${off_x},${off_y})"
+
+    xrandr \
+        --fb "${ext_w}x${ext_h}" \
+        --output "$EXTERNAL" \
+            --mode "$ext_res" --pos 0x0 --scale 1x1 --primary \
+        --output "$LAPTOP" \
+            --mode "$lap_res" --pos 0x0 \
+            --transform "${scale},0,${tx},0,${scale},${ty},0,0,1"
+
+    echo "mirror active — run '$0 restore' to go back to normal"
+}
+
+restore() {
+    xrandr \
+        --output "$LAPTOP" \
+            --auto --scale 1x1 --transform 1,0,0,0,1,0,0,0,1 --pos 0x0 --primary \
+        --output "$EXTERNAL" \
+            --auto --scale 1x1 --transform 1,0,0,0,1,0,0,0,1 --right-of "$LAPTOP"
+    echo "restored normal dual-monitor layout"
+}
+
+case "${1:-}" in
+    restore|off) restore ;;
+    *) mirror ;;
+esac
