@@ -40,6 +40,8 @@ alias gd="git branch --delete"
 alias gpf="git push -u origin HEAD"
 alias gpoops="git add . && git oops && git push -f"
 alias gl='git pull && git fetch origin master:master'
+unalias gca 2>/dev/null
+gca() { git add . && git commit -m "$*" && git push }
 
 
 
@@ -201,4 +203,3 @@ alias suckr=rebuild-suckless
 alias lsrecent='ls -t | head -n 10'
 alias o='xdg-open'
 alias ai-docker="$HOME/repos/ai-docker/ai.sh"
-
