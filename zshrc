@@ -34,7 +34,7 @@ source $ZSH/oh-my-zsh.sh
 alias ghostscript="/bin/gs"
 alias gs="git status"
 alias gh="git checkout"
-alias ghub="gh"
+alias ghub="command gh"
 alias gb="git checkout -b"
 alias gd="git branch --delete"
 alias gpf="git push -u origin HEAD"
