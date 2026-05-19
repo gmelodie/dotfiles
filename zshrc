@@ -40,8 +40,7 @@ alias gd="git branch --delete"
 alias gpf="git push -u origin HEAD"
 alias gpoops="git add . && git oops && git push -f"
 alias gl='git pull && git fetch origin master:master'
-unalias gca 2>/dev/null
-gca() { git add . && git commit -m "$*" && git push }
+gcap() { git add . && git commit -m "$*" && git push }
 
 
 
