@@ -35,12 +35,6 @@ function link_config() { # link_file(here, there)
     echo -e "${GREEN}Done${NC}"
 }
 
-function install_debian() {
-    echo '############# Starting full system upgrade (APT)...'
-    sudo apt -y update > /dev/null && sudo apt -y upgrade > /dev/null
-    sudo apt install -y curl build-essential git python3 python3-neovim golang zsh universal-ctags fzf nodejs golang-go clang clangd ripgrep snapd
-}
-
 function install_archlinux() {
     echo '############# Starting full system upgrade (Pacman)...'
     sudo pacman -Syyu
@@ -75,14 +69,10 @@ function post_install() {
     fi
 
     echo 'Installing espanso...'
-    if command -v snap &> /dev/null; then
-        sudo snap install espanso --classic
-    else
-        mkdir -p ~/opt
-        wget -O ~/opt/Espanso.AppImage 'https://github.com/espanso/espanso/releases/download/v2.2.1/Espanso-X11.AppImage'
-        chmod u+x ~/opt/Espanso.AppImage
-        sudo ~/opt/Espanso.AppImage env-path register
-    fi
+    mkdir -p ~/opt
+    wget -O ~/opt/Espanso.AppImage 'https://github.com/espanso/espanso/releases/download/v2.2.1/Espanso-X11.AppImage'
+    chmod u+x ~/opt/Espanso.AppImage
+    sudo ~/opt/Espanso.AppImage env-path register
     sudo espanso service register
 
     echo 'Installing neovim appimage...'
@@ -199,12 +189,8 @@ while getopts ":hcmv" option; do
 done
 
 # -------------- Start install ----------------
-if grep -qi archlinux /etc/os-release; then
-    install_archlinux
-    build_suckless
-else
-    install_debian
-fi
+install_archlinux
+build_suckless
 
 post_install
 
