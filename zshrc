@@ -158,6 +158,8 @@ export PATH="$PATH:$GOPATH/bin"
 
 export PATH="$PATH:$HOME/bin"
 
+export PATH="$PATH:$HOME/.local/bin"
+
 # Some magic to make gpg2 work
 export GPG_TTY=$(tty)
 
