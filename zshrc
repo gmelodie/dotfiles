@@ -204,3 +204,30 @@ alias suckr=rebuild-suckless
 alias lsrecent='ls -t | head -n 10'
 alias o='xdg-open'
 alias ai-docker="$HOME/repos/ai-docker/ai.sh"
+
+# `ai` wraps ai-docker and also spawns a separate terminal
+# opened at the first path argument.
+ai() {
+    local first_path="" arg
+    local skip_next=false past_separator=false
+    local count=0
+    for arg in "$@"; do
+        if $past_separator; then continue; fi
+        if [ "$arg" = "--" ]; then past_separator=true; continue; fi
+        if $skip_next; then skip_next=false; continue; fi
+        case "$arg" in
+            -b) skip_next=true ;;
+            --codex|--rebuild|-h|--help) ;;
+            *)
+                [ -z "$first_path" ] && first_path="$arg"
+                count=$((count + 1))
+                ;;
+        esac
+    done
+
+    if [ -n "$first_path" ] && [ -d "$first_path" ]; then
+        alacritty --working-directory "$first_path" </dev/null >/dev/null 2>&1 &!
+    fi
+
+    "$HOME/repos/ai-docker/ai.sh" "$@"
+}

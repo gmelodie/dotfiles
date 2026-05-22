@@ -1,0 +1,29 @@
+#!/bin/sh
+# Spawn alacritty. If the focused window is a terminal, inherit its cwd.
+
+cwd=""
+
+wid=$(xprop -root _NET_ACTIVE_WINDOW 2>/dev/null | awk '{print $NF}')
+
+if [ -n "$wid" ] && [ "$wid" != "0x0" ]; then
+    class=$(xprop -id "$wid" WM_CLASS 2>/dev/null)
+    case "$class" in
+        *Alacritty*|*alacritty*|*xterm*|*kitty*|*urxvt*|*\"st\"*)
+            pid=$(xprop -id "$wid" _NET_WM_PID 2>/dev/null | awk '/_NET_WM_PID/{print $NF}')
+            while [ -n "$pid" ]; do
+                child=$(pgrep -P "$pid" 2>/dev/null | tail -n 1)
+                [ -z "$child" ] && break
+                pid="$child"
+            done
+            if [ -n "$pid" ] && [ -L "/proc/$pid/cwd" ]; then
+                cwd=$(readlink "/proc/$pid/cwd" 2>/dev/null)
+            fi
+            ;;
+    esac
+fi
+
+if [ -n "$cwd" ] && [ -d "$cwd" ]; then
+    exec alacritty --working-directory "$cwd" "$@"
+else
+    exec alacritty "$@"
+fi

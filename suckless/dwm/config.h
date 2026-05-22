@@ -128,7 +128,7 @@ static const Layout layouts[] = {
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", normbgcolor, "-nf", normbordercolor, "-sb", selbgcolor, "-sf", selfgcolor, NULL };
-static const char *termcmd[]  = { "alacritty", NULL };
+static const char *termcmd[]  = { "/home/gmelodie/dotfiles/scripts/alacritty-here", NULL };
 static const char *lockcmd[]  = { "slock", NULL };
 static const char *screenshotcmd[] = { "/bin/sh", "-c", "maim -s | xclip -selection clipboard -t image/png -i", NULL };
 static const char *poweroffcmd[] = { "/bin/sh", "-c", "poweroff", NULL };
