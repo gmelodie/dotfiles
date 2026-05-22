@@ -103,6 +103,21 @@ fzf-smart-cd() {
 zle -N fzf-smart-cd
 bindkey '^E' fzf-smart-cd
 
+# Ctrl+A: paste a directory path onto the command line (dirs-only equivalent of Ctrl+T)
+fzf-dir-paste() {
+  local selected
+  selected=$(
+    fd --type d --hidden --follow --exclude .git |
+      fzf --height 40% --reverse --preview 'tree -C {} | head -50'
+  )
+  if [[ -n "$selected" ]]; then
+    LBUFFER="${LBUFFER}${(q)selected} "
+  fi
+  zle reset-prompt
+}
+zle -N fzf-dir-paste
+bindkey '^A' fzf-dir-paste
+
 fkill() {
   local pids
   pids=$(
