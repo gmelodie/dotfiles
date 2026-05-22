@@ -220,28 +220,50 @@ alias lsrecent='ls -t | head -n 10'
 alias o='xdg-open'
 alias ai-docker="$HOME/repos/ai-docker/ai.sh"
 
-# `ai` wraps ai-docker and also spawns a separate terminal
-# opened at the first path argument.
+# `ai` wraps ai-docker and also spawns a separate terminal opened at
+# the first path argument — or its worktree, if -b is given.
 ai() {
-    local first_path="" arg
-    local skip_next=false past_separator=false
-    local count=0
+    local first_path="" first_branch="" arg
+    local folder_count=0 expect_branch=false past_separator=false
     for arg in "$@"; do
         if $past_separator; then continue; fi
         if [ "$arg" = "--" ]; then past_separator=true; continue; fi
-        if $skip_next; then skip_next=false; continue; fi
+        if $expect_branch; then
+            [ $folder_count -eq 1 ] && first_branch="$arg"
+            expect_branch=false
+            continue
+        fi
         case "$arg" in
-            -b) skip_next=true ;;
+            -b) expect_branch=true ;;
             --codex|--rebuild|-h|--help) ;;
             *)
+                folder_count=$((folder_count + 1))
                 [ -z "$first_path" ] && first_path="$arg"
-                count=$((count + 1))
                 ;;
         esac
     done
 
+    local term_dir=""
     if [ -n "$first_path" ] && [ -d "$first_path" ]; then
-        alacritty --working-directory "$first_path" </dev/null >/dev/null 2>&1 &!
+        if [ -n "$first_branch" ]; then
+            # Mirrors ai-docker's worktree path: <dirname>/<basename>--<branch with / → ->
+            local abs branch_safe
+            abs="$(cd "$first_path" && pwd)"
+            branch_safe="${first_branch//\//-}"
+            term_dir="$(dirname "$abs")/$(basename "$abs")--${branch_safe}"
+        else
+            term_dir="$first_path"
+        fi
+    fi
+
+    if [ -n "$term_dir" ]; then
+        (
+            for _ in {1..150}; do
+                [ -d "$term_dir" ] && break
+                sleep 0.2
+            done
+            [ -d "$term_dir" ] && alacritty --working-directory "$term_dir" </dev/null >/dev/null 2>&1
+        ) &!
     fi
 
     "$HOME/repos/ai-docker/ai.sh" "$@"
