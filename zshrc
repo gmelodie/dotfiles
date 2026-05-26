@@ -221,7 +221,8 @@ alias o='xdg-open'
 alias ai-docker="$HOME/repos/ai-docker/ai.sh"
 
 # `ai` wraps ai-docker and also spawns a separate terminal opened at
-# the first path argument — or its worktree, if -b is given.
+# the first path argument — or its worktree, if -b is given. Focus is
+# returned to this (claude) terminal after the new one is launched.
 ai() {
     local first_path="" first_branch="" arg
     local folder_count=0 expect_branch=false past_separator=false
@@ -257,12 +258,30 @@ ai() {
     fi
 
     if [ -n "$term_dir" ]; then
+        # Remember the terminal we're launched from so focus returns to it
+        # (the claude terminal) instead of staying on the spawned alacritty.
+        local cur_win
+        cur_win="$(xdotool getactivewindow 2>/dev/null)"
         (
             for _ in {1..150}; do
                 [ -d "$term_dir" ] && break
                 sleep 0.2
             done
-            [ -d "$term_dir" ] && alacritty --working-directory "$term_dir" </dev/null >/dev/null 2>&1
+            [ -d "$term_dir" ] || exit
+            alacritty --working-directory "$term_dir" </dev/null >/dev/null 2>&1 &
+            # Hand focus back to the claude terminal. dwm ignores
+            # _NET_ACTIVE_WINDOW (windowactivate just marks the window urgent)
+            # and its focusin handler overrides XSetInputFocus (windowfocus),
+            # so the only reliable trigger is an EnterNotify: warp the pointer
+            # over the claude window and dwm's enternotify focuses it.
+            if [ -n "$cur_win" ]; then
+                for _ in {1..50}; do
+                    sleep 0.1
+                    [ "$(xdotool getactivewindow 2>/dev/null)" != "$cur_win" ] && break
+                done
+                sleep 0.1
+                xdotool mousemove --window "$cur_win" 20 20 2>/dev/null
+            fi
         ) &!
     fi
 
