@@ -39,7 +39,7 @@ alias gb="git checkout -b"
 alias gd="git branch --delete"
 alias gpf="git push -u origin HEAD"
 alias gpoops="git add . && git oops && git push -f"
-alias gl='git pull && git fetch origin master:master'
+alias gl='git pull'
 gcap() { git add . && git commit -m "$*" && git push }
 
 
