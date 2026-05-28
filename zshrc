@@ -225,7 +225,7 @@ alias ai-docker="$HOME/repos/ai-docker/ai.sh"
 # returned to this (claude) terminal after the new one is launched.
 ai() {
     local first_path="" first_branch="" arg
-    local folder_count=0 expect_branch=false past_separator=false
+    local folder_count=0 expect_branch=false expect_value=false past_separator=false
     for arg in "$@"; do
         if $past_separator; then continue; fi
         if [ "$arg" = "--" ]; then past_separator=true; continue; fi
@@ -234,8 +234,10 @@ ai() {
             expect_branch=false
             continue
         fi
+        if $expect_value; then expect_value=false; continue; fi
         case "$arg" in
             -b) expect_branch=true ;;
+            -i|-c) expect_value=true ;;
             --codex|--rebuild|-h|--help) ;;
             *)
                 folder_count=$((folder_count + 1))
