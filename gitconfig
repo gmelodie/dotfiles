@@ -16,7 +16,7 @@
     rebase = interactive
 
 [push]
-	default = simple
+	default = current
 	autoSetupRemote = true
 
 [alias]
