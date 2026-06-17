@@ -1,0 +1,203 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+root="${1:-.}"
+JOBS="${GRR_JOBS:-8}"
+TIMEOUT="${GRR_TIMEOUT:-10s}"
+
+skip() { printf "\033[33mskip\033[0m   %s (%s)\n" "$1" "$2"; }
+ok()   { printf "\033[32mok\033[0m     %s%s\n" "$1" "${2:+ ($2)}"; }
+fail() { printf "\033[31mfail\033[0m   %s\n       %s\n" "$1" "${2//$'\n'/ | }"; }
+
+ff_merge() {
+  local repo="$1"
+  local upstream local_sha remote_sha err
+
+  if [ -n "$(git -C "$repo" status --porcelain 2>/dev/null)" ]; then
+    skip "$repo" "dirty"; return
+  fi
+  if ! git -C "$repo" symbolic-ref -q HEAD >/dev/null; then
+    skip "$repo" "detached HEAD"; return
+  fi
+  if ! upstream=$(git -C "$repo" rev-parse --abbrev-ref --symbolic-full-name '@{u}' 2>/dev/null); then
+    skip "$repo" "no upstream"; return
+  fi
+  if ! git -C "$repo" rev-parse --verify --quiet "$upstream" >/dev/null; then
+    skip "$repo" "upstream $upstream missing"; return
+  fi
+
+  local_sha=$(git -C "$repo" rev-parse HEAD)
+  remote_sha=$(git -C "$repo" rev-parse "$upstream")
+
+  if [ "$local_sha" = "$remote_sha" ]; then
+    ok "$repo" "up to date"
+  elif git -C "$repo" merge-base --is-ancestor "$local_sha" "$remote_sha"; then
+    if err=$(git -C "$repo" merge --ff-only --quiet "$upstream" 2>&1); then
+      ok "$repo"
+      printf '\003updated\t%s\n' "$repo"
+    else
+      fail "$repo" "$err"
+    fi
+  else
+    skip "$repo" "diverged"
+  fi
+}
+
+worktree_prune() {
+  local repo="$1"
+  local default_ref default_branch default_target wt_path branch_ref branch reason
+  local url prs_out br num err dirty
+  local -a remove_args
+  local -A merged_prs
+
+  repo=$(git -C "$repo" worktree list --porcelain | awk '/^worktree /{print substr($0,10); exit}')
+
+  default_ref=$(git -C "$repo" symbolic-ref --quiet refs/remotes/origin/HEAD 2>/dev/null) || return 0
+  default_branch="${default_ref#refs/remotes/origin/}"
+  default_target="origin/$default_branch"
+  git -C "$repo" rev-parse --verify --quiet "$default_target" >/dev/null \
+    || default_target="$default_branch"
+
+  if command -v gh >/dev/null 2>&1 \
+     && url=$(git -C "$repo" remote get-url origin 2>/dev/null) \
+     && [[ "$url" == *github.com* ]]; then
+    prs_out=$(cd "$repo" && timeout "$TIMEOUT" gh pr list --state merged --limit 500 \
+                --json number,headRefName --jq '.[] | "\(.headRefName)\t\(.number)"' 2>/dev/null) || prs_out=""
+    while IFS=$'\t' read -r br num; do
+      [ -n "$br" ] && merged_prs["$br"]="$num"
+    done <<< "$prs_out"
+  fi
+
+  git -C "$repo" worktree prune --quiet 2>/dev/null || true
+
+  while IFS=$'\t' read -r wt_path branch_ref; do
+    [ "$wt_path" = "$repo" ] && continue
+
+    if [ "$branch_ref" = "DETACHED" ]; then
+      printf "\033[36mkeep\033[0m   %s (detached)\n" "$wt_path"
+      continue
+    fi
+
+    branch="${branch_ref#refs/heads/}"
+    reason=""
+
+    if [ -n "$(git -C "$repo" config --get "branch.$branch.remote" 2>/dev/null || true)" ]; then
+      git -C "$wt_path" rev-parse --verify --quiet '@{u}' >/dev/null 2>&1 \
+        || reason="upstream gone"
+    fi
+
+    if [ -z "$reason" ] \
+       && git -C "$repo" merge-base --is-ancestor "$branch" "$default_target" 2>/dev/null; then
+      reason="merged into $default_target"
+    fi
+
+    if [ -z "$reason" ] && [ -n "${merged_prs[$branch]:-}" ]; then
+      reason="merged in PR #${merged_prs[$branch]}"
+    fi
+
+    if [ -z "$reason" ]; then
+      printf "\033[36mkeep\033[0m   %s (%s)\n" "$wt_path" "$branch"
+      continue
+    fi
+
+    dirty=false
+    [ -n "$(git -C "$wt_path" status --porcelain 2>/dev/null)" ] && dirty=true
+
+    if $dirty && [ "$reason" = "upstream gone" ]; then
+      printf "\033[33mskip\033[0m   %s (%s) — dirty + %s\n" "$wt_path" "$branch" "$reason"
+      continue
+    fi
+
+    remove_args=()
+    $dirty && remove_args+=(--force)
+    remove_args+=("$wt_path")
+
+    if err=$(git -C "$repo" worktree remove "${remove_args[@]}" 2>&1); then
+      printf "\033[32mremove\033[0m %s (%s — %s%s)\n" "$wt_path" "$branch" "$reason" "${dirty:+, forced}"
+      printf '\003removed\t%s\n' "$wt_path"
+      git -C "$repo" branch -D "$branch" >/dev/null 2>&1 || true
+    else
+      printf "\033[31mfail\033[0m   %s\n       %s\n" "$wt_path" "${err//$'\n'/ | }"
+    fi
+  done < <(git -C "$repo" worktree list --porcelain | awk '
+    /^worktree / { wt = substr($0, 10) }
+    /^branch /   { print wt "\t" substr($0, 8); wt = "" }
+    /^detached/  { print wt "\tDETACHED"; wt = "" }
+  ')
+}
+
+# One fetch per group so worktrees sharing a gitdir don't race on FETCH_HEAD.lock.
+process_group() {
+  local fetch_repo="$1"; shift
+  local err r rc
+  err=$(timeout "$TIMEOUT" git -C "$fetch_repo" fetch --quiet --no-recurse-submodules 2>&1) || {
+    rc=$?
+    [ $rc -eq 124 ] && err="fetch timeout after $TIMEOUT"
+    for r in "$@"; do fail "$r" "$err"; done
+    return
+  }
+  worktree_prune "$fetch_repo"
+  for r in "$@"; do
+    git -C "$r" rev-parse --show-toplevel >/dev/null 2>&1 && ff_merge "$r"
+  done
+}
+
+{
+  mapfile -t kept < <(
+    fd --hidden --no-ignore --prune '^\.git$' "$root" \
+      | while IFS= read -r e; do printf '%s\n' "$(dirname "$e")"; done \
+      | sort \
+      | awk '
+          prev=="" { prev=$0; print; next }
+          $0 == prev { next }
+          index($0, prev "/") == 1 { next }
+          { prev=$0; print }
+        '
+  )
+
+  declare -A groups
+  for repo in "${kept[@]}"; do
+    if ! common=$(git -C "$repo" rev-parse --git-common-dir 2>/dev/null); then
+      fail "$repo" "not a git repository"
+      continue
+    fi
+    [ "${common:0:1}" = "/" ] || common="$repo/$common"
+    common=$(readlink -f "$common" 2>/dev/null) || common="$repo"
+    groups["$common"]+="$repo"$'\n'
+  done
+
+  running=0
+  for common in "${!groups[@]}"; do
+    members=()
+    while IFS= read -r r; do [ -n "$r" ] && members+=("$r"); done <<< "${groups[$common]}"
+    while [ "$running" -ge "$JOBS" ]; do
+      wait -n; running=$((running - 1))
+    done
+    process_group "${members[0]}" "${members[@]}" &
+    running=$((running + 1))
+  done
+  wait
+} | awk -v GREEN=$'\033[1;32m' -v RESET=$'\033[0m' '
+  /^\003updated\t/ { upd[substr($0, 10)] = 1; next }
+  /^\003removed\t/ { rem[substr($0, 10)] = 1; next }
+  { print; fflush() }
+  function section(label, arr,   keys, n, k, i, j, tmp) {
+    n = 0
+    for (k in arr) keys[++n] = k
+    if (n == 0) {
+      printf "\n%s%s:%s (none)\n", GREEN, label, RESET > "/dev/stderr"
+      return
+    }
+    for (i = 2; i <= n; i++) {
+      tmp = keys[i]; j = i - 1
+      while (j >= 1 && keys[j] > tmp) { keys[j+1] = keys[j]; j-- }
+      keys[j+1] = tmp
+    }
+    printf "\n%s%s:%s\n", GREEN, label, RESET > "/dev/stderr"
+    for (i = 1; i <= n; i++) printf "  %s\n", keys[i] > "/dev/stderr"
+  }
+  END {
+    section("Updated", upd)
+    section("Removed", rem)
+  }
+'
