@@ -6,6 +6,7 @@ tags
 suckless/dwmblocks/build/*
 suckless/dwmblocks/build/dwmblocks
 suckless/dwm/dwm
+suckless/dwm/config.h
 suckless/dwm/dwm.o
 suckless/dmenu/dmenu
 suckless/dmenu/dmenu.o

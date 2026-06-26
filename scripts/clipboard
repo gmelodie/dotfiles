@@ -1,0 +1,20 @@
+#!/bin/sh
+
+# Clipboard history daemon: append each new clipboard value to a capped history file.
+
+histfile="${XDG_CACHE_HOME:-$HOME/.cache}/clipboard"
+maxlines=500
+mkdir -p "$(dirname "$histfile")"
+touch "$histfile"
+chmod 600 "$histfile"
+
+while true; do
+	current="$(xclip -o -selection clipboard 2>/dev/null)"
+	last="$(tail -n 1 "$histfile")"
+	if [ -n "$current" ] && [ "$current" != "$last" ]; then
+		printf '%s\n' "$current" >> "$histfile"
+		tail -n "$maxlines" "$histfile" > "$histfile.tmp" &&
+			mv "$histfile.tmp" "$histfile" && chmod 600 "$histfile"
+	fi
+	sleep 1
+done

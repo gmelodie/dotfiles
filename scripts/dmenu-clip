@@ -1,0 +1,9 @@
+#!/bin/sh
+
+# Pick a clipboard-history entry (see the `clipboard` daemon) and re-copy it.
+
+histfile="${XDG_CACHE_HOME:-$HOME/.cache}/clipboard"
+[ -s "$histfile" ] || exit 0
+
+choice="$(tac "$histfile" | awk '!seen[$0]++' | dmenu -i -l 10 -p 'clip:')" || exit 0
+[ -n "$choice" ] && printf '%s' "$choice" | xclip -selection clipboard

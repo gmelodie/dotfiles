@@ -4,7 +4,9 @@ xrdb -merge ~/.Xresources
 
 feh --bg-scale ~/Pictures/wallpaper.jpg &
 picom -b &
+dunst &
 dwmblocks &
+~/dotfiles/scripts/clipboard &
 
 xset r rate 200 40
 

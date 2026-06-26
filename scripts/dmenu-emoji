@@ -1,0 +1,13 @@
+#!/bin/sh
+
+# Pick an emoji from the list file and copy it to the clipboard.
+
+emojifile="${0%/*}/emoji"
+[ -f "$emojifile" ] || exit 1
+
+chosen="$(dmenu -i -l 20 -p 'emoji:' < "$emojifile")" || exit 0
+[ -n "$chosen" ] || exit 0
+
+emoji="$(printf '%s' "$chosen" | sed 's/ .*//')"
+printf '%s' "$emoji" | xclip -selection clipboard
+notify-send "$emoji copied to clipboard"

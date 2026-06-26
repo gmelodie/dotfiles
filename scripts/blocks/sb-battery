@@ -3,6 +3,29 @@
 # Prints all batteries, their percentage remaining and an emoji corresponding
 # to charge status (🔌 for plugged up, 🔋 for discharging on battery, etc.).
 
+notify_low_battery() { # capacity status
+	statefile="${XDG_RUNTIME_DIR:-/tmp}/sb-battery-warned"
+	[ "$2" = "🔋" ] || { rm -f "$statefile"; return; }
+
+	bucket=""
+	if   [ "$1" -le 2 ];  then bucket=2
+	elif [ "$1" -le 5 ];  then bucket=5
+	elif [ "$1" -le 10 ]; then bucket=10
+	elif [ "$1" -le 15 ]; then bucket=15
+	fi
+	[ -n "$bucket" ] || return
+	[ "$bucket" = "$(cat "$statefile" 2>/dev/null)" ] && return
+
+	urgency=normal
+	title="🔋 Battery low"
+	if [ "$bucket" -le 5 ]; then
+		urgency=critical
+		title="🪫 Battery critically low"
+	fi
+	notify-send -u "$urgency" "$title" "$1% remaining"
+	echo "$bucket" > "$statefile"
+}
+
 case $BLOCK_BUTTON in
 	3) notify-send "🔋 Battery module" "🔋: discharging
 🛑: not charging
@@ -31,5 +54,8 @@ for battery in /sys/class/power_supply/BAT?*; do
 	capacity="$(cat "$battery/capacity" 2>&1)"
 	warn=""
 	[ "$status" = "🔋" ] && [ "$capacity" -le 25 ] && warn=" ❗"
+
+	notify_low_battery "$capacity" "$status"
+
 	printf "%d%% %s%s" "$capacity" "$status" "$warn"
 done && printf "\\n"

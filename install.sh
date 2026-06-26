@@ -40,7 +40,7 @@ function install_archlinux() {
     sudo pacman -Syyu
     sudo pacman -S wget curl base-devel git python bat fd z python-pynvim python-pip python-pipx zsh fzf clang clang-analyzer ripgrep neovim mesa ly libx11 libxft xorg-server xorg-xinit xorg-xauth xorg-apps xorg-setxkbmap xdg-utils libnotify slock openssh feh picom imagemagick maim alacritty \
         pipewire pipewire-pulse pipewire-alsa pipewire-audio bc wireplumber alsa-utils alsa-firmware pavucontrol bluez bluez-utils bluez-deprecated-tools blueman playerctl mpd mpc rmpc \
-        brightnessctl xclip xdotool wikiman arch-wiki-docs ranger nerd-fonts noto-fonts-emoji xsettingsd github-cli
+        brightnessctl xclip xdotool wikiman arch-wiki-docs ranger nerd-fonts noto-fonts-emoji xsettingsd github-cli dunst
     # bc is used for calculating int volume levels from floats
 
     git clone https://aur.archlinux.org/yay-bin.git /tmp/yay-bin
@@ -125,6 +125,10 @@ function config() {
 
     echo -n 'picom configurations...'
     link_config $BASEDIR/picom.conf $HOME/.config/picom.conf
+
+    echo -n 'dunst configurations...'
+    mkdir -p $HOME/.config/dunst
+    link_config $BASEDIR/dunstrc $HOME/.config/dunst/dunstrc
 
     echo -n 'Tmux configurations (.tmux.conf)...'
     link_config $BASEDIR/tmux.conf $HOME/.tmux.conf

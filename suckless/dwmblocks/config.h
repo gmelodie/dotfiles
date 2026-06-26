@@ -18,12 +18,12 @@
 
 // Define blocks for the status feed as X(icon, cmd, interval, signal).
 #define BLOCKS(X) \
-    X("", "/home/gmelodie/dotfiles/scripts/blocks/sb-clock", 10, 1)  \
-    X("", "/home/gmelodie/dotfiles/scripts/blocks/sb-memory", 10, 14) \
-X("", "/home/gmelodie/dotfiles/scripts/blocks/sb-nettraf", 3, 16)  \
-    X("", "/home/gmelodie/dotfiles/scripts/blocks/sb-volume", 1, 10)   \
-    X("", "/home/gmelodie/dotfiles/scripts/blocks/sb-internet", 5, 4)  \
-    X("", "/home/gmelodie/dotfiles/scripts/blocks/sb-battery", 5, 3) 
+    X("", "/home/gmelodie/dotfiles/scripts/blocks/sb-clock", 5, 1)   \
+    X("", "/home/gmelodie/dotfiles/scripts/blocks/sb-memory", 2, 14)  \
+    X("", "/home/gmelodie/dotfiles/scripts/blocks/sb-nettraf", 1, 16) \
+    X("", "/home/gmelodie/dotfiles/scripts/blocks/sb-volume", 1, 10)  \
+    X("", "/home/gmelodie/dotfiles/scripts/blocks/sb-internet", 2, 4) \
+    X("", "/home/gmelodie/dotfiles/scripts/blocks/sb-battery", 3, 3)
     /* X("", "/home/gmelodie/dotfiles/scripts/blocks/sb-cpu", 10, 18) */
     /* X("", "/home/gmelodie/dotfiles/scripts/blocks/sb-iplocate", 0, 27) */
 

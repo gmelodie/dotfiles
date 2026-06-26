@@ -13,19 +13,20 @@ static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const char *fonts[]          = { "Hack Nerd Font:size=18" };
 static const char dmenufont[]       = "Hack Nerd Font:size=18";
+static const int statusrpad         = 24;       /* right margin so the last status block isn't flush against the screen edge */
 
 // Opacity levels
 static const unsigned int baralpha = 0xb0;      // opacity
 static const unsigned int borderalpha = OPAQUE; // Fully opaque (make sure OPAQUE is defined as 0xff)
 
 /* default colors used if xrdb is not loaded */
-static const char normbgcolor[]           = "#076678"; // blue
-static const char selbgcolor[]            = "#b57614"; // yellow
+static const char normbgcolor[]           = "#282828"; // gruvbox bg0
+static const char selbgcolor[]            = "#fe8019"; // gruvbox orange
 
-static const char normfgcolor[]           = "#282828"; // black
-static const char selfgcolor[]            = "#282828";
-static const char normbordercolor[]       = "#282828";
-static const char selbordercolor[]        = "#fe8019"; // orange
+static const char normfgcolor[]           = "#ebdbb2"; // gruvbox fg
+static const char selfgcolor[]            = "#282828"; // dark text on orange
+static const char normbordercolor[]       = "#504945"; // gruvbox bg3
+static const char selbordercolor[]        = "#fe8019"; // gruvbox orange
 
 static const char *colors[][3] = {
        /*               fg           bg           border   */
@@ -113,21 +114,17 @@ static const Layout layouts[] = {
 	{ MOD, XK_Tab,     ACTION##stack, {.i = INC(+1) } }, \
 	{ MOD, XK_k,     ACTION##stack, {.i = INC(-1) } }, \
 	{ MOD, XK_h,     ACTION##stack, {.i = INC(-1) } }, \
-	{ MOD, XK_grave, ACTION##stack, {.i = PREVSEL } },// \
-//	{ MOD, XK_q,     ACTION##stack, {.i = 0 } }, \
-	{ MOD, XK_a,     ACTION##stack, {.i = 1 } }, \
-	{ MOD, XK_z,     ACTION##stack, {.i = 2 } }, \
-	{ MOD, XK_x,     ACTION##stack, {.i = -1 } },
+	{ MOD, XK_grave, ACTION##stack, {.i = PREVSEL } },
 
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
-#define SHCMD(cmd)  (Arg){ .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
+#define SHCMD(cmd)  { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
 #define STATUSBAR "dwmblocks"
 #define BROWSER "firefox"
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", normbgcolor, "-nf", normbordercolor, "-sb", selbgcolor, "-sf", selfgcolor, NULL };
+static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", normbgcolor, "-nf", normfgcolor, "-sb", selbgcolor, "-sf", selfgcolor, NULL };
 static const char *termcmd[]  = { "/home/gmelodie/dotfiles/scripts/alacritty-here", NULL };
 static const char *lockcmd[]  = { "slock", NULL };
 static const char *screenshotcmd[] = { "/bin/sh", "-c", "maim -s | xclip -selection clipboard -t image/png -i", NULL };
@@ -152,32 +149,7 @@ static const Key keys[] = {
 	// { MODKEY,                       XK_b,      togglebar,      {0} },
 	STACKKEYS(MODKEY,                          focus)
 	STACKKEYS(MODKEY|ShiftMask,                push)
-	// { MODKEY,                       XK_i,      incnmaster,     {.i = +1 } },
-	// { MODKEY,                       XK_d,      incnmaster,     {.i = -1 } },
-	// { MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
-	// { MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
-	// { MODKEY|ShiftMask,             XK_h,      setcfact,       {.f = +0.25} },
-	// { MODKEY|ShiftMask,             XK_l,      setcfact,       {.f = -0.25} },
-	// { MODKEY|ShiftMask,             XK_o,      setcfact,       {.f =  0.00} },
 	{ MODKEY,                       XK_Return, zoom,           {0} },
-
-    /* vanity gaps */
-	// { MODKEY|Mod4Mask,              XK_u,      incrgaps,       {.i = +1 } },
-	// { MODKEY|Mod4Mask|ShiftMask,    XK_u,      incrgaps,       {.i = -1 } },
-	// { MODKEY|Mod4Mask,              XK_i,      incrigaps,      {.i = +1 } },
-	// { MODKEY|Mod4Mask|ShiftMask,    XK_i,      incrigaps,      {.i = -1 } },
-	// { MODKEY|Mod4Mask,              XK_o,      incrogaps,      {.i = +1 } },
-	// { MODKEY|Mod4Mask|ShiftMask,    XK_o,      incrogaps,      {.i = -1 } },
-	// { MODKEY|Mod4Mask,              XK_6,      incrihgaps,     {.i = +1 } },
-	// { MODKEY|Mod4Mask|ShiftMask,    XK_6,      incrihgaps,     {.i = -1 } },
-	// { MODKEY|Mod4Mask,              XK_7,      incrivgaps,     {.i = +1 } },
-	// { MODKEY|Mod4Mask|ShiftMask,    XK_7,      incrivgaps,     {.i = -1 } },
-	// { MODKEY|Mod4Mask,              XK_8,      incrohgaps,     {.i = +1 } },
-	// { MODKEY|Mod4Mask|ShiftMask,    XK_8,      incrohgaps,     {.i = -1 } },
-	// { MODKEY|Mod4Mask,              XK_9,      incrovgaps,     {.i = +1 } },
-	// { MODKEY|Mod4Mask|ShiftMask,    XK_9,      incrovgaps,     {.i = -1 } },
-	// { MODKEY|Mod4Mask,              XK_0,      togglegaps,     {0} },
-	// { MODKEY|Mod4Mask|ShiftMask,    XK_0,      defaultgaps,    {0} },
 
 	// { MODKEY,                    XK_Tab,    view,           {0} },
 	{ MODKEY,                       XK_q,      killclient,     {0} },
@@ -200,6 +172,9 @@ static const Key keys[] = {
     // take screenshot (print screen   shot)
 	{ 0,                               XK_Print,    spawn,      { .v= screenshotcmd} },
 	{ MODKEY|ControlMask|ShiftMask,    XK_p,        spawn,      {.v = poweroffcmd } },
+    // clipboard history and emoji picker
+	{ MODKEY,                          XK_c,        spawn,      SHCMD("/home/gmelodie/dotfiles/scripts/dmenu-clip") },
+	{ MODKEY,                          XK_e,        spawn,      SHCMD("/home/gmelodie/dotfiles/scripts/dmenu-emoji") },
 
     /* application bindings */
     { MODKEY,			XK_m,          spawn,      {.v = (const char*[]){ "alacritty", "-e", "rmpc", NULL } } },

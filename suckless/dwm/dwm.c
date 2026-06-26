@@ -33,6 +33,7 @@
 #include <sys/wait.h>
 #include <X11/cursorfont.h>
 #include <X11/keysym.h>
+#include <X11/XKBlib.h>
 #include <X11/Xatom.h>
 #include <X11/Xlib.h>
 #include <X11/Xproto.h>
@@ -202,7 +203,6 @@ static pid_t getstatusbarpid();
 static int gettextprop(Window w, Atom atom, char *text, unsigned int size);
 static void grabbuttons(Client *c, int focused);
 static void grabkeys(void);
-static void incnmaster(const Arg *arg);
 static void keypress(XEvent *e);
 static void killclient(const Arg *arg);
 static void manage(Window w, XWindowAttributes *wa);
@@ -213,7 +213,6 @@ static void motionnotify(XEvent *e);
 static void movemouse(const Arg *arg);
 static Client *nexttagged(Client *c);
 static Client *nexttiled(Client *c);
-static void pop(Client *c);
 static void propertynotify(XEvent *e);
 static void pushstack(const Arg *arg);
 static void quit(const Arg *arg);
@@ -231,8 +230,6 @@ static void setfocus(Client *c);
 static void setfullscreen(Client *c, int fullscreen);
 static void fullscreen(const Arg *arg);
 static void setlayout(const Arg *arg);
-static void setcfact(const Arg *arg);
-static void setmfact(const Arg *arg);
 static void setup(void);
 static void seturgent(Client *c, int urg);
 static void showhide(Client *c);
@@ -270,10 +267,6 @@ static int xerrorstart(Display *dpy, XErrorEvent *ee);
 static void xinitvisual();
 static void zoom(const Arg *arg);
 
-static void keyrelease(XEvent *e);
-static void combotag(const Arg *arg);
-static void comboview(const Arg *arg);
-
 
 static pid_t getparentprocess(pid_t p);
 static int isdescprocess(pid_t p, pid_t c);
@@ -296,7 +289,6 @@ static int (*xerrorxlib)(Display *, XErrorEvent *);
 static unsigned int numlockmask = 0;
 static void (*handler[LASTEvent]) (XEvent *) = {
 	[ButtonPress] = buttonpress,
-	[ButtonRelease] = keyrelease,
 	[ClientMessage] = clientmessage,
 	[ConfigureRequest] = configurerequest,
 	[ConfigureNotify] = configurenotify,
@@ -304,7 +296,6 @@ static void (*handler[LASTEvent]) (XEvent *) = {
 	[EnterNotify] = enternotify,
 	[Expose] = expose,
 	[FocusIn] = focusin,
-	[KeyRelease] = keyrelease,
 	[KeyPress] = keypress,
 	[MappingNotify] = mappingnotify,
 	[MapRequest] = maprequest,
@@ -335,42 +326,6 @@ static xcb_connection_t *xcon;
 struct NumTags { char limitexceeded[LENGTH(tags) > 31 ? -1 : 1]; };
 
 /* function implementations */
-static int combo = 0;
-
-void
-keyrelease(XEvent *e) {
-	combo = 0;
-}
-
-void
-combotag(const Arg *arg) {
-	if(selmon->sel && arg->ui & TAGMASK) {
-		if (combo) {
-			selmon->sel->tags |= arg->ui & TAGMASK;
-		} else {
-			combo = 1;
-			selmon->sel->tags = arg->ui & TAGMASK;
-		}
-		focus(NULL);
-		arrange(selmon);
-	}
-}
-
-void
-comboview(const Arg *arg) {
-	unsigned newtags = arg->ui & TAGMASK;
-	if (combo) {
-		selmon->tagset[selmon->seltags] |= newtags;
-	} else {
-		selmon->seltags ^= 1;	/*toggle tagset*/
-		combo = 1;
-		if (newtags)
-			selmon->tagset[selmon->seltags] = newtags;
-	}
-	focus(NULL);
-	arrange(selmon);
-}
-
 void
 applyrules(Client *c)
 {
@@ -1202,13 +1157,6 @@ grabkeys(void)
 	}
 }
 
-void
-incnmaster(const Arg *arg)
-{
-	selmon->nmaster = MAX(selmon->nmaster + arg->i, 0);
-	arrange(selmon);
-}
-
 #ifdef XINERAMA
 static int
 isuniquegeom(XineramaScreenInfo *unique, size_t n, XineramaScreenInfo *info)
@@ -1229,7 +1177,7 @@ keypress(XEvent *e)
 	XKeyEvent *ev;
 
 	ev = &e->xkey;
-	keysym = XKeycodeToKeysym(dpy, (KeyCode)ev->keycode, 0);
+	keysym = XkbKeycodeToKeysym(dpy, (KeyCode)ev->keycode, 0, 0);
 	for (i = 0; i < LENGTH(keys); i++)
 		if (keysym == keys[i].keysym
 		&& CLEANMASK(keys[i].mod) == CLEANMASK(ev->state)
@@ -1447,15 +1395,6 @@ nexttiled(Client *c)
 {
 	for (; c && (c->isfloating || !ISVISIBLE(c)); c = c->next);
 	return c;
-}
-
-void
-pop(Client *c)
-{
-	detach(c);
-	attach(c);
-	focus(c);
-	arrange(c->mon);
 }
 
 void
@@ -1795,39 +1734,6 @@ setlayout(const Arg *arg)
 		arrange(selmon);
 	else
 		drawbar(selmon);
-}
-
-void
-setcfact(const Arg *arg) {
-	float f;
-	Client *c;
-
-	c = selmon->sel;
-
-	if(!arg || !c || !selmon->lt[selmon->sellt]->arrange)
-		return;
-	f = arg->f + c->cfact;
-	if(arg->f == 0.0)
-		f = 1.0;
-	else if(f < 0.25 || f > 4.0)
-		return;
-	c->cfact = f;
-	arrange(selmon);
-}
-
-/* arg > 1.0 will set mfact absolutely */
-void
-setmfact(const Arg *arg)
-{
-	float f;
-
-	if (!arg || !selmon->lt[selmon->sellt]->arrange)
-		return;
-	f = arg->f < 1.0 ? arg->f + selmon->mfact : arg->f - 1.0;
-	if (f < 0.05 || f > 0.95)
-		return;
-	selmon->mfact = f;
-	arrange(selmon);
 }
 
 void
@@ -2377,10 +2283,9 @@ updatesizehints(Client *c)
 void
 updatestatus(void)
 {
-    Monitor *m;
 	if (!gettextprop(root, XA_WM_NAME, stext, sizeof(stext))) {
 		strcpy(stext, "dwm-"VERSION);
-		statusw = TEXTW(stext) - lrpad + 2;
+		statusw = TEXTW(stext) - lrpad + 2 + statusrpad;
 	} else {
 		char *text, *s, ch;
 
@@ -2394,7 +2299,7 @@ updatestatus(void)
 				text = s + 1;
 			}
 		}
-		statusw += TEXTW(text) - lrpad + 2;
+		statusw += TEXTW(text) - lrpad + 2 + statusrpad;
 
 	}
     // update status in all monitors
