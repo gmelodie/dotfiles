@@ -21,7 +21,7 @@
     X("", "/home/gmelodie/dotfiles/scripts/blocks/sb-clock", 10, 1)  \
     X("", "/home/gmelodie/dotfiles/scripts/blocks/sb-memory", 10, 14) \
 X("", "/home/gmelodie/dotfiles/scripts/blocks/sb-nettraf", 3, 16)  \
-    X("", "/home/gmelodie/dotfiles/scripts/blocks/sb-volume", 0, 10)   \
+    X("", "/home/gmelodie/dotfiles/scripts/blocks/sb-volume", 1, 10)   \
     X("", "/home/gmelodie/dotfiles/scripts/blocks/sb-internet", 5, 4)  \
     X("", "/home/gmelodie/dotfiles/scripts/blocks/sb-battery", 5, 3) 
     /* X("", "/home/gmelodie/dotfiles/scripts/blocks/sb-cpu", 10, 18) */
