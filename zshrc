@@ -290,3 +290,5 @@ ai() {
 
     "$HOME/repos/ai-docker/ai.sh" "$@"
 }
+
+alias bd='sudo bandwhich'
