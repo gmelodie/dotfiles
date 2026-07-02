@@ -189,6 +189,8 @@ static void detachstack(Client *c);
 static Monitor *dirtomon(int dir);
 static void drawbar(Monitor *m);
 static void drawbars(void);
+static void drawstatusbar(Monitor *m);
+static int status2dwidth(char *text);
 static void enternotify(XEvent *e);
 static void expose(XEvent *e);
 static Client *findbefore(Client *c);
@@ -277,7 +279,7 @@ static pid_t winpid(Window w);
 /* variables */
 static Client *prevzoom = NULL;
 static const char broken[] = "broken";
-static char stext[256];
+static char stext[1024];
 static int statusw;
 static int statussig;
 static pid_t statuspid = -1;
@@ -572,7 +574,7 @@ buttonpress(XEvent *e)
 				if ((unsigned char)(*s) < ' ') {
 					ch = *s;
 					*s = '\0';
-					x += TEXTW(text) - lrpad;
+					x += status2dwidth(text);
 					*s = ch;
 					text = s + 1;
 					if (x >= ev->x)
@@ -627,7 +629,7 @@ cleanup(void)
 		cleanupmon(mons);
 	for (i = 0; i < CurLast; i++)
 		drw_cur_free(drw, cursor[i]);
-	for (i = 0; i < LENGTH(colors); i++)
+	for (i = 0; i < LENGTH(colors) + 1; i++)
 		free(scheme[i]);
 	free(scheme);
 	XDestroyWindow(dpy, wmcheckwin);
@@ -843,6 +845,95 @@ dirtomon(int dir)
 	return m;
 }
 
+int
+status2dwidth(char *text)
+{
+	/* rendered pixel width of a status segment, ignoring ^...^ escapes */
+	int w = 0, i = -1;
+	short isCode = 0;
+	char *seg = text;
+
+	while (text[++i]) {
+		if (text[i] != '^')
+			continue;
+		if (!isCode) {
+			isCode = 1;
+			text[i] = '\0';
+			w += TEXTW(seg) - lrpad;
+			text[i] = '^';
+			if (text[i + 1] == 'f')
+				w += atoi(text + i + 2);
+		} else {
+			isCode = 0;
+			seg = text + i + 1;
+		}
+	}
+	if (!isCode)
+		w += TEXTW(seg) - lrpad;
+	return w;
+}
+
+void
+drawstatusbar(Monitor *m)
+{
+	int x, w, i;
+	short isCode = 0;
+	char *text, *p, *seg;
+
+	if (!(text = ecalloc(strlen(stext) + 1, sizeof(char))))
+		return;
+	/* strip clickable-block signal bytes before rendering */
+	p = text;
+	for (i = 0; stext[i]; i++)
+		if ((unsigned char)stext[i] >= ' ')
+			*p++ = stext[i];
+	*p = '\0';
+
+	/* scratch scheme so per-block colors don't corrupt SchemeStatus */
+	drw_setscheme(drw, scheme[LENGTH(colors)]);
+	drw->scheme[ColFg] = scheme[SchemeStatus][ColFg];
+	drw->scheme[ColBg] = scheme[SchemeStatus][ColBg];
+
+	x = m->ww - statusw;
+	seg = text;
+	i = -1;
+	while (text[++i]) {
+		if (text[i] != '^' || isCode)
+			continue;
+		isCode = 1;
+		text[i] = '\0';
+		w = TEXTW(seg) - lrpad;
+		drw_text(drw, x, 0, w, bh, 0, seg, 0);
+		x += w;
+		while (text[++i] != '^') {
+			if (text[i] == 'c') {
+				char buf[8];
+				memcpy(buf, text + i + 1, 7);
+				buf[7] = '\0';
+				drw_clr_create(drw, &drw->scheme[ColFg], buf, OPAQUE);
+				i += 7;
+			} else if (text[i] == 'b') {
+				char buf[8];
+				memcpy(buf, text + i + 1, 7);
+				buf[7] = '\0';
+				drw_clr_create(drw, &drw->scheme[ColBg], buf, baralpha);
+				i += 7;
+			} else if (text[i] == 'd') {
+				drw->scheme[ColFg] = scheme[SchemeStatus][ColFg];
+				drw->scheme[ColBg] = scheme[SchemeStatus][ColBg];
+			} else if (text[i] == 'f') {
+				x += atoi(text + ++i);
+			}
+		}
+		seg = text + i + 1;
+		isCode = 0;
+	}
+	if (!isCode)
+		drw_text(drw, x, 0, TEXTW(seg) - lrpad + 2, bh, 0, seg, 0);
+	drw_setscheme(drw, scheme[SchemeNorm]);
+	free(text);
+}
+
 void
 drawbar(Monitor *m)
 {
@@ -856,23 +947,8 @@ drawbar(Monitor *m)
 		return;
 
 	/* draw status first so it can be overdrawn by tags later */
-    char *text, *s, ch;
-    drw_setscheme(drw, scheme[SchemeStatus]);
-    x = 0;
-    for (text = s = stext; *s; s++) {
-        if ((unsigned char)(*s) < ' ') {
-            ch = *s;
-            *s = '\0';
-            tw = TEXTW(text) - lrpad;
-            drw_text(drw, m->ww - statusw + x, 0, tw, bh, 0, text, 0);
-            x += tw;
-            *s = ch;
-            text = s + 1;
-        }
-    }
-    tw = TEXTW(text) - lrpad + 2;
-    drw_text(drw, m->ww - statusw + x, 0, tw, bh, 0, text, 0);
-    tw = statusw;
+	drawstatusbar(m);
+	tw = statusw;
 
 	for (c = m->clients; c; c = c->next) {
 		occ |= c->tags == TAGMASK ? 0 : c->tags;
@@ -1785,9 +1861,11 @@ setup(void)
 	cursor[CurResize] = drw_cur_create(drw, XC_sizing);
 	cursor[CurMove] = drw_cur_create(drw, XC_fleur);
 	/* init appearance */
-	scheme = ecalloc(LENGTH(colors), sizeof(Clr *));
+	scheme = ecalloc(LENGTH(colors) + 1, sizeof(Clr *));
 	for (i = 0; i < LENGTH(colors); i++)
 		scheme[i] = drw_scm_create(drw, colors[i], alphas[i], 3);
+	/* scratch scheme for status2d per-block colors */
+	scheme[LENGTH(colors)] = drw_scm_create(drw, colors[SchemeStatus], alphas[SchemeStatus], 3);
 	/* init bars */
 	updatebars();
 	updatestatus();
@@ -2294,12 +2372,12 @@ updatestatus(void)
 			if ((unsigned char)(*s) < ' ') {
 				ch = *s;
 				*s = '\0';
-				statusw += TEXTW(text) - lrpad;
+				statusw += status2dwidth(text);
 				*s = ch;
 				text = s + 1;
 			}
 		}
-		statusw += TEXTW(text) - lrpad + 2 + statusrpad;
+		statusw += status2dwidth(text) + 2 + statusrpad;
 
 	}
     // update status in all monitors

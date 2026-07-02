@@ -1,0 +1,3 @@
+#!/bin/sh
+# gruvbox mem block — aqua icon
+free -h --si | awk '/^Mem/ {printf "^c#8ec07c^󰍛 ^c#ebdbb2^%s^d^\n", $3}'

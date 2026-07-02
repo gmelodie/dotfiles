@@ -1,0 +1,8 @@
+#!/bin/sh
+# gruvbox network block — green when up, red when down
+if ip route get 1.1.1.1 >/dev/null 2>&1; then
+    iface=$(ip route get 1.1.1.1 | awk '{print $5; exit}')
+    printf "^c#b8bb26^󰈁 ^c#ebdbb2^%s^d^\n" "$iface"
+else
+    printf "^c#fb4934^󰈂 down^d^\n"
+fi

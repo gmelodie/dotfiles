@@ -1,0 +1,4 @@
+#!/bin/sh
+# gruvbox disk block — orange icon; point at / or your zpool mount
+MOUNT="${1:-/}"
+df -h "$MOUNT" | awk 'NR==2 {printf "^c#fe8019^󰋊 ^c#ebdbb2^%s^d^\n", $4}'

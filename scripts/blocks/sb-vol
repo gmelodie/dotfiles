@@ -1,0 +1,47 @@
+#!/bin/sh
+# gruvbox volume block — purple icon.
+# Controls the sink you actually hear: targets the sink a running playback
+# stream is routed to (Bluetooth, HDMI, …) rather than a possibly-stale
+# default sink. Falls back to @DEFAULT_AUDIO_SINK@ when nothing is playing.
+
+# Print the node id of a sink that has a running playback stream, else nothing.
+# pw-dump node ids are the same ids wpctl operates on.
+active_sink() {
+    command -v pw-dump >/dev/null && command -v jq >/dev/null || return
+    pw-dump 2>/dev/null | jq -r '
+        [ .[] | select(.type=="PipeWire:Interface:Node") ] as $n
+        | [ $n[] | select(.info.props["media.class"]=="Audio/Sink") | .id ] as $sinks
+        | [ $n[]
+            | select(.info.props["media.class"]=="Stream/Output/Audio")
+            | select(.info.state=="running") | .id ] as $streams
+        | [ .[] | select(.type=="PipeWire:Interface:Link") | .info
+            | select(.["output-node-id"] as $o | $streams | index($o))
+            | .["input-node-id"] ]
+        | map(select(. as $s | $sinks | index($s)))
+        | (unique | .[0] // empty)
+    '
+}
+
+if command -v wpctl >/dev/null; then
+    sink="$(active_sink)"
+    [ -n "$sink" ] || sink="@DEFAULT_AUDIO_SINK@"
+
+    case "$BLOCK_BUTTON" in
+        1) wpctl set-mute "$sink" toggle && pkill -RTMIN+11 dwmblocks ;;
+        4) wpctl set-volume -l 1.5 "$sink" 5%+ && pkill -RTMIN+11 dwmblocks ;;
+        5) wpctl set-volume "$sink" 5%- && pkill -RTMIN+11 dwmblocks ;;
+    esac
+
+    v="$(wpctl get-volume "$sink" 2>/dev/null)"
+    vol="$(printf "%s" "$v" | awk '{printf "%d", $2*100}')"
+    case "$v" in *MUTED*) printf "^c#928374^󰝟 ^c#ebdbb2^%3d%%^d^\n" "$vol"; exit ;; esac
+else
+    case "$BLOCK_BUTTON" in
+        1) pamixer -t && pkill -RTMIN+11 dwmblocks ;;
+        4) pamixer -i 5 && pkill -RTMIN+11 dwmblocks ;;
+        5) pamixer -d 5 && pkill -RTMIN+11 dwmblocks ;;
+    esac
+    vol="$(pamixer --get-volume)"
+    [ "$(pamixer --get-mute)" = "true" ] && { printf "^c#928374^󰝟 ^c#ebdbb2^%3d%%^d^\n" "$vol"; exit; }
+fi
+printf "^c#d3869b^󰕾 ^c#ebdbb2^%3d%%^d^\n" "$vol"

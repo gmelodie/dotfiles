@@ -34,10 +34,24 @@ bool status_update(status *const status) {
         const block *const block = &status->blocks[i];
 
         if (strlen(block->output) > 0) {
+            // Whitespace-only output (e.g. the battery block's trailing padding
+            // on a battery-less desktop) is kept for spacing but treated as
+            // "invisible": no delimiter is prepended, so no lone separator
+            // dangles against the screen edge.
+            bool is_visible = false;
+            for (const char *c = block->output; *c != '\0'; ++c) {
+                if (*c != ' ' && *c != '\t') {
+                    is_visible = true;
+                    break;
+                }
+            }
+
 #if LEADING_DELIMITER
-            (void)strncat(status->current, DELIMITER, LEN(DELIMITER));
+            if (is_visible) {
+                (void)strncat(status->current, DELIMITER, LEN(DELIMITER));
+            }
 #else
-            if (status->current[0] != '\0') {
+            if (is_visible && status->current[0] != '\0') {
                 (void)strncat(status->current, DELIMITER, LEN(DELIMITER));
             }
 #endif

@@ -1,11 +1,10 @@
 #!/bin/sh
-
-# Prints all batteries, their percentage remaining and an emoji corresponding
-# to charge status (🔌 for plugged up, 🔋 for discharging on battery, etc.).
+# gruvbox battery block — colored Nerd Font icon + fg text (Option 1 flat).
+# Green while charging, red/orange/yellow/green by level while discharging.
 
 notify_low_battery() { # capacity status
 	statefile="${XDG_RUNTIME_DIR:-/tmp}/sb-battery-warned"
-	[ "$2" = "🔋" ] || { rm -f "$statefile"; return; }
+	[ "$2" = "discharging" ] || { rm -f "$statefile"; return; }
 
 	bucket=""
 	if   [ "$1" -le 2 ];  then bucket=2
@@ -17,45 +16,46 @@ notify_low_battery() { # capacity status
 	[ "$bucket" = "$(cat "$statefile" 2>/dev/null)" ] && return
 
 	urgency=normal
-	title="🔋 Battery low"
+	title="Battery low"
 	if [ "$bucket" -le 5 ]; then
 		urgency=critical
-		title="🪫 Battery critically low"
+		title="Battery critically low"
 	fi
 	notify-send -u "$urgency" "$title" "$1% remaining"
 	echo "$bucket" > "$statefile"
 }
 
 case $BLOCK_BUTTON in
-	3) notify-send "🔋 Battery module" "🔋: discharging
-🛑: not charging
-♻: stagnant charge
-🔌: charging
-⚡: charged
-- Scroll to change adjust xbacklight." ;;
+	3) notify-send "Battery module" "Scroll to adjust backlight." ;;
 	4) xbacklight -inc 10 ;;
 	5) xbacklight -dec 10 ;;
 	6) setsid -f "$TERMINAL" -e "$EDITOR" "$0" ;;
 esac
 
-# Loop through all attached batteries and format the info
+# Loop through all attached batteries and format the info.
+first=1
 for battery in /sys/class/power_supply/BAT?*; do
-	# If non-first battery, print a space separator.
-	[ -n "${capacity+x}" ] && printf " "
-	# Sets up the status and capacity
-	case "$(cat "$battery/status" 2>&1)" in
-		"Full") status="⚡" ;;
-		"Discharging") status="🔋" ;;
-		"Charging") status="🔌" ;;
-		"Not charging") status="🛑" ;;
-		"Unknown") status="♻️" ;;
-		*) exit 1 ;;
+	[ -r "$battery/capacity" ] || continue
+	[ "$first" = 1 ] || printf " "
+	first=0
+
+	capacity="$(cat "$battery/capacity" 2>/dev/null)"
+	state="discharging"
+	case "$(cat "$battery/status" 2>/dev/null)" in
+		Full)           icon="󰂅"; col="#8ec07c"; state="full" ;;
+		Charging)       icon="󰂄"; col="#8ec07c"; state="charging" ;;
+		"Not charging") icon="󰂃"; col="#928374"; state="idle" ;;
+		Discharging)
+			if   [ "$capacity" -le 15 ]; then icon="󰁺"; col="#fb4934"
+			elif [ "$capacity" -le 40 ]; then icon="󰁽"; col="#fe8019"
+			elif [ "$capacity" -le 80 ]; then icon="󰂀"; col="#fabd2f"
+			else icon="󰁹"; col="#b8bb26"
+			fi ;;
+		*) icon="󰂑"; col="#928374" ;;
 	esac
-	capacity="$(cat "$battery/capacity" 2>&1)"
-	warn=""
-	[ "$status" = "🔋" ] && [ "$capacity" -le 25 ] && warn=" ❗"
 
-	notify_low_battery "$capacity" "$status"
-
-	printf "%d%% %s%s" "$capacity" "$status" "$warn"
-done && printf "\\n"
+	notify_low_battery "$capacity" "$state"
+	printf "^c%s^%s ^c#ebdbb2^%3d%%^d^" "$col" "$icon" "$capacity"
+done
+# Trailing padding separates this (rightmost) block from the screen corner.
+printf "  \\n"

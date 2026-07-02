@@ -11,8 +11,8 @@ static const unsigned int snap      = 32;       /* snap pixel */
 static const int swallowfloating    = 0;        /* 1 means swallow floating windows by default */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const char *fonts[]          = { "Hack Nerd Font:size=18" };
-static const char dmenufont[]       = "Hack Nerd Font:size=18";
+static const char *fonts[]          = { "JetBrainsMono Nerd Font:size=16" };
+static const char dmenufont[]       = "JetBrainsMono Nerd Font:size=16";
 static const int statusrpad         = 24;       /* right margin so the last status block isn't flush against the screen edge */
 
 // Opacity levels
@@ -21,12 +21,12 @@ static const unsigned int borderalpha = OPAQUE; // Fully opaque (make sure OPAQU
 
 /* default colors used if xrdb is not loaded */
 static const char normbgcolor[]           = "#282828"; // gruvbox bg0
-static const char selbgcolor[]            = "#fe8019"; // gruvbox orange
+static const char selbgcolor[]            = "#b57614"; // gruvbox dark/faded yellow
 
 static const char normfgcolor[]           = "#ebdbb2"; // gruvbox fg
-static const char selfgcolor[]            = "#282828"; // dark text on orange
+static const char selfgcolor[]            = "#282828"; // dark text on yellow
 static const char normbordercolor[]       = "#504945"; // gruvbox bg3
-static const char selbordercolor[]        = "#fe8019"; // gruvbox orange
+static const char selbordercolor[]        = "#d65d0e"; // gruvbox orange
 
 static const char *colors[][3] = {
        /*               fg           bg           border   */
@@ -200,9 +200,9 @@ static const Key keys[] = {
 
     /* fn keys */
     { 0,                            XF86XK_KbdBrightnessUp,     spawn,      SHCMD("/home/gmelodie/dotfiles/scripts/kblight.sh") },
-    { 0,                            XF86XK_AudioMute,     spawn,      SHCMD("wpctl set-mute @DEFAULT_SINK@ toggle; pkill -RTMIN+10 dwmblocks") },
-    { 0,                            XF86XK_AudioLowerVolume,     spawn,      SHCMD("wpctl set-volume @DEFAULT_SINK@ 5%-; pkill -RTMIN+10 dwmblocks") },
-    { 0,                            XF86XK_AudioRaiseVolume,     spawn,      SHCMD("wpctl set-volume @DEFAULT_SINK@ 5%+; pkill -RTMIN+10 dwmblocks") },
+    { 0,                            XF86XK_AudioMute,     spawn,      SHCMD("wpctl set-mute @DEFAULT_SINK@ toggle; pkill -RTMIN+11 dwmblocks") },
+    { 0,                            XF86XK_AudioLowerVolume,     spawn,      SHCMD("wpctl set-volume @DEFAULT_SINK@ 5%-; pkill -RTMIN+11 dwmblocks") },
+    { 0,                            XF86XK_AudioRaiseVolume,     spawn,      SHCMD("wpctl set-volume @DEFAULT_SINK@ 5%+; pkill -RTMIN+11 dwmblocks") },
     { 0,                            XF86XK_AudioPrev,     spawn,      SHCMD("playerctl previous") },
     { 0,                            XF86XK_AudioNext,     spawn,      SHCMD("playerctl next") },
     { 0,                            XF86XK_AudioPlay,     spawn,      SHCMD("playerctl play-pause") },
