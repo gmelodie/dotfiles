@@ -13,7 +13,7 @@ static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const char *fonts[]          = { "JetBrainsMono Nerd Font:size=16" };
 static const char dmenufont[]       = "JetBrainsMono Nerd Font:size=16";
-static const int statusrpad         = 24;       /* right margin so the last status block isn't flush against the screen edge */
+static const int statusrpad         = 0;        /* right margin; the sb-battery script's trailing spaces already supply the corner gap */
 
 // Opacity levels
 static const unsigned int baralpha = 0xb0;      // opacity

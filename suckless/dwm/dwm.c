@@ -946,6 +946,11 @@ drawbar(Monitor *m)
 	if (!m->showbar)
 		return;
 
+	/* paint the whole bar background first so the region past the status
+	 * (the statusrpad margin) is bar-colored, not a transparent hole */
+	drw_setscheme(drw, scheme[SchemeNorm]);
+	drw_rect(drw, 0, 0, m->ww, bh, 1, 1);
+
 	/* draw status first so it can be overdrawn by tags later */
 	drawstatusbar(m);
 	tw = statusw;
