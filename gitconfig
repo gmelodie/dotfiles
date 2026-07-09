@@ -23,10 +23,10 @@
     a = add --all
     d = diff
     s = status
-    c = commit
+    c = commit -S
     l = log --oneline
     ch = checkout
-    oops = commit --amend --no-edit
+    oops = commit -S --amend --no-edit
     unadd = restore --staged
     conflicts = diff --name-only --diff-filter=U
     whatadded = log --diff-filter=A
