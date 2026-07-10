@@ -27,7 +27,7 @@
     separator_color = frame
     sort = yes
 
-    font = Hack Nerd Font 18
+    font = JetBrainsMono Nerd Font 16
     line_height = 0
     markup = full
     format = "<b>%s</b>\n%b"
