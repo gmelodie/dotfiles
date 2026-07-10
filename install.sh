@@ -89,6 +89,11 @@ function post_install() {
 function config() {
     echo  '############# Installing configuration files...'
 
+    echo -n 'ly display manager (config.ini)...'
+    sudo mkdir -p /etc/ly/
+    sudo ln -sf $BASEDIR/ly/config.ini /etc/ly/config.ini
+    echo -e "${GREEN}Done${NC}"
+
     if $MARTINHA; then
         echo 'Keyd configurations (keyd.conf)...'
         sudo mkdir -p /etc/keyd/
