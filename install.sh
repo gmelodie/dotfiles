@@ -167,6 +167,25 @@ function config() {
     mkdir -p $HOME/.config/rmpc/themes
     link_config $BASEDIR/rmpc.ron $HOME/.config/rmpc/rmpc.ron
     link_config $BASEDIR/gmelodies-theme.ron $HOME/.config/rmpc/themes/gmelodies-theme.ron
+
+    echo -n 'WirePlumber Bluetooth speaker priority (51-bt-priority.conf)...'
+    mkdir -p $HOME/.config/wireplumber/wireplumber.conf.d
+    link_config $BASEDIR/wireplumber/51-bt-priority.conf $HOME/.config/wireplumber/wireplumber.conf.d/51-bt-priority.conf
+
+    echo -n 'Bluetooth autoconnect + audio-routing service (bt-audio-autoconnect)...'
+    mkdir -p $HOME/.config/systemd/user
+    link_config $BASEDIR/systemd/bt-audio-autoconnect.service $HOME/.config/systemd/user/bt-audio-autoconnect.service
+    systemctl --user daemon-reload
+    systemctl --user enable --now bt-audio-autoconnect.service
+    # scripts/bt-audio-autoconnect and scripts/bt-jota are already on PATH via zshrc
+
+    echo 'BlueZ autoconnect policy (main.conf: AutoEnable + reconnect)...'
+    sudo sed -i \
+        -e 's/^#\?ReconnectAttempts=.*/ReconnectAttempts=7/' \
+        -e 's/^#\?ReconnectIntervals=.*/ReconnectIntervals=1,2,4,8,16,32,64/' \
+        -e 's/^#\?AutoEnable=.*/AutoEnable=true/' \
+        /etc/bluetooth/main.conf
+    sudo systemctl restart bluetooth
 }
 
 function build_suckless() {

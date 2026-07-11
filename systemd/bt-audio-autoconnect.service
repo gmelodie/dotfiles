@@ -1,0 +1,15 @@
+[Unit]
+Description=Autoconnect preferred Bluetooth speaker and route audio to it
+After=bluetooth.target pipewire.service wireplumber.service
+PartOf=graphical-session.target
+
+[Service]
+Type=simple
+# Re-run the enforce script every 15s for the whole session: keeps the
+# preferred device connected and audio routed to it (JotaBellas > Ultra Quicos).
+ExecStart=/bin/sh -c 'while true; do "%h/dotfiles/scripts/bt-audio-autoconnect"; sleep 15; done'
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+# One-shot (re)pair + connect + route audio for JotaBellas.
+#
+# JotaBellas (a JBL speaker) does NOT persist its Bluetooth bond across power
+# cycles: after power-on it shows up unpaired and unreachable until you make it
+# connectable. Normal flow to get sound:
+#
+#   1. Power the speaker on.
+#   2. Press its dedicated Bluetooth button once (short press) so it becomes
+#      connectable. The bt-audio-autoconnect service then grabs it within ~15s
+#      and routes audio automatically -- usually you need nothing else.
+#
+# Use THIS script only if that is not enough and you need a full clean re-pair
+# (put the speaker in PAIRING MODE first -- hold the Bluetooth button until it
+# blinks fast), then run:  bt-jota
+set -uo pipefail
+
+JOTA=28:FA:19:6E:FD:B5
+SINK=bluez_output.28_FA_19_6E_FD_B5.1
+
+echo ">> Make sure JotaBellas is in PAIRING MODE (fast blinking), then wait..."
+
+# Clear any stale/half-paired state so we start clean.
+bluetoothctl disconnect "$JOTA" >/dev/null 2>&1 || true
+bluetoothctl remove "$JOTA" >/dev/null 2>&1 || true
+sleep 1
+
+# Discover + pair, retrying a few times to catch the pairing-mode window.
+paired=0
+for attempt in 1 2 3 4 5; do
+  echo ">> pairing attempt $attempt ..."
+  timeout 12 bluetoothctl --timeout 10 scan on >/dev/null 2>&1
+  if timeout 25 bluetoothctl pair "$JOTA" 2>&1 | grep -qi "Pairing successful"; then
+    paired=1; break
+  fi
+  sleep 2
+done
+
+if [ "$paired" -ne 1 ]; then
+  echo "!! Could not pair. Is JotaBellas actually in pairing mode (fast blink)?"
+  exit 1
+fi
+
+bluetoothctl trust "$JOTA" >/dev/null 2>&1
+timeout 15 bluetoothctl connect "$JOTA" >/dev/null 2>&1
+sleep 4
+
+# Verify the audio profile (A2DP sink) actually came up.
+if pactl list short sinks 2>/dev/null | grep -q "$SINK"; then
+  pactl set-default-sink "$SINK" 2>/dev/null
+  pactl list short sink-inputs 2>/dev/null | while read -r idx _; do
+    pactl move-sink-input "$idx" "$SINK" 2>/dev/null || true
+  done
+  echo ">> JotaBellas connected and audio routed to it. Enjoy."
+else
+  echo "!! Connected but no audio sink appeared. Try running bt-jota again."
+  exit 1
+fi

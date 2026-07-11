@@ -1,0 +1,72 @@
+#!/usr/bin/env bash
+# Keep the preferred Bluetooth speaker connected and route all audio to it.
+# Priority: JotaBellas > Ultra Quicos.
+#   - Reconnects the preferred device if it drifts off (when it is reachable).
+#   - Sets it as the default PipeWire sink and moves existing streams to it.
+#   - Falls back to Ultra Quicos whenever JotaBellas is absent.
+# Run periodically by the bt-audio-autoconnect.service user unit.
+set -uo pipefail
+
+JOTA=28:FA:19:6E:FD:B5   # JotaBellas   (priority 1)
+ULTRA=BC:87:FA:A0:2A:4D  # Ultra Quicos (priority 2)
+
+is_connected() { bluetoothctl info "$1" 2>/dev/null | grep -q "Connected: yes"; }
+
+# 1) Connect in priority order. Always try JotaBellas; only fall back to
+#    Ultra Quicos when neither is connected (so JotaBellas always wins).
+#    timeout guards against a connect call hanging the loop.
+is_connected "$JOTA"  || timeout 12 bluetoothctl connect "$JOTA"  >/dev/null 2>&1
+if ! is_connected "$JOTA" && ! is_connected "$ULTRA"; then
+  timeout 12 bluetoothctl connect "$ULTRA" >/dev/null 2>&1
+fi
+
+# 2) Find the PipeWire sink for a given MAC (colons -> underscores).
+sink_for() {
+  local m=${1//:/_}
+  pactl list short sinks 2>/dev/null | awk -v p="bluez_output.$m" '$2 ~ p {print $2; exit}'
+}
+
+# ensure_sink: return the a2dp sink for a connected device, forcing the A2DP
+# profile back if the sink went away (e.g. the speaker deep-slept and dropped
+# its transport). Recovers the "connected but silent, no sink" case.
+ensure_sink() {
+  local mac=$1 s
+  s=$(sink_for "$mac")
+  if [ -z "$s" ]; then
+    pactl set-card-profile "bluez_card.${mac//:/_}" a2dp-sink 2>/dev/null || true
+    sleep 1
+    s=$(sink_for "$mac")
+  fi
+  printf '%s' "$s"
+}
+
+# 3) Pick the highest-priority connected speaker and make it the default sink.
+desired=""
+if is_connected "$JOTA"; then
+  desired=$(ensure_sink "$JOTA")
+fi
+if [ -z "$desired" ] && is_connected "$ULTRA"; then
+  desired=$(ensure_sink "$ULTRA")
+fi
+
+[ -z "$desired" ] && exit 0   # no speaker available -> leave audio alone
+
+if [ "$(pactl get-default-sink 2>/dev/null)" != "$desired" ]; then
+  pactl set-default-sink "$desired" 2>/dev/null
+
+  # Wake the speaker's amp BEFORE moving real audio to it. BT speakers suspend
+  # on idle and drop into a deep sleep; playing a short INAUDIBLE clip (~-60 dBFS,
+  # see assets/wake.wav) re-opens the A2DP transport (AVDTP START) and powers the
+  # amp up so the first real audio isn't clipped/lost -- with no audible beep.
+  SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
+  WAKE="$SCRIPT_DIR/../assets/wake.wav"
+  if [ -f "$WAKE" ] && command -v pw-play >/dev/null 2>&1; then
+    timeout 4 pw-play --target "$desired" "$WAKE" >/dev/null 2>&1 || true
+    sleep 0.2   # let the amp settle before real audio lands
+  fi
+
+  # Move anything already playing over to the (now awake) speaker.
+  pactl list short sink-inputs 2>/dev/null | while read -r idx _; do
+    pactl move-sink-input "$idx" "$desired" 2>/dev/null || true
+  done
+fi
