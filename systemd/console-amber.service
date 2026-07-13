@@ -1,0 +1,24 @@
+# Remaps the 16-color Linux console palette to amber before ly draws.
+# The bare TTY can't do truecolor (the kernel snaps it to 16 colors), so this
+# is where ly's amber actually comes from. Palette lives in ../ly/amber-vtrgb
+# (setvtrgb format: 3 lines — reds, greens, blues — 16 values each, no comments).
+# ly (8-color mode) uses slot 0=bg 0x0D0701, 1=border 0x7A5500, 7=fg 0xFFA000.
+# The other 13 slots are a legible amber luminance ramp: 8=dim (comments),
+# 0-7 body tones, 9-15 pale/bright (dirs, execs, symlinks, grep matches, bold)
+# so colored TTY output stays readable on the monochrome amber palette.
+[Unit]
+Description=Amber CRT palette for the virtual console
+Documentation=man:setvtrgb(8)
+DefaultDependencies=no
+After=systemd-vconsole-setup.service
+Before=ly.service
+Conflicts=shutdown.target
+Before=shutdown.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/bin/setvtrgb /etc/ly/amber-vtrgb
+
+[Install]
+WantedBy=multi-user.target

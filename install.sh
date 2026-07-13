@@ -89,9 +89,15 @@ function post_install() {
 function config() {
     echo  '############# Installing configuration files...'
 
-    echo -n 'ly display manager (config.ini)...'
+    echo -n 'ly display manager (config.ini + amber console palette)...'
     sudo mkdir -p /etc/ly/
     sudo ln -sf $BASEDIR/ly/config.ini /etc/ly/config.ini
+    sudo ln -sf $BASEDIR/ly/amber-vtrgb /etc/ly/amber-vtrgb
+    # The TTY is 16-color only, so amber comes from remapping the console
+    # palette (setvtrgb) before ly draws — not from ly truecolor.
+    sudo ln -sf $BASEDIR/systemd/console-amber.service /etc/systemd/system/console-amber.service
+    sudo systemctl daemon-reload
+    sudo systemctl enable --now console-amber.service
     echo -e "${GREEN}Done${NC}"
 
     if $MARTINHA; then
