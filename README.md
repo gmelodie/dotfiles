@@ -33,3 +33,22 @@ Print usage help
 
 Be sure to log out and log back into your account so that the changes in zsh can take place
 
+## Bluetooth audio
+`./install.sh` deploys the WirePlumber configs and the autoconnect service. To
+set it up (or repair it) by hand:
+```bash
+# WirePlumber configs (A2DP-only + speaker priority)
+mkdir -p ~/.config/wireplumber/wireplumber.conf.d
+ln -sf "$PWD/wireplumber/51-bt-priority.conf"  ~/.config/wireplumber/wireplumber.conf.d/
+ln -sf "$PWD/wireplumber/52-bt-a2dp-only.conf" ~/.config/wireplumber/wireplumber.conf.d/
+systemctl --user restart wireplumber
+
+# Autoconnect + audio-routing service (keeps the preferred speaker connected)
+mkdir -p ~/.config/systemd/user
+ln -sf "$PWD/systemd/bt-audio-autoconnect.service" ~/.config/systemd/user/
+systemctl --user daemon-reload
+systemctl --user enable --now bt-audio-autoconnect.service
+```
+If a headset connects but plays no audio, disconnect/reconnect it once so it
+renegotiates on A2DP (`bluetoothctl disconnect <MAC>; bluetoothctl connect <MAC>`).
+

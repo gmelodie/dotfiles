@@ -178,6 +178,9 @@ function config() {
     mkdir -p $HOME/.config/wireplumber/wireplumber.conf.d
     link_config $BASEDIR/wireplumber/51-bt-priority.conf $HOME/.config/wireplumber/wireplumber.conf.d/51-bt-priority.conf
 
+    echo -n 'WirePlumber Bluetooth A2DP-only (52-bt-a2dp-only.conf)...'
+    link_config $BASEDIR/wireplumber/52-bt-a2dp-only.conf $HOME/.config/wireplumber/wireplumber.conf.d/52-bt-a2dp-only.conf
+
     echo -n 'Bluetooth autoconnect + audio-routing service (bt-audio-autoconnect)...'
     mkdir -p $HOME/.config/systemd/user
     link_config $BASEDIR/systemd/bt-audio-autoconnect.service $HOME/.config/systemd/user/bt-audio-autoconnect.service

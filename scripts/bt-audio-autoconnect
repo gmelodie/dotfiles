@@ -51,6 +51,19 @@ fi
 
 [ -z "$desired" ] && exit 0   # no speaker available -> leave audio alone
 
+# Only ONE BT speaker may hold a transport at a time. Both share the hci0
+# radio; a lower-priority speaker left connected can drop into a dead A2DP
+# transport that WirePlumber then retries acquiring every ~25s
+# (org.bluez.Error.NotAuthorized). That retry storm starves the winning
+# speaker's stream -- its sink reads RUNNING/unmuted yet plays nothing.
+# So disconnect every connected speaker that is NOT the chosen one.
+for mac in "$JOTA" "$ULTRA"; do
+  case "$desired" in
+    *"${mac//:/_}"*) ;;                                   # this is the winner
+    *) is_connected "$mac" && timeout 12 bluetoothctl disconnect "$mac" >/dev/null 2>&1 ;;
+  esac
+done
+
 if [ "$(pactl get-default-sink 2>/dev/null)" != "$desired" ]; then
   pactl set-default-sink "$desired" 2>/dev/null
 
