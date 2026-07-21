@@ -43,9 +43,22 @@ function install_archlinux() {
         brightnessctl xclip xdotool wikiman arch-wiki-docs ranger nerd-fonts noto-fonts-emoji xsettingsd github-cli dunst
     # bc is used for calculating int volume levels from floats
 
-    git clone https://aur.archlinux.org/yay-bin.git /tmp/yay-bin
-    cd /tmp/yay-bin
+    # yay-bin and its debug package both conflict with yay; drop whichever are installed
+    conflicting=$(pacman -Qq yay-bin yay-bin-debug 2>/dev/null || true)
+    [ -n "$conflicting" ] && sudo pacman -Rns --noconfirm $conflicting
+
+    rm -rf /tmp/yay
+    git clone https://aur.archlinux.org/yay.git /tmp/yay
+    cd /tmp/yay
     makepkg -si
+
+    # stale clones in yay's cache break rebuilds when a package's source URL changes
+    rm -rf "$HOME/.cache/yay/librewolf-bin" "$HOME/.cache/yay/xidlehook"
+
+    # librewolf-bin's tarball is PGP-signed; makepkg aborts if the signing key is unknown
+    gpg --keyserver keyserver.ubuntu.com --recv-keys 662E3CDD6FE329002D0CA5BB40339DD82B12EF16 ||
+        echo -e "${ORANGE}Could not import the LibreWolf signing key; librewolf-bin may fail to build${NC}"
+
     yay -S librewolf-bin xidlehook
 
     # Enable services
