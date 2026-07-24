@@ -1,0 +1,15 @@
+" vim_mode.pl mappings — keep in sync with nvim/init.lua leader maps.
+" Sourced on startup; reload inside irssi with :so
+" irssi windows are the "buffers" here: :bn/:bp/:bd -> window next/previous/close
+" Only `map` lines and " comments are supported by :source.
+
+" ,c  close window        (nvim: :bd)
+map ,c :bd
+
+" ,w ,x  next window      (nvim: :bn)
+map ,w :bn
+map ,x :bn
+
+" ,q ,z  previous window  (nvim: :bp)
+map ,q :bp
+map ,z :bp

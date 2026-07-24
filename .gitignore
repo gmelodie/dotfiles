@@ -2,6 +2,7 @@ tags
 *.o
 *.orig
 *.rej
+*.pem
 
 suckless/dwmblocks/build/*
 suckless/dwmblocks/build/dwmblocks

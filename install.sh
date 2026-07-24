@@ -59,7 +59,7 @@ function install_archlinux() {
     gpg --keyserver keyserver.ubuntu.com --recv-keys 662E3CDD6FE329002D0CA5BB40339DD82B12EF16 ||
         echo -e "${ORANGE}Could not import the LibreWolf signing key; librewolf-bin may fail to build${NC}"
 
-    yay -S librewolf-bin xidlehook
+    yay -S librewolf-bin xidlehook tiny-irc-client
 
     # Enable services
     systemctl --user enable --now pipewire pipewire-pulse wireplumber
@@ -133,6 +133,48 @@ function config() {
 	ln -sf $BASEDIR/nvim/lua/lsp/$filename $HOME/.config/nvim/lua/lsp/$filename
     done
 
+
+    echo -n 'Irssi vim_mode (vim_moderc + scripts)...'
+    mkdir -p $HOME/.irssi/scripts/autorun
+    # Third-party scripts are fetched, not vendored (like nvim plugins).
+    # uberprompt must load before vim_mode; autorun is alphabetical, so it does.
+    curl -sfLo $HOME/.irssi/scripts/uberprompt.pl \
+        https://github.com/shabble/irssi-scripts/raw/master/prompt_info/uberprompt.pl
+    curl -sfLo $HOME/.irssi/scripts/vim_mode.pl \
+        https://github.com/shabble/irssi-scripts/raw/master/vim-mode/vim_mode.pl
+    ln -sf ../uberprompt.pl $HOME/.irssi/scripts/autorun/uberprompt.pl
+    ln -sf ../vim_mode.pl $HOME/.irssi/scripts/autorun/vim_mode.pl
+    link_config $BASEDIR/irssi/vim_moderc $HOME/.irssi/vim_moderc
+
+    echo -n 'Irssi gruvbox theme (theme + statusbar scripts)...'
+    # gruvbox.theme needs these three scripts for its statusbar / window list;
+    # fetched (not vendored) like the vim_mode scripts above.
+    for script in adv_windowlist usercount sb_separator; do
+        curl -sfLo $HOME/.irssi/scripts/$script.pl \
+            https://github.com/irssi/scripts.irssi.org/raw/master/scripts/$script.pl
+        ln -sf ../$script.pl $HOME/.irssi/scripts/autorun/$script.pl
+    done
+    link_config $BASEDIR/irssi/gruvbox.theme $HOME/.irssi/gruvbox.theme
+    # irssi/config is copied (not symlinked) because the live config grows a
+    # SASL password and other secrets we don't want tracked. Seed the sanitized
+    # template only when no config exists yet, so real configs are never clobbered.
+    if [ ! -f "$HOME/.irssi/config" ]; then
+        cp $BASEDIR/irssi/config $HOME/.irssi/config
+        echo -e "${ORANGE}[Note] Seeded ~/.irssi/config; set your SASL password (sasl_password = CHANGEME)${NC}"
+    fi
+    # Ensure the theme is active even on pre-existing configs (idempotent).
+    if grep -q '^\s*theme = ' "$HOME/.irssi/config"; then
+        sed -i 's/^\(\s*\)theme = "[^"]*";/\1theme = "gruvbox";/' "$HOME/.irssi/config"
+    else
+        sed -i '/^  core = {/a\    theme = "gruvbox";' "$HOME/.irssi/config"
+    fi
+
+    echo -n 'tiny IRC config (config.yml) + global SASL certificate...'
+    mkdir -p $HOME/.config/tiny
+    link_config $BASEDIR/tiny/config.yml $HOME/.config/tiny/config.yml
+    # One global client cert for SASL EXTERNAL / CertFP; generated once (kept if
+    # it already exists), never tracked. Prints the fingerprint + enrollment steps.
+    bash $BASEDIR/gen-irc-cert.sh gmelodie
 
     echo -n 'Espanso configurations (default.yml)...'
     mkdir -p $HOME/.config/espanso
