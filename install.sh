@@ -102,15 +102,20 @@ function post_install() {
 function config() {
     echo  '############# Installing configuration files...'
 
-    echo -n 'ly display manager (config.ini + amber console palette)...'
+    echo -n 'ly display manager (config.ini + gruvbox console palette)...'
     sudo mkdir -p /etc/ly/
     sudo ln -sf $BASEDIR/ly/config.ini /etc/ly/config.ini
-    sudo ln -sf $BASEDIR/ly/amber-vtrgb /etc/ly/amber-vtrgb
-    # The TTY is 16-color only, so amber comes from remapping the console
-    # palette (setvtrgb) before ly draws — not from ly truecolor.
-    sudo ln -sf $BASEDIR/systemd/console-amber.service /etc/systemd/system/console-amber.service
+    sudo ln -sf $BASEDIR/ly/gruvbox-vtrgb /etc/ly/gruvbox-vtrgb
+    # The TTY is 16-color only, so ly's gruvbox colors come from remapping the
+    # console palette (setvtrgb). The palette is bound to ly's lifetime and
+    # restored to the kernel default on stop, so logs keep their normal colors.
+    # Drop the old boot-global amber service if it's still around.
+    sudo systemctl disable --now console-amber.service 2>/dev/null || true
+    sudo rm -f /etc/systemd/system/console-amber.service /etc/ly/amber-vtrgb
+    sudo ln -sf $BASEDIR/systemd/console-palette.service /etc/systemd/system/console-palette.service
     sudo systemctl daemon-reload
-    sudo systemctl enable --now console-amber.service
+    # Modern ly ships a templated unit; tty1 is the enabled greeter instance.
+    sudo systemctl enable console-palette.service
     echo -e "${GREEN}Done${NC}"
 
     if $MARTINHA; then

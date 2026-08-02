@@ -1,0 +1,30 @@
+# Applies the gruvbox console palette while ly is up, then restores the kernel
+# default when ly stops. The bare TTY can't do truecolor (the kernel snaps it to
+# 16 colors), so ly's colors come from remapping those 16 slots via setvtrgb.
+#
+# This is BindsTo/WantedBy ly@tty1.service (the ly greeter instance, not
+# multi-user.target) and ordered Before=ly@tty1.service, so the palette is
+# applied right before ly draws — never during boot. ExecStop runs
+# `setvtrgb vga` to put the default palette back when ly stops, so boot logs,
+# TTYs, and shutdown logs keep their normal colors. Modern ly ships a templated
+# unit (ly@.service); tty1 is the enabled instance. Palette values live in
+# ../ly/gruvbox-vtrgb (setvtrgb decimal format: 3 lines — reds, greens, blues —
+# 16 values each, no comments).
+[Unit]
+Description=Gruvbox console palette for ly
+Documentation=man:setvtrgb(8)
+DefaultDependencies=no
+After=systemd-vconsole-setup.service
+Before=ly@tty1.service
+BindsTo=ly@tty1.service
+Conflicts=shutdown.target
+Before=shutdown.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/bin/setvtrgb /etc/ly/gruvbox-vtrgb
+ExecStop=/usr/bin/setvtrgb vga
+
+[Install]
+WantedBy=ly@tty1.service
