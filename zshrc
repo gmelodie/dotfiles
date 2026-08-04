@@ -5,6 +5,8 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
+export COLORTERM=truecolor
+
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
@@ -41,7 +43,7 @@ alias gpf="git push -u origin HEAD"
 alias gpoops="git add . && git oops && git push -f"
 alias gl='git pull'
 alias grr='git-pull-all'
-gcap() { git add . && git commit -m "$*" && git push }
+gcap() { git add . && git commit -S -m "$*" && git push }
 
 
 
